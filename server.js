@@ -42,7 +42,7 @@ app.locals.site = {
     title: 'FastoTV',
     version: '0.0.1',
     domain: 'http://fastotv.com',
-    keywords: 'FastoTV, IPTV, Open source, Tv player, Cross-platform',
+    keywords: 'FastoTV, IPTV, Open source, Free, Tv player, Cross-platform',
     description: 'FastoTV it is open source iptv solution.',
     small_description: 'FastoTV - cross-platform solution for watching tv.',
     large_description: 'FastoTV — is a cross-platform, open source iptv solution in which you can watch TV after registration.',
