@@ -1,10 +1,10 @@
 // load the things we need
+var Channel = require('channel');
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
-
     local            : {
         email        : String,
         password     : String
@@ -30,11 +30,7 @@ var userSchema = mongoose.Schema({
     
     name : String,
     created_date : Date,
-    channels : [{
-                  id : ObjectId,
-                  url : String,
-                  name : String
-                }]
+    channels : [Channel]
 });
 
 // generating a hash
