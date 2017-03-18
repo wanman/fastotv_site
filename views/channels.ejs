@@ -21,6 +21,18 @@
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
     ga('create', '<%- site.google_analitics_token %>', 'auto');
     ga('send', 'pageview');
+    function on_checkbox_state_changed() {
+      var arr = document.getElementsByName('channel');
+      var total = document.getElementById('total');
+      var sum = 0;
+      for(var i = 0; i < arr.length; i++){
+        if(arr.checked) {
+          sum += parseInt(arr[i].value);
+        }
+      }
+      total.value = sum;
+    
+    }
   </script>
 </head>
 <body>
@@ -42,17 +54,20 @@
           <td><%= i + 1 %></td>
           <td><%= channels[i].name %></td>
           <td><%= channels[i].price %></td>
-          <td><input type="checkbox" name="" value="" checked=<%- channels[i].checked %>></td>
+          <td><input type="checkbox" name="channel" onclick = "on_checkbox_state_changed() value=channels[i].price checked=<%- channels[i].checked %> ? "checked" : undefined></td>
         </tr>
         <% } %>
         <% } %>
       </tbody>
     </table>
-    <!-- Add channels FORM -->
-    <form action="/add_channels" method="post">
-      <input type="hidden" class="form-control" name="channels_id" value="">
-      <button type="submit" class="btn btn-warning btn-small">Apply</button>
-    </form>
+      <div>
+        <!-- Add channels FORM -->
+        <form action="/add_channels" method="post">
+          <input type="hidden" class="form-control" name="channels_id" value="">
+          <button type="submit" class="btn btn-warning btn-small">Apply</button>
+        </form>
+        <strong>TOTAL: <input id="total", value=0></strong>
+      <div>
     </div>
   </div>
 </body>
