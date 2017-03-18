@@ -1,5 +1,5 @@
 // load the things we need
-var Channel = require('channel');
+var channel = require('./channel');
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 
@@ -30,7 +30,7 @@ var userSchema = mongoose.Schema({
     
     name : String,
     created_date : Date,
-    channels : [Channel]
+    channels : [channel.schema]
 });
 
 // generating a hash

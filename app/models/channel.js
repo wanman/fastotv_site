@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 
 // define the schema for our channel model
-var channelSchema = Schema({
+var channelSchema = mongoose.Schema({
   url : String,
   name : String
 });
