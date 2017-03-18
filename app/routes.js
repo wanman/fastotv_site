@@ -1,5 +1,6 @@
 // load up the user model
 var User = require('../app/models/user');
+var Channel = require('../app/models/channel');
 
 var fs = require('fs');
 var path = require('path');
@@ -19,22 +20,40 @@ module.exports = function(app, passport) {
   app.get('/download_p', function(req, res) {
       res.render('download_p.ejs');
   });
-  app.get('/servers_status', function(req, res){
-    User.find({} , function(err, all_users) {
-    if (err) {
-      console.error(err);
-      return;
-    }
+  app.get('/channels', function(req, res) {
+    Channel.find({} , function(err, all_channels) {
+      if (err) {
+        console.error(err);
+        return;
+      }
 
-    var users = [];
-    for (var i = 0; i < all_users.length; i++) {
-      var user = all_users[i];
-      users.push({name : user.login, created_date : user.created_date});
-    }
+      var channels = [];
+      for (var i = 0; i < all_channels.length; i++) {
+        var channel = all_channels[i];
+        channels.push({name : channel.name, price : name.price});
+      }
 
-    res.render('user_status.ejs', {
-      users: users
+      res.render('channels.ejs', {
+        channels: channels
+      });
     });
+  });
+  app.get('/user_status', function(req, res){
+    User.find({} , function(err, all_users) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      var users = [];
+      for (var i = 0; i < all_users.length; i++) {
+        var user = all_users[i];
+        users.push({name : user.login, created_date : user.created_date});
+      }
+
+      res.render('user_status.ejs', {
+        users: users
+      });
     }); 
   });
   app.get('/build_installer_request', function(req, res) {

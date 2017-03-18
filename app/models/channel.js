@@ -4,7 +4,8 @@ var mongoose = require('mongoose');
 // define the schema for our channel model
 var channelSchema = mongoose.Schema({
   url : String,
-  name : String
+  name : String,
+  price : Number
 });
 
 // create the model for users and expose it to our app
