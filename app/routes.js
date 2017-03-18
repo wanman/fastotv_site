@@ -19,6 +19,24 @@ module.exports = function(app, passport) {
   app.get('/download_p', function(req, res) {
       res.render('download_p.ejs');
   });
+  app.get('/servers_status', function(req, res){
+    User.find({} , function(err, all_users) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    var users = [];
+    for (var i = 0; i < all_users.length; i++) {
+      var user = all_users[i];
+      users.push({name : user.login});
+    }
+
+    res.render('user_status.ejs', {
+      users: users
+    });
+    }); 
+  });
   app.get('/build_installer_request', function(req, res) {
       var user = req.user;     
       var walk = function(dir, done) {  

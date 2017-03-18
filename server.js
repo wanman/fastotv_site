@@ -18,6 +18,7 @@ var express  = require('express');
 var app      = express();
 var port     = settings_config.http_server_port;
 var mongoose = require('mongoose');
+var redis = require('redis');
 var passport = require('passport');
 var flash    = require('connect-flash');
 var amqp = require('amqp');
@@ -30,6 +31,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 
+
+app.redis_connection = redis.createClient();
+app.redis_connection.on("error", function (err) {
+    console.error(err);
+});
 // app_r
 
 var http = require('http');
@@ -146,10 +152,30 @@ listener.on('connection', function (socket) {
     });
 });
 
+var redis_sub = redis.createClient();
+var redis_pub = redis.createClient();
+
+redis_sub.on('error', function (err) {
+    console.error(err);
+});
+
+redis_pub.on('error', function (err) {
+    console.error(err);
+});
+
+redis_sub.on('ready', function() {
+    redis_sub.subscribe(app.locals.back_end.pub_sub_channel_out, app.locals.back_end.pub_sub_channel_client_state);
+});
+
+redis_sub.on('message', function(channel, message){
+    var resp = {'text': message, 'channel':channel};
+    listener.in(channel).emit('message', resp);
+});
+
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
 
-require('./config/passport')(passport); // pass passport for configuration
+require('./config/passport')(redis_connection, passport); // pass passport for configuration
 
 // set up our express application
 app.use(express.static(public_dir_abs_path));
