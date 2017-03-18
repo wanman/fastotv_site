@@ -21,12 +21,12 @@
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
     ga('create', '<%- site.google_analitics_token %>', 'auto');
     ga('send', 'pageview');
-    function on_checkbox_state_changed() {
+    function on_total_update() {
       var arr = document.getElementsByName('channel');
       var total = document.getElementById('total');
       var sum = 0;
       for(var i = 0; i < arr.length; i++){
-        if(arr.checked) {
+        if(arr[i].checked) {
           sum += parseInt(arr[i].value);
         }
       }
@@ -35,40 +35,46 @@
     }
   </script>
 </head>
-<body>
+<body onload="on_total_update()">
   <div class="container">
+    
     <div class="well">                
-    <h2>Availible channels:</h2>
-    <table class="table">
-      <thead>
-        <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (channels.length > 0) { %>
-        <% for (var i = 0; i < channels.length; i++) { %>
-        <tr>
-          <td><%= i + 1 %></td>
-          <td><%= channels[i].name %></td>
-          <td><%= channels[i].price %></td>
-          <td><input type="checkbox" name="channel" onclick = "on_checkbox_state_changed() value=channels[i].price checked=<%- channels[i].checked %> ? "checked" : undefined></td>
-        </tr>
-        <% } %>
-        <% } %>
-      </tbody>
-    </table>
-      <div>
-        <!-- Add channels FORM -->
-        <form action="/add_channels" method="post">
-          <input type="hidden" class="form-control" name="channels_id" value="">
-          <button type="submit" class="btn btn-warning btn-small">Apply</button>
-        </form>
-        <strong>TOTAL: <input id="total", value=0></strong>
+      <h2>Availible channels:</h2>
+      <table class="table">
+        <thead>
+          <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (channels.length > 0) { %>
+          <% for (var i = 0; i < channels.length; i++) { %>
+          <tr>
+            <td><%= i + 1 %></td>
+            <td><%= channels[i].name %></td>
+            <td><%= channels[i].price %></td>
+            <td><input type="checkbox" name="channel" onclick="on_total_update()" value=<%-channels[i].price %> <%- channels[i].checked %> ></td>
+          </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+      <div class="row">
+        <div class="col-sm-6">
+          <!-- Add channels FORM -->
+          <form action="/add_channels" method="post">
+            <input type="hidden" class="form-control" name="channels_id" value="">
+            <button type="submit" class="btn btn-warning btn-small">Apply</button>
+          </form>
+        <div>
+        <div class="col-sm-6">
+          <p>TOTAL: <input id="total", value=0></p>
+        <div>
       <div>
     </div>
+    
   </div>
 </body>
 </html>
