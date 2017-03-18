@@ -42,16 +42,17 @@
           <td><%= i + 1 %></td>
           <td><%= channels[i].name %></td>
           <td><%= channels[i].price %></td>
-          <td>
-            <form action=<%= templates[i].download_link %> method="get">
-              <button type="submit" class="btn btn-danger btn-small">Assign</button>
-            </form>
-          </td>
-        </tr>    
+          <td><input type="checkbox" name="" value="" checked=<%- channels[i].checked %>></td>
+        </tr>
         <% } %>
-        <% } %> 
+        <% } %>
       </tbody>
     </table>
+    <!-- Add channels FORM -->
+    <form action="/add_channels" method="post">
+      <input type="hidden" class="form-control" name="channels_id" value="">
+      <button type="submit" class="btn btn-warning btn-small">Apply</button>
+    </form>
     </div>
   </div>
 </body>

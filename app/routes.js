@@ -30,12 +30,17 @@ module.exports = function(app, passport) {
       var channels = [];
       for (var i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
-        channels.push({name : channel.name, price : name.price});
+        channels.push({id : channel._id, name : channel.name, price : channel.price, checked :  i % 2 == 0});
       }
       res.render('channels.ejs', {
         channels: channels
       });
     });
+  });
+  // ADD channel 
+  app.post('/add_channels', function(req, res) {
+    var user = req.user;        
+    var channels_id = req.body.channels_id;
   });
   app.get('/user_status', function(req, res){
     User.find({} , function(err, all_users) {
