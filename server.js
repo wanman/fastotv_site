@@ -68,7 +68,11 @@ app.locals.project = {
     name: 'FastoTV',
     name_lowercase: 'fastotv',
     version: settings_config.app_version,
-    version_type: settings_config.app_version_type
+    version_type: settings_config.app_version_type,
+    socketio_port : settings_config.socketio_port,
+    pub_sub_channel_in : settings_config.pub_sub_channel_in,
+    pub_sub_channel_out : settings_config.pub_sub_channel_out,
+    pub_sub_channel_client_state : settings_config.pub_sub_channel_client_state
 };
 app.locals.author = {
     name: 'Topilski Alexandr',
@@ -164,7 +168,7 @@ redis_pub.on('error', function (err) {
 });
 
 redis_sub.on('ready', function() {
-    redis_sub.subscribe(app.locals.back_end.pub_sub_channel_out, app.locals.back_end.pub_sub_channel_client_state);
+  redis_sub.subscribe(app.locals.project.pub_sub_channel_out, app.locals.project.pub_sub_channel_client_state);
 });
 
 redis_sub.on('message', function(channel, message){
