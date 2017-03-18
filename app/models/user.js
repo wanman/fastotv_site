@@ -31,6 +31,7 @@ var userSchema = mongoose.Schema({
     name : String,
     created_date : Date,
     channels : [{
+                  id : ObjectId,
                   url : String,
                   name : String
                 }]

@@ -122,13 +122,9 @@ module.exports = function(redis_connection, passport) {
                             return done(err);
                           }
 
-                          var redis_channels = []; // Create a new empty array.
-                          for (var i = 0; i < user.channels.length; i++) {
-                            redis_channels[i] = user.channels[i];
-                          }
-                          var needed_val = { name : user.local.email, password : user.local.password, channels : redis_channels};
+                          var needed_val = { login : newUser.local.email, password : newUser.local.password, channels : []};
                           var needed_val_str = JSON.stringify(needed_val);
-                          redis_connection.hset("users", user.local.email, needed_val_str);
+                          redis_connection.hset("users", newUser.local.email, needed_val_str);
                           return done(null, newUser);
                         });
                     }
