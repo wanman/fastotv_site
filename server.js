@@ -175,7 +175,7 @@ redis_sub.on('message', function(channel, message){
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
 
-require('./config/passport')(redis_connection, passport); // pass passport for configuration
+require('./config/passport')(app.redis_connection, passport); // pass passport for configuration
 
 // set up our express application
 app.use(express.static(public_dir_abs_path));
