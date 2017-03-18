@@ -110,9 +110,9 @@ module.exports = function(redis_connection, passport) {
                     } else {
 
                         // create the user
-                        var newUser            = new User();
+                        var newUser = new User();
 
-                        newUser.local.email    = email;
+                        newUser.local.email = email;
                         newUser.local.password = newUser.generateHash(password);
                         newUser.created_date = Date();
                         newUser.name = email;

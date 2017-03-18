@@ -32,7 +32,6 @@ module.exports = function(app, passport) {
         var channel = all_channels[i];
         channels.push({name : channel.name, price : name.price});
       }
-
       res.render('channels.ejs', {
         channels: channels
       });
@@ -48,9 +47,8 @@ module.exports = function(app, passport) {
       var users = [];
       for (var i = 0; i < all_users.length; i++) {
         var user = all_users[i];
-        users.push({name : user.login, created_date : user.created_date});
+        users.push({name : user.name, created_date : user.created_date});
       }
-
       res.render('user_status.ejs', {
         users: users
       });
