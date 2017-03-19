@@ -24,13 +24,18 @@
     function on_total_update() {
       var arr = document.getElementsByName('channel');
       var total = document.getElementById('total');
+      var channels_id = document.getElementById('channels_id');
       var sum = 0;
+      var arr_ids = [];
       for(var i = 0; i < arr.length; i++){
-        if(arr[i].checked) {
-          sum += parseFloat(arr[i].value);
+        var checkbox = arr[i];
+        if(checkbox.checked) {
+          sum += parseFloat(checkbox.value);
+          arr_ids.push(checkbox.channel_id);
         }
       }
       total.value = sum;
+      channels_id.value = arr_ids;
     
     }
   </script>
@@ -55,7 +60,7 @@
             <td><%= i + 1 %></td>
             <td><%= channels[i].name %></td>
             <td><%= channels[i].price %></td>
-            <td><input type="checkbox" name="channel" onclick="on_total_update()" value=<%-channels[i].price %> <%- channels[i].checked %> ></td>
+            <td><input type="checkbox" name="channel" channel_id="<%- channels[i].id %>" onclick="on_total_update()" value=<%-channels[i].price %> <%- channels[i].checked %>></td>
           </tr>
           <% } %>
           <% } %>
@@ -65,7 +70,7 @@
         <div class="col-sm-6">
           <!-- Add channels FORM -->
           <form action="/add_channels" method="post">
-            <input type="hidden" class="form-control" name="channels_id" value="">
+            <input id="channels_id" class="form-control" name="channels_id" value="">
             <button type="submit" class="btn btn-warning btn-small">Apply</button>
           </form>
         <div>

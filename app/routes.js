@@ -82,7 +82,7 @@ module.exports = function(app, passport) {
         
         var needed_val = { login : user.local.email, password : user.local.password, channels : redis_channels};
         var needed_val_str = JSON.stringify(needed_val);
-        redis_connection.hset("users", user.local.email, needed_val_str);
+        app.redis_connection.hset("users", user.local.email, needed_val_str);
         res.redirect('/profile');
       });
       
