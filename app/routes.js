@@ -23,7 +23,7 @@ module.exports = function(app, passport) {
   app.get('/channels', function(req, res) {
     var user = req.user;
     var user_channels = user.channels;
-    Channel.find({} , function(err, all_channels, user_channels) {
+    Channel.find({}, function(err, all_channels) {
       if (err) {
         console.error(err);
         return;
@@ -34,7 +34,7 @@ module.exports = function(app, passport) {
         var channel = all_channels[i];
         var exist = false;
         for (var j = 0; j < user_channels.length; j++) {
-          if (user_channels[i]._id == channel._id) {
+          if (user_channels[j]._id == channel._id) {
             exist = true;
             break;
           }
@@ -50,6 +50,44 @@ module.exports = function(app, passport) {
   app.post('/add_channels', function(req, res) {
     var user = req.user;        
     var channels_id = req.body.channels_id;
+    Channel.find({}, function(err, all_channels) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      var channels = [];
+      for (var i = 0; i < all_channels.length; i++) {
+        var channel = all_channels[i];
+        for (var j = 0; j < channels_id.length; j++) {
+          if (user_channels[i]._id == channels_id[j]) {
+            channels.push(channel);
+            break;
+          }
+        }
+      }
+      
+      user.channels = channels;
+      user.save(function(err) {
+        if (err) {
+          req.flash('statusProfileMessage', err);
+          return;
+        }
+        
+        var redis_channels = []; // Create a new empty array.
+        for (var i = 0; i < user.channels.length; i++) {
+          var channel = user.channels[i];
+          redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
+        }
+        
+        var needed_val = { login : user.local.email, password : user.local.password, channels : redis_channels};
+        var needed_val_str = JSON.stringify(needed_val);
+        redis_connection.hset("users", user.local.email, needed_val_str);
+        res.redirect('/profile');
+      });
+      
+    });
+
   });
   app.get('/user_status', function(req, res){
     User.find({} , function(err, all_users) {
