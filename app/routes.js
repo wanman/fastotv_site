@@ -23,6 +23,8 @@ module.exports = function(app, passport) {
   app.get('/channels', function(req, res) {
     var user = req.user;
     var user_channels = user.channels;
+    console.log(user);
+    console.log(user_channels);
     Channel.find({}, function(err, all_channels) {
       if (err) {
         console.error(err);
@@ -48,7 +50,7 @@ module.exports = function(app, passport) {
   });
   // ADD channel 
   app.post('/add_channels', function(req, res) {
-    var user = req.user;        
+    var user = req.user;
     var channels_id = JSON.parse(req.body.channels_id);
     Channel.find({}, function(err, all_channels) {
       if (err) {
@@ -60,7 +62,6 @@ module.exports = function(app, passport) {
       for (var i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
         for (var j = 0; j < channels_id.length; j++) {
-          console.log(channel._id, channels_id[j]);
           if (channel._id == channels_id[j]) {
             channels.push(channel);
             break;
@@ -68,7 +69,6 @@ module.exports = function(app, passport) {
         }
       }
       
-      console.log(channels);
       user.channels = channels;
       user.save(function(err) {
         if (err) {

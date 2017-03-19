@@ -24,7 +24,7 @@
     function on_total_update() {
       var arr = document.getElementsByName('channel');
       var total = document.getElementById('total');
-      var channels_id = document.getElementById('channels_id');
+      var channels_id = document.getElementById('c_id');
       var sum = 0;
       var arr_ids = [];
       for(var i = 0; i < arr.length; i++){
@@ -71,7 +71,7 @@
         <div class="col-sm-6">
           <!-- Add channels FORM -->
           <form action="/add_channels" method="post">
-            <input type="hidden" id="channels_id" class="form-control" value="">
+            <input type="hidden" id="c_id" class="form-control" name="channels_id" value="">
             <button type="submit" class="btn btn-warning btn-small">Apply</button>
           </form>
         <div>
