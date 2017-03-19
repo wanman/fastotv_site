@@ -34,7 +34,7 @@ module.exports = function(app, passport) {
         var channel = all_channels[i];
         var exist = false;
         for (var j = 0; j < user_channels.length; j++) {
-          if (user_channels[j].ref == channel._id) {
+          if (user_channels[j].equals(channel._id)) {
             exist = true;
             break;
           }
@@ -61,9 +61,7 @@ module.exports = function(app, passport) {
         var channel = all_channels[i];
         for (var j = 0; j < channels_id.length; j++) {
           if (channel._id == channels_id[j]) {
-            var ch = new Channel();
-            ch.ref = channel;
-            channels.push(ch);
+            channels.push(channel);
             break;
           }
         }
