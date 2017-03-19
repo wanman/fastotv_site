@@ -21,7 +21,9 @@ module.exports = function(app, passport) {
       res.render('download_p.ejs');
   });
   app.get('/channels', function(req, res) {
-    Channel.find({} , function(err, all_channels) {
+    var user = req.user;
+    var user_channels = user.channels;
+    Channel.find({} , function(err, all_channels, user_channels) {
       if (err) {
         console.error(err);
         return;
@@ -30,7 +32,14 @@ module.exports = function(app, passport) {
       var channels = [];
       for (var i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
-        channels.push({id : channel._id, name : channel.name, price : channel.price, checked :  i % 2 == 0 ? "checked" : ""});
+        var exist = false;
+        for (var j = 0; j < user_channels.length; j++) {
+          if (user_channels[i]._id == channel._id) {
+            exist = true;
+            break;
+          }
+        }
+        channels.push({id : channel._id, name : channel.name, price : channel.price, checked :  exist ? "checked" : ""});
       }
       res.render('channels.ejs', {
         channels: channels
@@ -60,7 +69,7 @@ module.exports = function(app, passport) {
     }); 
   });
   app.get('/build_installer_request', function(req, res) {
-      var user = req.user;     
+      var user = req.user;
       var walk = function(dir, done) {  
         console.log('scan folder: ', dir);
         var results = [];
