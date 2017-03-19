@@ -31,7 +31,8 @@
         var checkbox = arr[i];
         if(checkbox.checked) {
           sum += parseFloat(checkbox.value);
-          arr_ids.push(checkbox.channel_id);
+          var cid = checkbox.getAttribute('channel_id');
+          arr_ids.push(cid);
         }
       }
       total.value = sum;
@@ -70,7 +71,7 @@
         <div class="col-sm-6">
           <!-- Add channels FORM -->
           <form action="/add_channels" method="post">
-            <input id="channels_id" class="form-control" name="channels_id" value="">
+            <input type="hidden" id="channels_id" class="form-control" name="channels_id" value="">
             <button type="submit" class="btn btn-warning btn-small">Apply</button>
           </form>
         <div>

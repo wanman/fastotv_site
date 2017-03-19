@@ -60,7 +60,7 @@ module.exports = function(app, passport) {
       for (var i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
         for (var j = 0; j < channels_id.length; j++) {
-          if (user_channels[i]._id == channels_id[j]) {
+          if (channel._id == channels_id[j]) {
             channels.push(channel);
             break;
           }
