@@ -23,8 +23,6 @@ module.exports = function(app, passport) {
   app.get('/channels', function(req, res) {
     var user = req.user;
     var user_channels = user.channels;
-    console.log(user);
-    console.log(user_channels);
     Channel.find({}, function(err, all_channels) {
       if (err) {
         console.error(err);
@@ -36,7 +34,7 @@ module.exports = function(app, passport) {
         var channel = all_channels[i];
         var exist = false;
         for (var j = 0; j < user_channels.length; j++) {
-          if (user_channels[j]._id == channel._id) {
+          if (user_channels[j].ref == channel._id) {
             exist = true;
             break;
           }
@@ -63,7 +61,9 @@ module.exports = function(app, passport) {
         var channel = all_channels[i];
         for (var j = 0; j < channels_id.length; j++) {
           if (channel._id == channels_id[j]) {
-            channels.push(channel);
+            var ch = new Channel();
+            ch.ref = channel;
+            channels.push(ch);
             break;
           }
         }
