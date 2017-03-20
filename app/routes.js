@@ -80,7 +80,7 @@ module.exports = function(app, passport) {
           redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
         }
         
-        var needed_val = { id: new_user._id, login : user.local.email, password : user.local.password, channels : redis_channels};
+        var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : redis_channels};
         var needed_val_str = JSON.stringify(needed_val);
         app.redis_connection.hset("users", user.local.email, needed_val_str);
         res.redirect('/profile');
