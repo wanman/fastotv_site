@@ -110,22 +110,22 @@ module.exports = function(redis_connection, passport) {
                     } else {
 
                         // create the user
-                        var newUser = new User();
+                        var new_user = new User();
 
-                        newUser.local.email = email;
-                        newUser.local.password = newUser.generateHash(password);
-                        newUser.created_date = Date();
-                        newUser.name = email;
+                        new_user.local.email = email;
+                        new_user.local.password = new_user.generateHash(password);
+                        new_user.created_date = Date();
+                        new_user.name = email;
                         
-                        newUser.save(function(err) {
+                        new_user.save(function(err) {
                           if (err) {
                             return done(err);
                           }
 
-                          var needed_val = { login : newUser.local.email, password : newUser.local.password, channels : []};
+                          var needed_val = { id: new_user.id_, login : new_user.local.email, password : new_user.local.password, channels : []};
                           var needed_val_str = JSON.stringify(needed_val);
-                          redis_connection.hset("users", newUser.local.email, needed_val_str);
-                          return done(null, newUser);
+                          redis_connection.hset("users", new_user.local.email, needed_val_str);
+                          return done(null, new_user);
                         });
                     }
 

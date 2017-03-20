@@ -99,7 +99,7 @@ module.exports = function(app, passport) {
       var users = [];
       for (var i = 0; i < all_users.length; i++) {
         var user = all_users[i];
-        users.push({name : user.name, created_date : user.created_date});
+        users.push({id: user._id, name : user.name, created_date : user.created_date});
       }
       res.render('user_status.ejs', {
         users: users

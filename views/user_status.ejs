@@ -27,8 +27,8 @@
   <script>
   var socket = io.connect('<%= site.domain %>:<%= back_end.socketio_port %>');
 
-  function handle_onconnection_changed(host, is_connected) {
-    var id_control = '#status_img' + host.replace('.', '_');
+  function handle_on_connection_changed(host, is_connected) {
+    var id_control = '#status_img' + host;
     if (is_connected) {
       $(id_control).attr("src", SERVER_STATUS_IMG.ONLINE);
     } else {
@@ -37,7 +37,7 @@
   }
 
   function handle_state_changed(stateObj) {                
-  handle_onconnection_changed(stateObj.host, stateObj.status === CONNECTED_STATUS.CONNECTED);
+    handle_on_connection_changed(stateObj.host, stateObj.status === CONNECTED_STATUS.CONNECTED);
   }
 
   //on connetion, updates connection state and sends subscribe request
@@ -51,16 +51,15 @@
 
   //on new message adds a new message to display
   socket.on('message', function (data) {
-  var msg = data.text;
+    var msg = data.text;
+    if (data.channel === '<%= back_end.pub_sub_channel_client_state %>') {
+      var stateObj = parse_state_msg(msg);
+      if (stateObj == undefined) {
+        return;
+      }
 
-  if (data.channel === '<%= back_end.pub_sub_channel_client_state %>') {
-  var stateObj = parse_state_msg(msg);
-  if (stateObj == undefined) {
-  return;
-  }
-
-  handle_state_changed(stateObj);
-  }
+      handle_state_changed(stateObj);
+    }
   });
 
   </script>
@@ -82,7 +81,7 @@
           <% for (var i = 0; i < users.length; i++) { %>
           <tr>
             <td><%= i + 1 %></td>
-            <td><img id="status_img<%= users[i].name.replace('.', '_') %>" src="images/offline.png"/> <%= users[i].name %></td>
+            <td><img id="status_img<%= users[i].id %>" src="images/offline.png"/> <%= users[i].name %></td>
             <td><%= users[i].created_date %></td>
           </tr>    
           <% } %>
