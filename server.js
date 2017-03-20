@@ -98,61 +98,70 @@ rabbit_connection.on('error', function (err) {
     console.error("rabbit_connection.on:", err);
 });
 
-listener.on('connection', function (socket) {   
-    socket.on('publish_rabbitmq', function (msg) {
-        var in_json = JSON.parse(msg);
-        if (in_json.databases.length == 0) {
-          var err = Error('At least one database must be selected!');
-          console.error(err);
-          socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': 100, 'message': err.message } ); //
-          socket.emit('message_rabbitmq', { 'email': in_json.email, 'error': err.message });
-          return;
-        }
+listener.on('connection', function (socket) {
+  socket.on('subscribe_redis', function (data) {
+    console.log('subscribe_redis', data.channel);
+    socket.join(data.channel);
+  });
+
+  socket.on('publish_redis', function (msg) {
+    redis_pub.publish(app.locals.back_end.pub_sub_channel_in, msg);
+  });
+ 
+  socket.on('publish_rabbitmq', function (msg) {
+    var in_json = JSON.parse(msg);
+    if (in_json.databases.length == 0) {
+      var err = Error('At least one database must be selected!');
+      console.error(err);
+      socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': 100, 'message': err.message } ); //
+      socket.emit('message_rabbitmq', { 'email': in_json.email, 'error': err.message });
+      return;
+    }
         
-        var user_package_dir = public_downloads_users_dir_abs_path + '/' + in_json.email;
-        mkdirp(user_package_dir, function(err) {
-          if (err) {
-            console.error(err);
-            socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': 100, 'message': err.message } ); //
-            socket.emit('message_rabbitmq', { 'email': in_json.email, 'error': err.message });
-            return;
-          }
-          
-          socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': 0, 'message': 'Send request to build server' } ); //
-          
-          var rpc = new (require('./app/amqprpc'))(rabbit_connection);
-          var branding_variables = '-DIS_PUBLIC_BUILD=OFF -DUSER_SPECIFIC_ID=' + in_json.id + ' -DUSER_SPECIFIC_LOGIN=' + in_json.email + ' -DUSER_SPECIFIC_PASSWORD=' + in_json.password;
-          var request_data_json = {
-              'branding_variables': branding_variables,
-              'package_type' : in_json.package_type,
-              'destination' : user_package_dir
-          };
-          var routing_key = gen_routing_key(in_json.platform, in_json.arch);
-          console.log("request_data_json", request_data_json);
-          console.log("routing_key", routing_key);
-          
-          rpc.makeRequest(routing_key, in_json.email, request_data_json, function response(err, response) {
-              if (err) {
-                console.error(err);
-                socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': 100, 'message': err.message } ); //
-                socket.emit('message_rabbitmq', { 'email': in_json.email, 'error': err.message });
-                return;
-              }
-              
-              var responce_json = response;
-              console.log("response", responce_json);
-              if(response.hasOwnProperty('error')){
-                socket.emit('message_rabbitmq', { 'email': in_json.email, 'error': response.error });
-              } else {
-                var public_path = response.body.replace(public_dir_abs_path, '');
-                socket.emit('message_rabbitmq', { 'email': in_json.email, 'body': public_path } );
-              }
-          }, 
-          function status(response) {
-            socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': response.progress, 'message': response.status } ); //
-          } );
-        });
+    var user_package_dir = public_downloads_users_dir_abs_path + '/' + in_json.email;
+    mkdirp(user_package_dir, function(err) {
+      if (err) {
+        console.error(err);
+        socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': 100, 'message': err.message } ); //
+        socket.emit('message_rabbitmq', { 'email': in_json.email, 'error': err.message });
+        return;
+      }
+            
+      socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': 0, 'message': 'Send request to build server' } ); //
+            
+      var rpc = new (require('./app/amqprpc'))(rabbit_connection);
+      var branding_variables = '-DIS_PUBLIC_BUILD=OFF -DUSER_SPECIFIC_ID=' + in_json.id + ' -DUSER_SPECIFIC_LOGIN=' + in_json.email + ' -DUSER_SPECIFIC_PASSWORD=' + in_json.password;
+      var request_data_json = {
+        'branding_variables': branding_variables,
+        'package_type' : in_json.package_type,
+        'destination' : user_package_dir
+      };
+      var routing_key = gen_routing_key(in_json.platform, in_json.arch);
+      console.log("request_data_json", request_data_json);
+      console.log("routing_key", routing_key);
+            
+      rpc.makeRequest(routing_key, in_json.email, request_data_json, function response(err, response) {
+      if (err) {
+        console.error(err);
+        socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': 100, 'message': err.message } ); //
+        socket.emit('message_rabbitmq', { 'email': in_json.email, 'error': err.message });
+        return;
+      }
+                
+      var responce_json = response;
+        console.log("response", responce_json);
+        if(response.hasOwnProperty('error')){
+          socket.emit('message_rabbitmq', { 'email': in_json.email, 'error': response.error });
+        } else {
+          var public_path = response.body.replace(public_dir_abs_path, '');
+          socket.emit('message_rabbitmq', { 'email': in_json.email, 'body': public_path } );
+        }
+      }, 
+      function status(response) {
+        socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': response.progress, 'message': response.status } ); //
+      });
     });
+  });
 });
 
 var redis_sub = redis.createClient();
