@@ -124,7 +124,7 @@ module.exports = function(redis_connection, passport) {
 
                           var needed_val = { id: new_user._id, login : new_user.local.email, password : new_user.local.password, channels : []};
                           var needed_val_str = JSON.stringify(needed_val);
-                          redis_connection.hset("users", new_user.local.email, needed_val_str);
+                          redis_connection.set(new_user.local.email, needed_val_str);
                           return done(null, new_user);
                         });
                     }
