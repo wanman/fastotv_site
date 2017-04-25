@@ -11,8 +11,11 @@ var channelSchema = mongoose.Schema({
   url : String,
   name : String,
   price : Number,
-  enum : [CHANNEL_TYPE.OFFICAL, CHANNEL_TYPE.USER],
-  default: CHANNEL_TYPE.OFFICAL
+  channel_type: {
+    type: String,
+    enum : [CHANNEL_TYPE.OFFICAL, CHANNEL_TYPE.USER],
+    default: CHANNEL_TYPE.OFFICAL
+  }
 });
 
 // create the model for users and expose it to our app
