@@ -1,10 +1,6 @@
 // load the things we need
 var mongoose = require('mongoose');
-
-var CHANNEL_TYPE = { 
-  OFFICAL : 'OFFICAL',
-  USER : 'USER'
-};
+var consts = require('./consts');
 
 // define the schema for our channel model
 var channelSchema = mongoose.Schema({
@@ -13,8 +9,8 @@ var channelSchema = mongoose.Schema({
   price : Number,
   channel_type: {
     type: String,
-    enum : [CHANNEL_TYPE.OFFICAL, CHANNEL_TYPE.USER],
-    default: CHANNEL_TYPE.OFFICAL
+    enum : consts.CHANNEL_TYPE,
+    default: consts.CHANNEL_TYPE.OFFICAL
   }
 });
 

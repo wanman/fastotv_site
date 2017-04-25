@@ -1,0 +1,1 @@
+const CHANNEL_TYPE = {'OFFICAL', 'USER'}
