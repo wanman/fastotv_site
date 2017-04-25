@@ -33,7 +33,7 @@ module.exports = function(app, passport) {
       var channels = [];
       for (var i = 0; i < user_channels.length; i++) {
         var uchannel = user_channels[i];
-        var exist = uchannel.channel_type == consts.CHANNEL_TYPE.USER;
+        var exist = uchannel.channel_type == consts.USER;
         if (!exist) {
           for (var j = 0; j < all_channels.length; j++) {
             var channel = all_channels[j];
@@ -64,7 +64,7 @@ module.exports = function(app, passport) {
       var channels = [];
       for (var i = 0; i < channels_id_type.length; i++) {
         var channel_id_type = channels_id_type[i];
-        if (channel_id_type.type == consts.CHANNEL_TYPE.OFFICAL) {
+        if (channel_id_type.type == consts.OFFICAL) {
           for (var j = 0; j < all_channels.length; j++) {
             var offical_channel = all_channels[i];
             if (offical_channel._id == channel_id_type.id) {
@@ -72,7 +72,7 @@ module.exports = function(app, passport) {
               break;
             }
           }
-        } else if (channel_id_type.type == consts.CHANNEL_TYPE.USER) {
+        } else if (channel_id_type.type == consts.USER) {
           for (var j = 0; j < user_channels.length; j++) {
             var user_channel = user_channels[i];
             if (user_channel._id == channel_id_type.id) {

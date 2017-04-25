@@ -10,7 +10,7 @@ var channelSchema = mongoose.Schema({
   channel_type: {
     type: String,
     enum : consts.CHANNEL_TYPE,
-    default: consts.CHANNEL_TYPE.OFFICAL
+    default: consts.OFFICAL
   }
 });
 
