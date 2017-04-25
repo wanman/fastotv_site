@@ -30,16 +30,19 @@ module.exports = function(app, passport) {
       }
 
       var channels = [];
-      for (var i = 0; i < all_channels.length; i++) {
-        var channel = all_channels[i];
-        var exist = false;
-        for (var j = 0; j < user_channels.length; j++) {
-          if (user_channels[j].equals(channel._id)) {
-            exist = true;
-            break;
+      for (var i = 0; i < user_channels.length; i++) {
+        var uchannel = user_channels[i];
+        var exist = uchannel.channel_type == Channel.CHANNEL_TYPE.USER;
+        if (!exist) {
+          for (var j = 0; j < all_channels.length; j++) {
+            var channel = all_channels[j];
+            if (uchannel.equals(channel._id)) {
+              exist = true;
+              break;
+            }
           }
         }
-        channels.push({id : channel._id, name : channel.name, price : channel.price, checked :  exist ? "checked" : ""});
+        channels.push({id : uchannel._id, type : uchannel.channel_type, name : uchannel.name, price : uchannel.price, checked :  exist ? "checked" : ""});
       }
       res.render('channels.ejs', {
         channels: channels
@@ -49,20 +52,32 @@ module.exports = function(app, passport) {
   // ADD channel 
   app.post('/add_channels', function(req, res) {
     var user = req.user;
-    var channels_id = JSON.parse(req.body.channels_id);
+    var channels_id_type = JSON.parse(req.body.channels_id_type);
     Channel.find({}, function(err, all_channels) {
       if (err) {
         console.error(err);
         return;
       }
-
+      
+      var user_channels = user.channels;
       var channels = [];
-      for (var i = 0; i < all_channels.length; i++) {
-        var channel = all_channels[i];
-        for (var j = 0; j < channels_id.length; j++) {
-          if (channel._id == channels_id[j]) {
-            channels.push(channel);
-            break;
+      for (var i = 0; i < channels_id_type.length; i++) {
+        var channel_id_type = channels_id_type[i];
+        if (channel_id_type.type == Channel.CHANNEL_TYPE.OFFICAL) {
+          for (var j = 0; j < all_channels.length; j++) {
+            var offical_channel = all_channels[i];
+            if (offical_channel._id == channel_id_type.id) {
+              channels.push(offical_channel);
+              break;
+            }
+          }
+        } else if (channel_id_type.type == Channel.CHANNEL_TYPE.USER) {
+          for (var j = 0; j < user_channels.length; j++) {
+            var user_channel = user_channels[i];
+            if (user_channel._id == channel_id_type.id) {
+              channels.push(user_channel);
+              break;
+            }
           }
         }
       }
@@ -85,9 +100,7 @@ module.exports = function(app, passport) {
         app.redis_connection.set(user.local.email, needed_val_str);
         res.redirect('/profile');
       });
-      
-    });
-
+    })
   });
   app.get('/user_status', function(req, res){
     User.find({} , function(err, all_users) {

@@ -24,19 +24,20 @@
     function on_total_update() {
       var arr = document.getElementsByName('channel');
       var total = document.getElementById('total');
-      var channels_id = document.getElementById('c_id');
+      var channels_ids = document.getElementById('c_id');
       var sum = 0;
-      var arr_ids = [];
+      var channels_id_type = [];
       for(var i = 0; i < arr.length; i++){
         var checkbox = arr[i];
         if(checkbox.checked) {
           sum += parseFloat(checkbox.value);
           var cid = checkbox.getAttribute('channel_id');
-          arr_ids.push(cid);
+          var ctype = checkbox.getAttribute('channel_type');
+          channels_id_type.push({id : cid, type : ctype});
         }
       }
       total.value = sum;
-      channels_id.value = JSON.stringify(arr_ids);
+      channels_ids.value = JSON.stringify(channels_id_type);
     
     }
   </script>
@@ -51,6 +52,7 @@
           <tr>
           <th>#</th>
           <th>Name</th>
+          <th>Type</th>
           <th>Price</th>
           </tr>
         </thead>
@@ -60,8 +62,9 @@
           <tr>
             <td><%= i + 1 %></td>
             <td><%= channels[i].name %></td>
+            <td><%= channels[i].type %></td>
             <td><%= channels[i].price %></td>
-            <td><input type="checkbox" name="channel" channel_id="<%- channels[i].id %>" onclick="on_total_update()" value=<%-channels[i].price %> <%- channels[i].checked %>></td>
+            <td><input type="checkbox" name="channel" channel_id="<%- channels[i].id %>" channel_type="<%- channels[i].type %>" onclick="on_total_update()" value=<%-channels[i].price %> <%- channels[i].checked %>></td>
           </tr>
           <% } %>
           <% } %>
@@ -71,7 +74,7 @@
         <div class="col-sm-6">
           <!-- Add channels FORM -->
           <form action="/add_channels" method="post">
-            <input type="hidden" id="c_id" class="form-control" name="channels_id" value="">
+            <input type="hidden" id="c_id" class="form-control" name="channels_id_type" value="">
             <button type="submit" class="btn btn-warning btn-small">Apply</button>
           </form>
         <div>
