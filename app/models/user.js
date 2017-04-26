@@ -1,7 +1,7 @@
 // load the things we need
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var channel_scheme = require('./channel_scheme');
+var ChannelSchema = require('./channel_scheme');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
