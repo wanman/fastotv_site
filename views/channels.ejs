@@ -24,7 +24,7 @@
     function on_total_update() {
       var arr = document.getElementsByName('channel');
       var total = document.getElementById('total');
-      var channels_ids = document.getElementById('c_id');
+      var channels_id = document.getElementById('c_id');
       var sum = 0;
       var channels_id_type = [];
       for(var i = 0; i < arr.length; i++){
@@ -32,12 +32,11 @@
         if(checkbox.checked) {
           sum += parseFloat(checkbox.value);
           var cid = checkbox.getAttribute('channel_id');
-          var ctype = checkbox.getAttribute('channel_type');
-          channels_id_type.push({id : cid, type : ctype});
+          channels_id_type.push(cid);
         }
       }
       total.value = sum;
-      channels_ids.value = JSON.stringify(channels_id_type);
+      channels_id.value = JSON.stringify(channels_id_type);
     
     }
   </script>
@@ -87,7 +86,7 @@
             <td><%= private_channels[i].url %></td>
             <td>
               <form action="/remove_private_channel" method="post">
-                <input type="hidden" class="form-control" name="channel_id" value="<%= private_channels[i]._id %>">
+                <input type="hidden" class="form-control" name="remove_channel_id" value="<%= private_channels[i]._id %>">
                 <button type="submit" class="btn btn-danger btn-xs">Remove</button>
               </form>
             </td>
@@ -96,8 +95,8 @@
           <% } %>
         </tbody>
       </table>
-      <form action="/add_private_channel" method="post">
-        <div class="row">
+      <div class="row">
+        <form action="/add_private_channel" method="post">
           <div class="form-group">
             <label>Name:</label>
             <input class="form-control" name="private_channel_name">
@@ -107,13 +106,13 @@
             <input class="form-control" name="private_channel_url">
           </div>
           <button type="submit" class="btn btn-warning btn-small">Add</button>
-        <div>
-      </form>
+        </form>
+      <div>
       <div class="row">
         <div class="col-sm-6">
-          <!-- Add channels FORM -->
+          <!-- Apply channels FORM -->
           <form action="/apply_channels" method="post">
-            <input type="hidden" id="c_id" class="form-control" name="channels_id" value="">
+            <input type="hidden" id="c_id" class="form-control" name="apply_channels_id" value="">
             <button type="submit" class="btn btn-warning btn-small">Apply</button>
           </form>
         <div>

@@ -69,19 +69,21 @@ module.exports = function(app, passport) {
    // APPLY channels 
   app.post('/apply_channels', function(req, res) {
     var user = req.user;
-    var channels_id = JSON.parse(req.body.channels_id);
+    var channels_id = JSON.parse(req.body.apply_channels_id);
     Channel.find({}, function(err, all_channels) {
       if (err) {
         console.error(err);
         return;
       }
 
+      var redis_channels = []; // Create a new empty array.
       var channels = [];
       for (var i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
         for (var j = 0; j < channels_id.length; j++) {
           if (channel._id == channels_id[j]) {
             channels.push(channel);
+            redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
             break;
           }
         }
@@ -92,18 +94,12 @@ module.exports = function(app, passport) {
       var user_private_channels = user.private_channels;
       for (var i = 0; i < user_private_channels.length; i++) {
         var channel = user_private_channels[i];
-        channels.push(channel);
+        redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
       }
       user.save(function(err) {
         if (err) {
           req.flash('statusProfileMessage', err);
           return;
-        }
-        
-        var redis_channels = []; // Create a new empty array.
-        for (var i = 0; i < channels.length; i++) {
-          var channel = channels[i];
-          redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
         }
         
         var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : redis_channels};
