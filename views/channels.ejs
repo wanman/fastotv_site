@@ -43,7 +43,6 @@
 </head>
 <body onload="on_total_update()">
   <div class="container">
-    
     <div class="well">                
       <h2>Availible channels:</h2>
       <table class="table">
@@ -52,6 +51,7 @@
           <th>#</th>
           <th>Name</th>
           <th>Price</th>
+          <th>In playlist</th>
           </tr>
         </thead>
         <tbody>
@@ -95,9 +95,7 @@
           <% } %>
         </tbody>
       </table>
-    </div>
-    <div class="row">
-      <form action="/add_private_channel" method="post">
+      <form class="form-inline" action="/add_private_channel" method="post">
         <div class="form-group">
           <label>Name:</label>
           <input class="form-control" name="private_channel_name">
@@ -108,18 +106,14 @@
         </div>
         <button type="submit" class="btn btn-warning btn-small">Add</button>
       </form>
-    <div>
-    <div class="row">
-      <div class="col-sm-6">
-        <!-- Apply channels FORM -->
-        <form action="/apply_channels" method="post">
-          <input type="hidden" id="c_id" class="form-control" name="apply_channels_id" value="">
-          <button type="submit" class="btn btn-warning btn-small">Apply</button>
-        </form>
-      <div>
-      <div class="col-sm-6">
-        <p>TOTAL: <input id="total", value=0></p>
-      <div>
+    </div>
+    <!-- Apply channels FORM -->
+    <form class="form-inline" action="/apply_channels" method="post">
+      <input type="hidden" id="c_id" class="form-control" name="apply_channels_id" value="">
+      <button type="submit" class="btn btn-warning btn-small">Apply</button>
+    </form>
+    <div class="col-sm-6">
+      <p>TOTAL: <input id="total", value=0></p>
     <div>
   </div>
 </body>
