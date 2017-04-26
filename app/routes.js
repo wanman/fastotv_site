@@ -1,7 +1,6 @@
 // load up the user model
 var User = require('../app/models/user');
 var Channel = require('../app/models/channel');
-var consts = require('../app/models/consts');
 
 var fs = require('fs');
 var path = require('path');
@@ -23,7 +22,54 @@ module.exports = function(app, passport) {
   });
   app.get('/channels', function(req, res) {
     var user = req.user;
-    var user_channels = user.channels;
+    var user_offical_channels = user.offical_channels;
+    var user_private_channels = user.private_channels;
+    Channel.find({}, function(err, all_channels) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      var ochannels = [];
+      for (var i = 0; i < all_channels.length; i++) {
+        var channel = all_channels[i];
+        var exist = false;
+        for (var j = 0; j < user_channels.length; j++) {
+          if (user_channels[j].equals(channel._id)) {
+            exist = true;
+            break;
+          }
+        }
+        ochannels.push({id : channel._id, name : channel.name, price : channel.price, checked :  exist ? "checked" : ""});
+      }
+      res.render('channels.ejs', {
+        offical_channels: ochannels,
+        private_channels: user_private_channels
+      });
+    });
+  });
+  
+  // ADD private channel
+  app.post('/add_private_channel', function(req, res) {
+    var user = req.user;
+    var channel_name = req.body.private_channel_name;
+    var channel_url = req.body.private_channel_url;
+    var new_channel = {url : channel_url, name : channel_name}
+    user.user_private_channels.push(new_channel);
+    user.save(function(err) {
+      if (err) {
+        req.flash('statusProfileMessage', err);
+        return;
+      }
+      
+      res.render('channels.ejs');
+    });
+  });
+  
+   // ADD channels 
+  app.post('/add_channels', function(req, res) {
+    var user = req.user;
+    var channels_id = JSON.parse(req.body.channels_id);
     Channel.find({}, function(err, all_channels) {
       if (err) {
         console.error(err);
@@ -31,54 +77,12 @@ module.exports = function(app, passport) {
       }
 
       var channels = [];
-      for (var i = 0; i < user_channels.length; i++) {
-        var uchannel = user_channels[i];
-        var exist = uchannel.channel_type == consts.USER;
-        if (!exist) {
-          for (var j = 0; j < all_channels.length; j++) {
-            var channel = all_channels[j];
-            if (uchannel.equals(channel._id)) {
-              exist = true;
-              break;
-            }
-          }
-        }
-        channels.push({id : uchannel._id, type : uchannel.channel_type, name : uchannel.name, price : uchannel.price, checked :  exist ? "checked" : ""});
-      }
-      res.render('channels.ejs', {
-        channels: channels
-      });
-    });
-  });
-  // ADD channel 
-  app.post('/add_channels', function(req, res) {
-    var user = req.user;
-    var channels_id_type = JSON.parse(req.body.channels_id_type);
-    Channel.find({}, function(err, all_channels) {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      
-      var user_channels = user.channels;
-      var channels = [];
-      for (var i = 0; i < channels_id_type.length; i++) {
-        var channel_id_type = channels_id_type[i];
-        if (channel_id_type.type == consts.OFFICAL) {
-          for (var j = 0; j < all_channels.length; j++) {
-            var offical_channel = all_channels[i];
-            if (offical_channel._id == channel_id_type.id) {
-              channels.push(offical_channel);
-              break;
-            }
-          }
-        } else if (channel_id_type.type == consts.USER) {
-          for (var j = 0; j < user_channels.length; j++) {
-            var user_channel = user_channels[i];
-            if (user_channel._id == channel_id_type.id) {
-              channels.push(user_channel);
-              break;
-            }
+      for (var i = 0; i < all_channels.length; i++) {
+        var channel = all_channels[i];
+        for (var j = 0; j < channels_id.length; j++) {
+          if (channel._id == channels_id[j]) {
+            channels.push(channel);
+            break;
           }
         }
       }
@@ -101,7 +105,7 @@ module.exports = function(app, passport) {
         app.redis_connection.set(user.local.email, needed_val_str);
         res.redirect('/profile');
       });
-    })
+    });
   });
   app.get('/user_status', function(req, res){
     User.find({} , function(err, all_users) {

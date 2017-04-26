@@ -29,7 +29,8 @@ var userSchema = mongoose.Schema({
     
     name : String,
     created_date : Date,
-    channels : [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}]
+    offical_channels : [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}],
+    private_channels : Channel
 });
 
 // generating a hash

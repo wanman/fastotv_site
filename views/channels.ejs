@@ -52,23 +52,60 @@
           <tr>
           <th>#</th>
           <th>Name</th>
-          <th>Type</th>
           <th>Price</th>
           </tr>
         </thead>
         <tbody>
-          <% if (channels.length > 0) { %>
-          <% for (var i = 0; i < channels.length; i++) { %>
+          <% if (offical_channels.length > 0) { %>
+          <% for (var i = 0; i < offical_channels.length; i++) { %>
           <tr>
             <td><%= i + 1 %></td>
-            <td><%= channels[i].name %></td>
-            <td><%= channels[i].type %></td>
-            <td><%= channels[i].price %></td>
-            <td><input type="checkbox" name="channel" channel_id="<%- channels[i].id %>" channel_type="<%- channels[i].type %>" onclick="on_total_update()" value=<%-channels[i].price %> <%- channels[i].checked %>></td>
+            <td><%= offical_channels[i].name %></td>
+            <td><%= offical_channels[i].price %></td>
+            <td><input type="checkbox" name="channel" channel_id="<%- offical_channels[i].id %>" onclick="on_total_update()" value=<%-offical_channels[i].price %> <%- offical_channels[i].checked %>></td>
           </tr>
           <% } %>
           <% } %>
         </tbody>
+        
+        <h2>Availible user channels:</h2>
+        <table class="table">
+          <thead>
+            <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Url</th>
+            <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (private_channels.length > 0) { %>
+            <% for (var i = 0; i < private_channels.length; i++) { %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= private_channels[i].name %></td>
+              <td><%= private_channels[i].url %></td>
+              <td>
+                <form action="/remove_private_channel" method="post">
+                  <input type="hidden" class="form-control" name="channel_id" value="<%= private_channels[i]._id %>">
+                  <button type="submit" class="btn btn-danger btn-xs">Remove</button>
+                </form>
+              </td>
+            </tr>
+            <% } %>
+            <% } %>
+            <form action="/add_private_channel" method="post">
+              <div class="form-group">
+                <label>Name:</label>
+                <input class="form-control" name="private_channel_name">
+              </div>
+              <div class="form-group">
+                <label>Url:</label>
+                <input class="form-control" name="private_channel_url">
+              </div>
+              <button type="submit" class="btn btn-warning btn-small">Add</button>
+            </form>
+          </tbody>
       </table>
       <div class="row">
         <div class="col-sm-6">

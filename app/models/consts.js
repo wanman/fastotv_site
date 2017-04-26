@@ -1,3 +1,0 @@
-const OFFICAL = 'OFFICAL';
-const USER = 'USER';
-const CHANNEL_TYPE = [OFFICAL, USER]
