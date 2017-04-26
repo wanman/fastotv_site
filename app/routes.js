@@ -55,7 +55,7 @@ module.exports = function(app, passport) {
     var channel_name = req.body.private_channel_name;
     var channel_url = req.body.private_channel_url;
     var new_channel = {url : channel_url, name : channel_name}
-    user.user_private_channels.push(new_channel);
+    user.private_channels.push(new_channel);
     user.save(function(err) {
       if (err) {
         req.flash('statusProfileMessage', err);
