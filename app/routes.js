@@ -66,8 +66,8 @@ module.exports = function(app, passport) {
     });
   });
   
-   // ADD channels 
-  app.post('/add_channels', function(req, res) {
+   // APPLY channels 
+  app.post('/apply_channels', function(req, res) {
     var user = req.user;
     var channels_id = JSON.parse(req.body.channels_id);
     Channel.find({}, function(err, all_channels) {
@@ -87,7 +87,13 @@ module.exports = function(app, passport) {
         }
       }
       
-      user.channels = channels;
+      user.offical_channels = channels;
+      
+      var user_private_channels = user.private_channels;
+      for (var i = 0; i < user_private_channels.length; i++) {
+        var channel = user_private_channels[i];
+        channels.push(channel);
+      }
       user.save(function(err) {
         if (err) {
           req.flash('statusProfileMessage', err);
@@ -95,8 +101,8 @@ module.exports = function(app, passport) {
         }
         
         var redis_channels = []; // Create a new empty array.
-        for (var i = 0; i < user.channels.length; i++) {
-          var channel = user.channels[i];
+        for (var i = 0; i < channels.length; i++) {
+          var channel = channels[i];
           redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
         }
         
