@@ -62,7 +62,7 @@ module.exports = function(app, passport) {
         return;
       }
       
-      res.render('channels.ejs');
+      res.redirect('/channels');
     });
   });
   
