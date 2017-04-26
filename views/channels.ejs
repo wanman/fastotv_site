@@ -97,24 +97,25 @@
       </table>
       <form class="form-inline" action="/add_private_channel" method="post">
         <div class="form-group">
-          <label>Name:</label>
-          <input class="form-control" name="private_channel_name">
+          <input class="form-control" name="private_channel_name" placeholder="Name">
         </div>
         <div class="form-group">
-          <label>Url:</label>
-          <input class="form-control" name="private_channel_url">
+          <input class="form-control" name="private_channel_url" placeholder="Url">
         </div>
         <button type="submit" class="btn btn-warning btn-small">Add</button>
       </form>
     </div>
     <!-- Apply channels FORM -->
     <form class="form-inline" action="/apply_channels" method="post">
+      <div class="form-group">
+        <label>TOTAL:</label>
+      </div>
+      <div class="form-group">
+        <input class="form-control" id="total", value=0 disabled>
+      </div>
       <input type="hidden" id="c_id" class="form-control" name="apply_channels_id" value="">
       <button type="submit" class="btn btn-warning btn-small">Apply</button>
     </form>
-    <div class="col-sm-6">
-      <p>TOTAL: <input id="total", value=0></p>
-    <div>
   </div>
 </body>
 </html>
