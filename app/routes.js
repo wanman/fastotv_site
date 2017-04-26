@@ -34,8 +34,8 @@ module.exports = function(app, passport) {
       for (var i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
         var exist = false;
-        for (var j = 0; j < user_channels.length; j++) {
-          if (user_channels[j].equals(channel._id)) {
+        for (var j = 0; j < user_offical_channels.length; j++) {
+          if (user_offical_channels[j].equals(channel._id)) {
             exist = true;
             break;
           }
