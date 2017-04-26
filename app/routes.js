@@ -66,6 +66,22 @@ module.exports = function(app, passport) {
     });
   });
   
+  // REMOVE private channel
+  app.post('/remove_private_channel', function(req, res) {
+    var user = req.user;
+    var channel_id = req.body.remove_channel_id;
+    user.private_channels.pull({_id: channel_id});
+    user.save(function(err) {
+      if (err) {
+        req.flash('statusProfileMessage', err);
+        return;
+      }
+      
+      res.redirect('/channels');
+    });
+  });
+  
+  
    // APPLY channels 
   app.post('/apply_channels', function(req, res) {
     var user = req.user;
