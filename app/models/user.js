@@ -1,7 +1,7 @@
 // load the things we need
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var Channel = require('./Channel');
+var channel_scheme = require('./channel_scheme');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
@@ -31,7 +31,7 @@ var userSchema = mongoose.Schema({
     name : String,
     created_date : Date,
     offical_channels : [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}],
-    private_channels : Channel
+    private_channels : channel_scheme.channelSchema
 });
 
 // generating a hash
