@@ -73,14 +73,13 @@
         update_bar(responce_json.progress, responce_json.message);             
       });
           
-      function send_build_request(id, user, password, platform, package_type, bit, databases) {
+      function send_build_request(id, user, password, platform, package_type, bit) {
         var build_args = { "id" : id,
                            "platform": platform,
                            "package_type" : package_type,
                            "email" : user,
                            "password" : password,
-                           "arch" : bit,
-                           "databases" : databases
+                           "arch" : bit
                          };
         var msg = JSON.stringify(build_args);
         socket.emit('publish_rabbitmq', msg);
@@ -91,14 +90,8 @@
         var os_ctrl = $('input[name=os]:checked');
         var package_type = os_ctrl.attr('package_type');
         var bit = parseInt(os_ctrl.attr('bit'));
-        var databases = [];
         var dbs = document.getElementsByName('database');
-        for(var i = 0; i < dbs.length; ++i) {
-          if(dbs[i].checked) {
-            databases.push(dbs[i].value);
-          }
-        }
-        return send_build_request(id, user, password, platform, package_type, bit, databases);
+        return send_build_request(id, user, password, platform, package_type, bit);
       }            
     </script>
     <script>
@@ -186,9 +179,6 @@
             </div>
             <div role="tabpane2" class="tab-pane form-inline" id="advanced">
               <div>
-                <% for (var i = 0; i < site.supported_databases.length; ++i) { %>
-                  <input type="checkbox" name="database" value="<%- site.supported_databases[i].name %>" checked="checked"> <%- site.supported_databases[i].name %></br>
-                <% } %>
               </div>            
             </div>
           </div>
