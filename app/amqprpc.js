@@ -38,6 +38,7 @@ AmqpRpc.prototype.makeRequest = function(queue_name, correlationId, content, cal
     //put the request on a queue
     self.connection.publish(queue_name, content, {
       correlationId:correlationId,
+      contentEncoding: 'utf-8'
       contentType:CONTENT_TYPE,
       replyTo:self.response_queue});
   });
