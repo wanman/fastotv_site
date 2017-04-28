@@ -1,2 +1,2 @@
 # fastotv_site
-Site for fastotv
+FastoTV free IPTV platform.
