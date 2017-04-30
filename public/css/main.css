@@ -5,6 +5,9 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 240px;
+  
+  padding-top:80px; 
+  word-wrap:break-word;
 }
 .footer {
   position: absolute;
