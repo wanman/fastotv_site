@@ -4,27 +4,26 @@
 <body class="page">
   <%- include('header/main'); %>
   <div class="container">
-    <div class="row">
-      <div class="text-center">
-        <h1 style="color: #fff;">&lt;%- site.small_description %&gt;</h1>
-        <h3 style="color: #fff;">Login or Register for download:</h3>
-        <a href="/login" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign in</a>
-        <a href="/signup" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign up</a> 
-        <a href="/auth/facebook"class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
-        <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span> Twitter</a>
-        <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google+</a>
-      </div>
+    <div class="row text-center">
+      <h1><%- site.small_description %></h1>
+      <h3>Login or Register for download:</h3>
+      <a href="/login" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign in</a>
+      <a href="/signup" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign up</a> 
+      <a href="/auth/facebook"class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+      <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span> Twitter</a>
+      <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google+</a>
     </div>
+    </br></br></br>
     
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="github"> 
           <a aria-label="Watch <%- site.github_link_without_host %> on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/<%- site.github_link_without_host %>#subscribers_count" data-count-href="/<%- site.github_link_without_host %>/watchers" data-icon="octicon-eye" href="<%- site.github_link %>" class="github-button">Watch</a>
           <a aria-label="Star <%- site.github_link_without_host %> on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/<%- site.github_link_without_host %>#stargazers_count" data-count-href="/<%- site.github_link_without_host %>/stargazers" data-icon="octicon-star" href="<%- site.github_link %>" class="github-button">Star</a>
           <script async="" defer="" id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="facebook">
           <div id="fb-root"></div>
           <script>
@@ -42,7 +41,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="twitter"> <a href="https://twitter.com/share" class="twitter-share-button" {count}="" data-via="<%= site.twitter_name %>">Tweet</a>
           <script>
           ! function(d, s, id) {
@@ -71,7 +70,7 @@
           </script>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="google_plus">
           <div class="g-plus" data-action="share" data-annotation="bubble"></div>
           <script type="text/javascript">
@@ -94,7 +93,7 @@
     </div>
     
     <div class="row">
-      <h2>What is <%- site.title %>?</h2>
+      <h2>What is <%- site.title %>? </h2>
       <p>
         <%- site.title %> it is iptv platform, for watching TV via internet. Currently we support next platform:
       </p>
