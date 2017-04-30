@@ -1,8 +1,12 @@
 <!doctype html>
 <html>
-<%- include('head/main'); %>
+<head>
+  <%- include('head/main'); %>
+</head>
 <body class="page">
-  <%- include('header/main'); %>
+  <header role="banner" class="transparent light">
+    <%- include('header/main'); %>
+  </header>
   <div class="container">
     <div class="row text-center">
       <h1><%- site.small_description %></h1>
@@ -130,6 +134,8 @@
       <a href=<%= site.twitter_link %> title="Project in Twitter"><i style="font-size: 2.556em; vertical-align: middle;" class="fa fa-twitter"></i></a>
     </div>
   </div>
-  <%- include('footer/main'); %>
+  <footer class="footer">
+    <%- include('footer/main'); %>
+  </footer>
 </body>
 </html>
