@@ -46,8 +46,8 @@ var listener = io.listen(server);
 // settings
 app.locals.site = {
     title: 'FastoTV',
-    version: '0.0.1',
-    domain: 'http://46.101.148.105',
+    version: '0.1.0',
+    domain: 'http://fastotv.com',
     keywords: 'FastoTV, IPTV, Open source, Free, Tv player, Cross-platform',
     description: 'FastoTV it is open source iptv solution.',
     small_description: 'FastoTV - cross-platform solution for watching tv.',
