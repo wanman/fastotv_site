@@ -4,119 +4,132 @@
 <body class="page">
   <%- include('header/main'); %>
   <div class="container">
-    <main role="main">
-      <div id="intro-wrap">    
-        <div class="container intro-item">
-          <div class="intro-mockup-wrapper">
-            <div class="text-center">
-                <h1 style="color: #fff;"><%- site.small_description %></h1>
-                <h3 style="color: #fff;">Login or Register for download:</h3>
-                <a href="/login" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign in</a>
-                <a href="/signup" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign up</a>
-                <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
-                <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span> Twitter</a>
-                <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google+</a>
-            </div>
+    <div class="row">
+      <div class="text-center">
+        <h1 style="color: #fff;">&lt;%- site.small_description %&gt;</h1>
+        <h3 style="color: #fff;">Login or Register for download:</h3>
+        <a href="/login" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign in</a>
+        <a href="/signup" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign up</a> 
+        <a href="/auth/facebook"class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+        <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span> Twitter</a>
+        <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google+</a>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="github"> 
+          <a aria-label="Watch <%- site.github_link_without_host %> on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/<%- site.github_link_without_host %>#subscribers_count" data-count-href="/<%- site.github_link_without_host %>/watchers" data-icon="octicon-eye" href="<%- site.github_link %>" class="github-button">Watch</a>
+          <a aria-label="Star <%- site.github_link_without_host %> on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/<%- site.github_link_without_host %>#stargazers_count" data-count-href="/<%- site.github_link_without_host %>/stargazers" data-icon="octicon-star" href="<%- site.github_link %>" class="github-button">Star</a>
+          <script async="" defer="" id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="facebook">
+          <div id="fb-root"></div>
+          <script>
+          (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.5&appId=<%= site.facebook_appid %>";
+          fjs.parentNode.insertBefore(js, fjs);
+          }(document, 'script', 'facebook-jssdk'));
+          </script>
+          <div class="fb-like" style="vertical-align: sub !important;" data-href="<%= site.domain %>" 
+            data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">
           </div>
         </div>
       </div>
-      
-      <div id="main">
-        <section class="row section call-to-action first">
-          <div class="row-content buffer even" style="line-height: 0.8;">
-            <div class="column three">
-              <div class="github">
-                <a aria-label="Watch <%- site.github_link_without_host %> on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/<%- site.github_link_without_host %>#subscribers_count" data-count-href="/<%- site.github_link_without_host %>/watchers" data-icon="octicon-eye" href="<%- site.github_link %>" class="github-button">Watch</a>
-                <a aria-label="Star <%- site.github_link_without_host %> on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/<%- site.github_link_without_host %>#stargazers_count" data-count-href="/<%- site.github_link_without_host %>/stargazers" data-icon="octicon-star" href="<%- site.github_link %>" class="github-button">Star</a>
-                <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
-              </div>
-            </div>
-            <div class="column three">
-              <div class="facebook">
-                <div id="fb-root"></div>
-                <script>(function(d, s, id) {
-                          var js, fjs = d.getElementsByTagName(s)[0];
-                          if (d.getElementById(id)) return;
-                          js = d.createElement(s); js.id = id;
-                          js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.5&appId=<%= site.facebook_appid %>";
-                          fjs.parentNode.insertBefore(js, fjs);
-                      }(document, 'script', 'facebook-jssdk'));
-                </script>
-                <div class="fb-like" style="vertical-align: sub !important;" data-href="<%= site.domain %>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>	
-              </div>
-            </div>      
-            <div class="column three">
-              <div class="twitter">
-                <a href="https://twitter.com/share" class="twitter-share-button"{count} data-via="<%= site.twitter_name %>">Tweet</a>
-                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                <a href="<%= site.twitter_link %>" class="twitter-follow-button" data-show-count="false">Follow @<%= site.twitter_name %></a>
-                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-              </div>
-            </div>      
-            <div class="column three">
-              <div class="google_plus">
-                <div class="g-plus" data-action="share" data-annotation="bubble"></div>
-                <script type="text/javascript">
-                    window.___gcfg = {lang: 'en-GB'};
-                    (function() {
-                        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                        po.src = 'https://apis.google.com/js/platform.js';
-                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                    })();
-                </script>
-                <script src="https://apis.google.com/js/platform.js" async defer>
-                    {lang: 'en-GB'}
-                </script>
-                <div class="g-plusone" data-size="medium" data-href="<%= site.domain%>"></div>
-              </div>
-            </div> 
-          </div>
-        </section>
-
-        <!--content-->
-        <section class="row section text-light first">
-          <div class="row-content buffer even clear-after">   
-            <div class="column six">
-              <h2>What is <%- site.title %>?</h2>
-              <p>
-                <%- site.title %> it is iptv platform, for watching TV via internet. Currently we support next platform:
-              </p>
-              <p>
-                  <ul>
-                    <li>MacOSX</li>
-                    <li>Linux</li>
-                    <li>Windows</li>
-                    <li>Embedded Linux</li>
-                  </ul>
-              </p>
-            </div>
-            <div class="column">
-              <p>
-                You can use our player for watcing tv channels. 
-                Also <%- site.title %> is open and free IPTV platform.
-              </p>
-              <p>
-                Main big advantages of <%- site.title %>:
-              </p>
-              <p>
-                <ul>
-                  <li>Open source</li>
-                  <li>Cross-platform</li>
-                  <li>Simple code</li>
-                  <li>Great solutions</li>
-                </ul>
-              </p>
-              <p>
-                We are waiting for your feedback! Please write any issues and proposals to 
-                <a href="<%- site.github_issues_link %>" alt="IPTV">GitHub Issues</a>.
-              </p>
-              <a class="button transparent white" href="/help">How to use</a>
-              <a href=<%= site.twitter_link %> title="Project in Twitter"><i style="font-size: 2.556em; vertical-align: middle;" class="fa fa-twitter"></i></a>
-            </div>
-          </div>  
-        </section>
+      <div class="col-md-6">
+        <div class="twitter"> <a href="https://twitter.com/share" class="twitter-share-button" {count}="" data-via="<%= site.twitter_name %>">Tweet</a>
+          <script>
+          ! function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0],
+            p = /^http:/.test(d.location) ? 'http' : 'https';
+          if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = p + '://platform.twitter.com/widgets.js';
+            fjs.parentNode.insertBefore(js, fjs);
+          }
+          }(document, 'script', 'twitter-wjs');
+          </script> 
+          <a href="<%= site.twitter_link %>" class="twitter-follow-button" data-show-count="false">Follow @&lt;%= site.twitter_name %&gt;</a>
+          <script>
+          ! function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0],
+            p = /^http:/.test(d.location) ? 'http' : 'https';
+          if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = p + '://platform.twitter.com/widgets.js';
+            fjs.parentNode.insertBefore(js, fjs);
+          }
+          }(docum*ent, 'script', 'twitter-wjs');
+          </script>
+        </div>
       </div>
-    </main>
+      <div class="col-md-6">
+        <div class="google_plus">
+          <div class="g-plus" data-action="share" data-annotation="bubble"></div>
+          <script type="text/javascript">
+            window.___gcfg = {lang: 'en-GB'};
+            (function() {
+            var po = document.createElement('script');
+            po.type = 'text/javascript';
+            po.async = true;
+            po.src = 'https://apis.google.com/js/platform.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(po, s);
+            })();
+          </script>
+          <script src="https://apis.google.com/js/platform.js" async="" defer="">
+            {lang: 'en-GB'}
+          </script>
+        <div class="g-plusone" data-size="medium" data-href="<%= site.domain%>"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <h2>What is <%- site.title %>?</h2>
+      <p>
+        <%- site.title %> it is iptv platform, for watching TV via internet. Currently we support next platform:
+      </p>
+      <p>
+          <ul>
+            <li>MacOSX</li>
+            <li>Linux</li>
+            <li>Windows</li>
+            <li>Embedded Linux</li>
+          </ul>
+      </p>
+    </div>
+    <div class="row">
+      <p>
+        You can use our player for watcing tv channels. 
+        Also <%- site.title %> is open and free IPTV platform.
+      </p>
+      <p>
+        Main big advantages of <%- site.title %>:
+      </p>
+      <p>
+        <ul>
+          <li>Open source</li>
+          <li>Cross-platform</li>
+          <li>Simple code</li>
+          <li>Great solutions</li>
+        </ul>
+      </p>
+      <p>
+        We are waiting for your feedback! Please write any issues and proposals to 
+        <a href="<%- site.github_issues_link %>" alt="IPTV">GitHub Issues</a>.
+      </p>
+      <a class="button transparent white" href="/help">How to use</a>
+      <a href=<%= site.twitter_link %> title="Project in Twitter"><i style="font-size: 2.556em; vertical-align: middle;" class="fa fa-twitter"></i></a>
+    </div>
   </div>
   <%- include('footer/main'); %>
 </body>
