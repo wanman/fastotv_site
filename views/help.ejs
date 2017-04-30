@@ -40,7 +40,6 @@
         <ul class="reset" role="navigation">
         <li><a href="/">Home</a></li>
         <li><a href="/help">How to use</a></li>
-        <li><a href="/download">Download</a></li>
         </ul>
       </nav>
     </div><!-- row-content -->  
@@ -51,125 +50,17 @@
   <div id="intro" class="preload darken">
     <div class="intro-item">
       <div class="caption" style="top: 25.5px;">
-        <h1 style="color: #fff;">How to use FastoNoSQL</h1>
+        <h1 style="color: #fff;">How to use <%- site.title %></h1>
       </div><!-- caption -->    
     </div><!-- intro -->
   </div><!-- intro -->        
 </div><!-- intro-wrap -->
 
-<div id="main" class="row">
-  <div class="row-content buffer-left buffer-right buffer-bottom clear-after">
-    <div class="post-area clear-after">
-      <article role="main" class="column nine">
-         <div class="row-content" id="1">
-          <h2 style="margin: 25px 0 0 0;">Create connection</h2>
-          </p>
-          <img src="images/connect.gif" alt="Help - Create connection" title="Help - Create connection"/>
-          <p>
-        </div>
-
-        <div class="row-content" id="2">
-          <h2>Workflow</h2>
-          </p>
-          <img src="images/edit.gif" alt="Help - FastoNoSQL workflow" title="Help - FastoNoSQL workflow"/>
-          <p>
-        </div>
-        <div class="meta-social">
-
-<div class="column twelve" style="text-align: center; margin: 10px 0;">
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <!-- FastoNoSQL -->
-    <ins class="adsbygoogle"
-    style="display:inline-block;width:728px;height:90px"
-    data-ad-client="<%- site.data_ad_client %>"
-    data-ad-slot="<%- site.data_ad_slot %>"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-</div>
-
-          <div class="row-content buffer even" style="line-height: 0.8;">
-            <div class="column three">
-              <div class="github">
-                <a aria-label="Watch <%- site.github_link_without_host %> on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/<%- site.github_link_without_host %>#subscribers_count" data-count-href="/<%- site.github_link_without_host %>/watchers" data-icon="octicon-eye" href="<%- site.github_link %>" class="github-button">Watch</a>
-                <a aria-label="Star <%- site.github_link_without_host %> on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/<%- site.github_link_without_host %>#stargazers_count" data-count-href="/<%- site.github_link_without_host %>/stargazers" data-icon="octicon-star" href="<%- site.github_link %>" class="github-button">Star</a>
-                <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
-              </div>
-            </div>
-            <div class="column three">
-              <div class="facebook">
-                <div id="fb-root"></div>
-                <script>(function(d, s, id) {
-                          var js, fjs = d.getElementsByTagName(s)[0];
-                          if (d.getElementById(id)) return;
-                          js = d.createElement(s); js.id = id;
-                          js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.5&appId=<%= site.facebook_appid %>";
-                          fjs.parentNode.insertBefore(js, fjs);
-                      }(document, 'script', 'facebook-jssdk'));
-                </script>
-                <div class="fb-like" style="vertical-align: sub !important;" data-href="<%= site.domain %>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>	
-              </div>
-            </div>      
-            <div class="column three">
-              <div class="twitter">
-                  <a href="https://twitter.com/share" class="twitter-share-button"{count} data-via="<%= site.twitter_name %>">Tweet</a>
-                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                  <a href="<%= site.twitter_link %>" class="twitter-follow-button" data-show-count="false">Follow @<%= site.twitter_name %></a>
-                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-              </div>
-            </div>      
-            <div class="column three">
-              <div class="google_plus">
-                <div class="g-plus" data-action="share" data-annotation="bubble"></div>
-                <script type="text/javascript">
-                    window.___gcfg = {lang: 'en-GB'};
-                    (function() {
-                        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                        po.src = 'https://apis.google.com/js/platform.js';
-                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                    })();
-                </script>
-                <script src="https://apis.google.com/js/platform.js" async defer>
-                    {lang: 'en-GB'}
-                </script>
-                <div class="g-plusone" data-size="medium" data-href="<%= site.domain%>"></div>
-              </div>
-            </div> 
-          </div>
-        </div>
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-                /* * * CONFIGURATION VARIABLES * * */
-                var disqus_shortname = 'fastonosqlcom';
-                
-                /* * * DON'T EDIT BELOW THIS LINE * * */
-                (function() {
-                  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-      </article>
-
-      <aside role="complementary" class="sidebar column three last">
-        <div class="widget help-menu">
-          <h3>How to use</h3>
-            <ul class="plain">
-              <li><a href="#1">Create connection</a></li>
-              <li><a href="#2">Workflow</a></li>
-            </ul>
-        </div>    
-      </aside>
-    </div><!-- post-area -->    
-  </div><!-- row-content -->
-</div><!-- row -->
-
 <footer role="contentinfo">
   <div class="row">
     <div class="row-content buffer clear-after">
       <section id="top-footer">
-        <div class="widget column three"><!-- la class="widget" è forse generata utomaticamente da wp -->
+        <div class="widget column three">
           <h4>Contribute</h4>
           <p>Please submit any issues, bugs and proposals via GitHub Issues:<br />
           <a href="<%- site.github_issues_link %>" style="font-weight: bold;"><%- site.title %> in GitHub</a><br />
@@ -221,7 +112,7 @@
       </section><!-- top-footer -->
       <section id="bottom-footer">
         <p class="keep-left"><%- company.copyright %></p>
-        <p class="keep-right"><a href="/"><%- site.title %></a> | <a href="/download">Download</a> | <a href="help">Support</a></p>
+        <p class="keep-right"><a href="/"><%- site.title %></a> | <a href="help">Support</a></p>
       </section><!-- bottom-footer -->
         <p> Website development &ndash; <a href="<%- company.domain %>" target="_blank" rel="nofollow"><img style="display: inline; margin: 0 !important;" src="design/img/fastogt.png" alt="<%- company.description %>" title="<%- company.description %>" /></a></p>
     </div><!-- row-content -->  
