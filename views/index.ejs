@@ -8,16 +8,17 @@
     <%- include('header/main') %>
   </header>
   <div class="container">
-    <div class="row text-center">
-      <h1><%- site.small_description %></h1>
-      <h3>Login or Register for download:</h3>
-      <a href="/login" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign in</a>
-      <a href="/signup" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign up</a> 
-      <a href="/auth/facebook"class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
-      <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span> Twitter</a>
-      <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google+</a>
+    <div class="well">
+      <div class="row text-center">
+        <h1><%- site.small_description %></h1>
+        <h3>Login or Register for download:</h3>
+        <a href="/login" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign in</a>
+        <a href="/signup" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign up</a> 
+        <a href="/auth/facebook"class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+        <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span> Twitter</a>
+        <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google+</a>
+      </div>
     </div>
-    </br></br></br>
     
     <div class="row">
       <div class="col-md-4">
@@ -96,41 +97,45 @@
       </div>
     </div>
     
-    <div class="row">
-      <h2>What is <%- site.title %>? </h2>
-      <p>
-        <%- site.title %> it is iptv platform, for watching TV via internet. Currently we support next platform:
-      </p>
-      <p>
-          <ul>
-            <li>MacOSX</li>
-            <li>Linux</li>
-            <li>Windows</li>
-            <li>Embedded Linux</li>
-          </ul>
-      </p>
+    <div class="well">
+      <div class="row">
+        <h2>What is <%- site.title %>? </h2>
+        <p>
+          <%- site.title %> it is iptv platform, for watching TV via internet. Currently we support next platform:
+        </p>
+        <p>
+            <ul>
+              <li>MacOSX</li>
+              <li>Linux</li>
+              <li>Windows</li>
+              <li>Embedded Linux</li>
+            </ul>
+        </p>
+      </div>
     </div>
-    <div class="row">
-      <p>
-        You can use our player for watcing tv channels. 
-        Also <%- site.title %> is open and free IPTV platform.
-      </p>
-      <p>
-        Main big advantages of <%- site.title %>:
-      </p>
-      <p>
-        <ul>
-          <li>Open source</li>
-          <li>Cross-platform</li>
-          <li>Simple code</li>
-          <li>Great solutions</li>
-        </ul>
-      </p>
-      <p>
-        We are waiting for your feedback! Please write any issues and proposals to 
-        <a href="<%- site.github_issues_link %>" alt="IPTV">GitHub Issues</a>.
-      </p>
-      <a class="button transparent white" href="/help">How to use</a>
+    <div class="well">
+      <div class="row">
+        <p>
+          You can use our player for watcing tv channels. 
+          Also <%- site.title %> is open and free IPTV platform.
+        </p>
+        <p>
+          Main big advantages of <%- site.title %>:
+        </p>
+        <p>
+          <ul>
+            <li>Open source</li>
+            <li>Cross-platform</li>
+            <li>Simple code</li>
+            <li>Great solutions</li>
+          </ul>
+        </p>
+        <p>
+          We are waiting for your feedback! Please write any issues and proposals to 
+          <a href="<%- site.github_issues_link %>" alt="IPTV">GitHub Issues</a>.
+        </p>
+        <a class="button transparent white" href="/help">How to use</a>
+      </div>
     </div>
   </div>
   <footer class="footer">
