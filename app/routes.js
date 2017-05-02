@@ -14,6 +14,9 @@ module.exports = function(app, passport) {
   app.get('/help', function(req, res) {
       res.render('help.ejs');
   });
+  app.get('/brodcasters_help', function(req, res) {
+      res.render('brodcasters_help.ejs');
+  });
   app.get('/channels', function(req, res) {
     var user = req.user;
     var user_offical_channels = user.offical_channels;
