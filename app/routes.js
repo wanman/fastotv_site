@@ -54,7 +54,7 @@ module.exports = function(app, passport) {
     var private_channel_tags_array = req.body.private_channel_tags.split(',');
     var tags = [];
     for(var i in private_channel_tags_array){
-      tags.push(i);
+      tags.push(private_channel_tags_array[i]);
     }
     var new_channel = {url : channel_url, name : channel_name, tags: tags}
     user.private_channels.push(new_channel);
