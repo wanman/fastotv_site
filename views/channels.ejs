@@ -93,6 +93,15 @@
         </div>
         <div class="form-group">
           <input class="form-control" data-role="tagsinput" id="private_channel_tags_id" name="private_channel_tags" placeholder="tags">
+          <script>
+          $('#private_channel_tags_id').tagsinput({
+            typeahead: {
+              source: function(query) {
+                return $.getJSON('assets/channels_tags.json');
+              }
+            }
+          });
+          </script>
         </div>
         <button type="submit" class="btn btn-warning btn-small">Add</button>
       </form>
