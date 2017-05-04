@@ -5,7 +5,8 @@ var mongoose = require('mongoose');
 var ChannelSchema = mongoose.Schema({
   url : String,
   name : String,
-  price : {type : Number, default: 0}
+  price : {type : Number, default: 0},
+  tags : [String]
 });
 
 module.exports = ChannelSchema;
