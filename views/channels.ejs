@@ -23,6 +23,7 @@
     }
   </script>
   <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
 </head>
 <body onload="on_total_update()">
   <div class="container">
@@ -44,7 +45,10 @@
             <td><%= i + 1 %></td>
             <td><%= offical_channels[i].name %></td>
             <td><%= offical_channels[i].price %></td>
-            <td><input type="checkbox" name="channel" channel_id="<%- offical_channels[i].id %>" onclick="on_total_update()" value=<%-offical_channels[i].price %> <%- offical_channels[i].checked %>></td>
+            <td>
+            <input type="checkbox" name="channel" channel_id="<%- offical_channels[i].id %>" onclick="on_total_update()" 
+            value=<%-offical_channels[i].price %> <%- offical_channels[i].checked %>>
+            </td>
           </tr>
           <% } %>
           <% } %>
@@ -88,14 +92,14 @@
           <input class="form-control" name="private_channel_url" placeholder="Url">
         </div>
         <div class="form-group">
-          <input class="form-control" data-role="tagsinput" name="private_channel_tags" placeholder="tags">
+          <input class="form-control" data-role="tagsinput" id="private_channel_tags_id" name="private_channel_tags" placeholder="tags">
           <script>
-          $('input').tagsinput({
+          var channel_tags = $("#private_channel_tags_id");
+          channel_tags.tagsinput({
             typeahead: {
-              source: function(query) {
-                return $.getJSON('channels_tags.json');
-              }
-            }
+              source: ['HD','SD','UHD']
+            },
+            freeInput: true
           });
           </script>
         </div>
