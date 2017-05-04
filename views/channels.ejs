@@ -85,6 +85,15 @@
         </div>
         <div class="form-group">
           <input class="form-control" name="private_channel_url" placeholder="Url">
+          <script>
+          $('input').tagsinput({
+            typeahead: {
+              source: function(query) {
+                return $.getJSON('channels_tags.json');
+              }
+            }
+          });
+          </script>
         </div>
         <div class="form-group">
           <input class="form-control" data-role="tagsinput" name="private_channel_tags" placeholder="tags">
