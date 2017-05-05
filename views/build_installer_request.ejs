@@ -45,8 +45,8 @@
       }
 
       if (responce_json.hasOwnProperty('error')){
-        $('.progress').removeClass('progress-bar-success');
-        $('.progress').addClass('progress-bar-danger');
+        $('.progress-bar').removeClass('progress-bar-success');
+        $('.progress-bar').addClass('progress-bar-danger');
         update_bar(100, responce_json.error);
       } else {
         $('#package_link').attr("href", responce_json.body);
@@ -185,7 +185,6 @@
                 <p>Do you want to start build package?</p>                   
                 <div class="progress progress-striped active">
                   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="max-width:1600px;">
-                    <span></span>
                   </div>
                 </div>
                 <a href="" id="package_link" style="display:none">Click to download</a>
