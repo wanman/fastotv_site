@@ -37,7 +37,7 @@ module.exports = function(app, passport) {
             break;
           }
         }
-        ochannels.push({id : channel._id, name : channel.name, price : channel.price, checked :  exist ? "checked" : ""});
+        ochannels.push({id : channel._id, tags: channel.tags, name : channel.name, price : channel.price, checked :  exist ? "checked" : ""});
       }
       res.render('channels.ejs', {
         offical_channels: ochannels,

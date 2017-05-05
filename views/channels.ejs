@@ -35,6 +35,7 @@
           <th>#</th>
           <th>Name</th>
           <th>Price</th>
+          <th>Tags</th>
           <th>In playlist</th>
           </tr>
         </thead>
@@ -46,8 +47,11 @@
             <td><%= offical_channels[i].name %></td>
             <td><%= offical_channels[i].price %></td>
             <td>
-            <input type="checkbox" name="channel" channel_id="<%- offical_channels[i].id %>" onclick="on_total_update()" 
-            value=<%-offical_channels[i].price %> <%- offical_channels[i].checked %>>
+              <input data-role="tagsinput" value=<%- offical_channels[i].tags %> >
+            </td>
+            <td>
+              <input type="checkbox" name="channel" channel_id="<%- offical_channels[i].id %>" onclick="on_total_update()" 
+              value=<%-offical_channels[i].price %> <%- offical_channels[i].checked %>>
             </td>
           </tr>
           <% } %>
@@ -63,6 +67,7 @@
           <th>#</th>
           <th>Name</th>
           <th>Url</th>
+          <th>Tags</th>
           <th>Actions</th>
           </tr>
         </thead>
@@ -73,6 +78,9 @@
             <td><%= i + 1 %></td>
             <td><%= private_channels[i].name %></td>
             <td><%= private_channels[i].url %></td>
+            <td>
+              <input data-role="tagsinput" value=<%- private_channels[i].tags %> >
+            </td>
             <td>
               <form action="/remove_private_channel" method="post">
                 <input type="hidden" class="form-control" name="remove_channel_id" value="<%= private_channels[i]._id %>">
