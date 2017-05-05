@@ -47,7 +47,7 @@
             <td><%= offical_channels[i].name %></td>
             <td><%= offical_channels[i].price %></td>
             <td>
-              <input data-role="tagsinput" value=<%- offical_channels[i].tags %> >
+              <input value="<%- offical_channels[i].tags %>" disabled>
             </td>
             <td>
               <input type="checkbox" name="channel" channel_id="<%- offical_channels[i].id %>" onclick="on_total_update()" 
@@ -79,7 +79,7 @@
             <td><%= private_channels[i].name %></td>
             <td><%= private_channels[i].url %></td>
             <td>
-              <input data-role="tagsinput" value=<%- private_channels[i].tags %> >
+              <input value="<%- private_channels[i].tags %>" disabled>
             </td>
             <td>
               <form action="/remove_private_channel" method="post">
