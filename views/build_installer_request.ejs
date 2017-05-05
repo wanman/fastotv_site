@@ -52,7 +52,8 @@
         $('#package_link').attr("href", responce_json.body);
         $('#package_link').show();
       }
-      $('#build_button').disabled = false;
+      var build_button = $('#build_button');
+      build_button.prop('disabled', false);
     });
         
     socket.on('status_rabbitmq', function (responce_json) {
@@ -75,7 +76,8 @@
     }
         
     function send_build_request_local(id, user, password) {
-      $('#build_button').disabled = true;
+      var build_button = $('#build_button');
+      build_button.prop('disabled', true);
       $('.progress-bar').removeClass('progress-bar-danger');
       $('.progress-bar').addClass('progress-bar-success');
       $('#package_link').hide();
@@ -84,7 +86,6 @@
       var os_ctrl = $('input[name=os]:checked');
       var package_type = os_ctrl.attr('package_type');
       var bit = os_ctrl.attr('bit');
-      var dbs = document.getElementsByName('database');
       return send_build_request(id, user, password, platform, package_type, bit);
     }            
   </script>
