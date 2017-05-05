@@ -51,7 +51,8 @@
       } else {
         $('#package_link').attr("href", responce_json.body);
         $('#package_link').show();
-      }              
+      }
+      $('#build_button').disabled = false;
     });
         
     socket.on('status_rabbitmq', function (responce_json) {
@@ -74,6 +75,7 @@
     }
         
     function send_build_request_local(id, user, password) {
+      $('#build_button').disabled = true;
       $('.progress-bar').removeClass('progress-bar-danger');
       $('.progress-bar').addClass('progress-bar-success');
       $('#package_link').hide();
@@ -197,7 +199,7 @@
             </div>
             <div class="modal-footer">                  
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" onclick="send_build_request_local('<%- user._id %>', '<%- user.local.email %>', '<%- user.local.password %>')">Start build</button>
+              <button type="button" id="build_button" class="btn btn-primary" onclick="send_build_request_local('<%- user._id %>', '<%- user.local.email %>', '<%- user.local.password %>')">Start build</button>
             </div>
           </div>
         </div>
