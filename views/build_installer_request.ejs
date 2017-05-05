@@ -74,6 +74,10 @@
     }
         
     function send_build_request_local(id, user, password) {
+      $('.progress-bar').removeClass('progress-bar-danger');
+      $('.progress-bar').addClass('progress-bar-success');
+      $('#package_link').hide();
+      
       var platform = $('.nav-tabs .active > a').attr('aria-controls');
       var os_ctrl = $('input[name=os]:checked');
       var package_type = os_ctrl.attr('package_type');
