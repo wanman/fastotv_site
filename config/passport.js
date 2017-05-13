@@ -145,11 +145,18 @@ module.exports = function(redis_connection, passport) {
                         var user = req.user;
                         user.local.email = email;
                         user.local.password = user.generateHash(password);
+                        user.local.created_date = Date();
+                        user.local.email = email;
+                        
                         user.save(function (err) {
-                            if (err)
-                                return done(err);
-                            
-                            return done(null,user);
+                          if (err) {
+                            return done(err);
+                          }
+                          
+                          var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : []};
+                          var needed_val_str = JSON.stringify(needed_val);
+                          redis_connection.set(user.local.email, needed_val_str);
+                          return done(null,user);
                         });
                     }
                 });
