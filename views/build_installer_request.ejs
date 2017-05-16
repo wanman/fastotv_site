@@ -82,6 +82,7 @@
       $('.progress-bar').addClass('progress-bar-success');
       $('#package_link').hide();
       
+      // pc
       var platform = $('.nav-tabs .active > a').attr('aria-controls');
       var os_ctrl = $('input[name=os]:checked');
       var package_type = os_ctrl.attr('package_type');
@@ -189,12 +190,18 @@
                         <label><input id="hwaccel" type="checkbox" value="" checked>Hardware acceleration</label>
                       </div>
                       <label>Resoution: <input id="width" value="1920" min="720" max="3840" placeholder="width">x<input id="hight" value="1080" min="480" max="2160" placeholder="height"></label>
+                      <div class="checkbox">
+                        <label><input id="power_off_on_exit" type="checkbox" value="" checked>Power OFF on exit</label>
+                      </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="raspberry_pi">
                       <div class="checkbox">
                         <label><input id="hwaccel" type="checkbox" value="" checked>Hardware acceleration</label>
                       </div>
                       <label>Resoution: <input id="width" value="1920" min="720" max="3840" placeholder="width">x<input id="hight" value="1080" min="480" max="2160" placeholder="height"></label>
+                      <div class="checkbox">
+                        <label><input id="power_off_on_exit" type="checkbox" value="" checked>Power OFF on exit</label>
+                      </div>
                     </div>
                   </div>
                 </div>
