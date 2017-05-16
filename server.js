@@ -130,7 +130,7 @@ listener.on('connection', function (socket) {
           cmd_arguments += ' ' + in_json.argv[i];
         }
       }
-      var branding_variables = '-DUSER_LOGIN=' + in_json.email + ' -DUSER_PASSWORD=' + in_json.password + ' -DCMD_ARGUMENTS="' + cmd_arguments + """;
+      var branding_variables = '-DUSER_LOGIN=' + in_json.email + ' -DUSER_PASSWORD=' + in_json.password + util.format(' -DCMD_ARGUMENTS="%s"', cmd_arguments);
       var request_data_json = {
         'branding_variables': branding_variables,
         'package_type' : in_json.package_type,
