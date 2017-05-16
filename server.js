@@ -123,14 +123,14 @@ listener.on('connection', function (socket) {
       socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': 0, 'message': 'Send request to build server' } ); //
             
       var rpc = new (require('./app/amqprpc'))(rabbit_connection);
-      var cmd_arguments;
+      var cmd_arguments = "";
       if (in_json.argv.length > 0) {
         cmd_arguments += in_json.argv[0];
         for (var i = 1; i < in_json.argv.length; i++) {
           cmd_arguments += ' ' + in_json.argv[i];
         }
       }
-      var branding_variables = '-DUSER_LOGIN=' + in_json.email + ' -DUSER_PASSWORD=' + in_json.password + util.format(' -DCMD_ARGUMENTS="%s"', cmd_arguments);
+      var branding_variables = '-DUSER_LOGIN=' + in_json.email + ' -DUSER_PASSWORD=' + in_json.password + util.format(' -DCMD_ARGUMENTS='%s'', cmd_arguments);
       var request_data_json = {
         'branding_variables': branding_variables,
         'package_type' : in_json.package_type,
