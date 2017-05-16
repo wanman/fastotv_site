@@ -51,6 +51,9 @@
       } else {
         $('#package_link').attr("href", responce_json.body);
         $('#package_link').show();
+        
+        $('#wget_package_link').text("wget " + responce_json.body);
+        $('#wget_package_link').show();
       }
       var build_button = $('#build_button');
       build_button.prop('disabled', false);
@@ -82,6 +85,7 @@
       $('.progress-bar').removeClass('progress-bar-danger');
       $('.progress-bar').addClass('progress-bar-success');
       $('#package_link').hide();
+      $('#wget_package_link').hide();
       
       var device_selected = $('.device .active > a').attr('aria-controls');
       if (device_selected == "pc") { 
@@ -286,6 +290,7 @@
                 </div>
               </div>
               <a href="" id="package_link" style="display:none">Click to download</a>
+              <code id="wget_package_link" class="w3-codespan"></code>
             </div>
           </div>
           <div class="modal-footer">                  

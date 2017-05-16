@@ -154,7 +154,7 @@ listener.on('connection', function (socket) {
           socket.emit('message_rabbitmq', { 'email': in_json.email, 'error': response.error });
         } else {
           var public_path = response.body.replace(public_dir_abs_path, '');
-          socket.emit('message_rabbitmq', { 'email': in_json.email, 'body': public_path } );
+          socket.emit('message_rabbitmq', { 'email': in_json.email, 'body': app.locals.site.domain + public_path } );
         }
       }, 
       function status(response) {
