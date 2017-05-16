@@ -187,8 +187,8 @@
                 <h2>Supported devices:</h2>
                 <div>
                   <ul class="nav nav-tabs em_device" role="tablist">
-                    <li role="presentation" class="active"><a href="#orange_pi" aria-controls="orange_pi" role="tab" data-toggle="tab"><i class="fa"></i> Orange PI</a></li>
-                    <li role="presentation"><a href="#raspberry_pi" aria-controls="raspberry_pi" role="tab" data-toggle="tab"><i class="fa"></i> Raspberry PI</a></li>
+                    <li role="presentation" class="active"><a href="#orange_pi" aria-controls="orange_pi" role="tab" data-toggle="tab"><i class="fa fa-orange-pi"></i> Orange PI</a></li>
+                    <li role="presentation"><a href="#raspberry_pi" aria-controls="raspberry_pi" role="tab" data-toggle="tab"><i class="fa fa-raspberry-pi"></i> Raspberry PI</a></li>
                   </ul>
                   <!-- Tab panes -->
                   <div class="tab-content">
@@ -232,17 +232,17 @@
           <div>
             <ul class="nav nav-tabs" role="tablist" id="connection_settings">
               <li role="presentation" class="active">
-                <a href="#base" aria-controls="base" role="tab" data-toggle="tab">Base</a>
+                <a href="#base" aria-controls="base" role="tab" data-toggle="tab"><i class="fa fa-cog"></i> Base</a>
               </li>
               <li role="presentation">
-                <a href="#advanced" aria-controls="advanced" role="tab" data-toggle="tab">Advanced</a>
+                <a href="#advanced" aria-controls="advanced" role="tab" data-toggle="tab"><i class="fa fa-cogs"></i> Advanced</a>
               </li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
               <div role="tabpane2" class="tab-pane form-inline active" id="base">
                 <div>
-                  <label>Email: <input type="text" disabled name="Host" class="form-control" id="localhost_host" value='<%- user.local.email %>'></label>
+                  <label>Email: <input type="text" disabled id="email" value='<%- user.local.email %>'></label>
                 </div>
               </div>
               <div role="tabpane2" class="tab-pane form-inline" id="advanced">
@@ -251,11 +251,9 @@
               </div>
             </div>
             
-            <div class="col-sm-12 col-md-12 col-lg-12">
-              <button id="build_package_button" class="btn btn-success btn-send" data-toggle="modal" data-target="#myModal">
-                Build Package
-              </button>
-            </div>
+            <button id="build_package_button" class="btn btn-success btn-send" data-toggle="modal" data-target="#myModal">
+              Build Package
+            </button>
           </div>
         </div>
       </div>
