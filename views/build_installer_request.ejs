@@ -304,8 +304,9 @@
       <thead>
         <tr>
         <th>#</th>
-        <th></th>
-        <th></th>
+        <th>Hot link</th>
+        <th>Wget link</th>
+        <th>Size KB</th>
         </tr>
       </thead>
       <tbody>
@@ -315,6 +316,7 @@
               <td><%= i + 1 %></td>
               <td><a href="<%= builded_packages[i].path %>"><%= builded_packages[i].file_name %></a></td>
               <td><code id="wget_package_link" class="text-muted">wget <%= builded_packages[i].path %></code></td>
+              <td><%= builded_packages[i].size %></td>
             </tr>
           <% } %>
         <% } %>

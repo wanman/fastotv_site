@@ -166,7 +166,7 @@ module.exports = function(app, passport) {
               if (stat && stat.isDirectory()) {
               } else {
                 var path = file.replace(app.locals.site.public_directory, '');
-                results.push({ 'path' : app.locals.site.domain + path, 'file_name' : file_name});
+                results.push({ 'path' : app.locals.site.domain + path, 'file_name' : file_name, 'size': stat.size / 1024 });
                 if (!--pending) { 
                   done(null, results);
                 }
