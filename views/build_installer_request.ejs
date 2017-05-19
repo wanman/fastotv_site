@@ -321,13 +321,13 @@
               <td><%= builded_packages[i].size %></td>
             </tr>
           <% } %>
-          <!-- Clear packages FORM -->
-          <form class="form-inline" action="/clear_packages" method="post">
-            <button type="submit" class="btn btn-warning btn-small">Clear</button>
-          </form>
         <% } %>
       </tbody>
     </table>
+    <!-- Clear packages FORM -->
+    <form class="form-inline" action="/clear_packages" method="post">
+      <button type="submit" class="btn btn-warning btn-small">Clear</button>
+    </form>
   </div>
 </body>
 </html>
