@@ -5,6 +5,20 @@ var Channel = require('../app/models/channel');
 var fs = require('fs');
 var path = require('path');
 
+function deleteFolderRecursive(path) {
+  if( fs.existsSync(path) ) {
+    fs.readdirSync(path).forEach(function(file,index){
+      var curPath = path + "/" + file;
+      if(fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath);
+      } else { // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+};
+
 module.exports = function(app, passport) {
   // normal routes ===============================================================
   // show the home page (will also have our login links)
@@ -188,7 +202,17 @@ module.exports = function(app, passport) {
       });
       
   });
-    
+  
+  // CLEAR user packages
+  app.post('/clear_packages', function(req, res) {
+    var user = req.user;
+    deleteFolderRecursive(app.locals.site.users_directory + '/' + user.local.email);
+    res.render('build_installer_request.ejs', {
+      user : user,
+      builded_packages : []
+    });
+  });
+  
   // PROFILE SECTION =========================
   app.get('/profile', isLoggedIn, function(req, res) {
       res.render('profile.ejs', {
