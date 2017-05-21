@@ -125,15 +125,15 @@ listener.on('connection', function (socket) {
       var rpc = new (require('./app/amqprpc'))(rabbit_connection);
       var branding_variables = '-DUSER_LOGIN=' + in_json.email + ' -DUSER_PASSWORD=' + in_json.password;
       var config = in_json.config;
-      if (config.has("hwaccel")) {
+      if (config.hasOwnProperty("hwaccel")) {
         var hwaccel_method = config.getString("hwaccel");
         branding_variables += ' -DCONFIG_HWACCEL_METHOD=' + hwaccel_method;
       }
-      if (config.has("poweroffonexit")) {
+      if (config.hasOwnProperty("poweroffonexit")) {
         var poweroffonexit = config.getBoolean("poweroffonexit");
         branding_variables += ' -DCONFIG_POWER_OFF_ON_EXIT=' + poweroffonexit ? 'ON' : 'OFF';
       }
-      if (config.has("vf")) {
+      if (config.hasOwnProperty("vf")) {
         var vf_string = config.getString("vf");
         branding_variables += ' -DCONFIG_VF_SCALE=' + vf_string;
       }
