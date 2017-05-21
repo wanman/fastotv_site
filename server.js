@@ -121,16 +121,22 @@ listener.on('connection', function (socket) {
       }
             
       socket.emit('status_rabbitmq', { 'email': in_json.email, 'progress': 0, 'message': 'Send request to build server' } ); //
-            
+
       var rpc = new (require('./app/amqprpc'))(rabbit_connection);
-      var cmd_arguments = "";
-      if (in_json.argv.length > 0) {
-        cmd_arguments += in_json.argv[0];
-        for (var i = 1; i < in_json.argv.length; i++) {
-          cmd_arguments += ' ' + in_json.argv[i];
-        }
+      var branding_variables = '-DUSER_LOGIN=' + in_json.email + ' -DUSER_PASSWORD=' + in_json.password;
+      var config = in_json.config;
+      if (config.has("hwaccel")) {
+        String hwaccel_method = config.getString("hwaccel"));
+        branding_variables += ' -DCONFIG_HWACCEL_METHOD=' + hwaccel_method;
       }
-      var branding_variables = '-DUSER_LOGIN=' + in_json.email + ' -DUSER_PASSWORD=' + in_json.password + util.format(' -DCMD_ARGUMENTS="%s"', cmd_arguments);
+      if (config.has("poweroffonexit")) {
+        boolean poweroffonexit = config.getBoolean("poweroffonexit"));
+        branding_variables += ' -DCONFIG_POWER_OFF_ON_EXIT=' + poweroffonexit ? 'ON' : 'OFF';
+      }
+      if (config.has("vf")) {
+        String vf_string = config.getString("vf"));
+        branding_variables += ' -DCONFIG_VF_SCALE=' + vf_string;
+      }
       var request_data_json = {
         'branding_variables': branding_variables,
         'package_type' : in_json.package_type,
@@ -139,7 +145,7 @@ listener.on('connection', function (socket) {
       var routing_key = gen_routing_key(in_json.platform, in_json.arch);
       console.log("request_data_json", request_data_json);
       console.log("routing_key", routing_key);
-            
+
       rpc.makeRequest(routing_key, in_json.email, request_data_json, function response(err, response) {
       if (err) {
         console.error(err);
