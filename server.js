@@ -126,15 +126,15 @@ listener.on('connection', function (socket) {
       var branding_variables = '-DUSER_LOGIN=' + in_json.email + ' -DUSER_PASSWORD=' + in_json.password;
       var config = in_json.config;
       if (config.has("hwaccel")) {
-        String hwaccel_method = config.getString("hwaccel"));
+        var hwaccel_method = config.getString("hwaccel");
         branding_variables += ' -DCONFIG_HWACCEL_METHOD=' + hwaccel_method;
       }
       if (config.has("poweroffonexit")) {
-        boolean poweroffonexit = config.getBoolean("poweroffonexit"));
+        var poweroffonexit = config.getBoolean("poweroffonexit");
         branding_variables += ' -DCONFIG_POWER_OFF_ON_EXIT=' + poweroffonexit ? 'ON' : 'OFF';
       }
       if (config.has("vf")) {
-        String vf_string = config.getString("vf"));
+        var vf_string = config.getString("vf");
         branding_variables += ' -DCONFIG_VF_SCALE=' + vf_string;
       }
       var request_data_json = {
