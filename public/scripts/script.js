@@ -84,7 +84,7 @@ function parse_command_out(msg) {
 }
 
 // device functions
-function ping_device(user_id, id_cmd socket) {
+function ping_device(user_id, id_cmd, socket) {
   if(user_id === undefined){
     return;
   }
