@@ -115,21 +115,21 @@
             </div>
           </div>
           <div class="row">
-            <strong>
-              4) Start application and enjoy watching.
-            <strong>
+            <div class="col-sm-6">
+              <strong>
+                4) Start application and enjoy watching.
+              </strong>
+            </div>
           </div>
-          <div class="well">
-            <div class="row">
-              <div class="col-sm-6">
-                Test is your device online.
-              </div>
-              <div class="col-sm-6">
-                <form action="/device_details" method="post">
-                  <input type="hidden" class="form-control" name="login" value="<%= user.name %>">
-                  <button type="submit" class="btn btn-success">Test</button>
-                </form>
-              </div>
+          <div class="row">
+            <div class="col-sm-6">
+              Test is your device online.
+            </div>
+            <div class="col-sm-6">
+              <form action="/device_details" method="post">
+                <input type="hidden" class="form-control" name="login" value="<%= user.name %>">
+                <button type="submit" class="btn btn-success">Test Device</button>
+              </form>
             </div>
           </div>
         <% } %>

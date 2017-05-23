@@ -15,9 +15,9 @@ var COMMANDS = {
 
 // state parse
 function parse_state_msg(msg) {
-  var msg_host_state = msg.split(" ");
-  if(msg_host_state.length === 2){
-    return {host : msg_host_state[0], status : msg_host_state[1] == "connected" ? CONNECTED_STATUS.CONNECTED : CONNECTED_STATUS.DISCONNECTED };
+  var msg_device_state = msg.split(" ");
+  if(msg_device_state.length === 2){
+    return {device : msg_device_state[0], status : msg_device_state[1] == "connected" ? CONNECTED_STATUS.CONNECTED : CONNECTED_STATUS.DISCONNECTED };
   }
   
   return undefined;
@@ -84,21 +84,21 @@ function parse_command_out(msg) {
 }
 
 // device functions
-function ping_device(id, name, socket) {
-  if(name === undefined){
+function ping_device(user_id, id_cmd socket) {
+  if(user_id === undefined){
     return;
   }
     
-  var msg = name + " " + id + " " + COMMANDS.PING;
+  var msg = user_id + " " + id_cmd + " " + COMMANDS.PING;
   socket.emit('publish_redis', msg);
 }
 
-function device_info(id, name, socket) {
-  if(name === undefined){
+function device_info(user_id, id_cmd, socket) {
+  if(user_id === undefined){
     return;
   }
     
-  var msg = name + " " + id + " " + COMMANDS.INFO;
+  var msg = user_id + " " + id_cmd + " " + COMMANDS.INFO;
   socket.emit('publish_redis', msg);
 }
 
