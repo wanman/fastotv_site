@@ -37,7 +37,7 @@
     }
     
     function handle_command_received(msgObj) {
-      if ('<%- user_id %>' !== msgObj.id) {
+      if (cmd_id !== msgObj.id) {
           return;
       }
       
@@ -113,7 +113,7 @@
             Processor: <label id="cpu_label"></label><br>
             Installed memory(RAM): <label id="ram_label"></label>
         </div>
-        <button id="info_button" disabled onclick="device_info('<%- user_id %>', '<%- login %>', socket)">Info</button>
+        <button id="info_button" disabled onclick="device_info('<%- user_id %>', cmd_id, socket)">Info</button>
       </div>
     </div>
   </div>

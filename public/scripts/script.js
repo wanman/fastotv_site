@@ -9,7 +9,7 @@ var CONNECTED_STATUS = {
 };
 
 var COMMANDS = {
-  PING : "ping",
+  PING : "server_ping",
   INFO : "plz_system_info"
 };
 
