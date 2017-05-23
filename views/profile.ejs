@@ -83,14 +83,11 @@
         <% if (user.isReadOnlyMode()) { %>
           <div class="alert alert-danger">Read only mode</div>
         <% } else { %> 
+          <div class="alert alert-success">Nice to meet you <strong><%= user.name %></strong></div>
           <div class="row">
             <div class="col-sm-6">
-              <form action="/build_installer_request" method="get">
-                <button type="submit" class="btn btn-primary">Build last stable <%= project.name %> version</button>
-              </form>
+              1) You can see how much members in our community.
             </div>
-          </div>
-          <div class="row">
             <div class="col-sm-6">
               <form action="/user_status" method="get">
                 <button type="submit" class="btn btn-info btn-small">Registered users</button>
@@ -99,10 +96,28 @@
           </div>
           <div class="row">
             <div class="col-sm-6">
+              2) Please choose which channel do you want to see on your device.
+            </div>
+            <div class="col-sm-6">
               <form action="/channels" method="get">
-                <button type="submit" class="btn btn-info btn-small">Channels</button>
+                <button type="submit" class="btn btn-primary btn-small">Channels</button>
               </form>
             </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              3) Build and install video player for your device.
+            </div>
+            <div class="col-sm-6">
+              <form action="/build_installer_request" method="get">
+                <button type="submit" class="btn btn-success">Build last stable <%= project.name %> version</button>
+              </form>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              4) Start application on your device and enjoy watching.
+            <div>
           </div>
         <% } %>
       </div>
