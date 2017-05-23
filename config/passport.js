@@ -145,8 +145,8 @@ module.exports = function(redis_connection, passport) {
                         var user = req.user;
                         user.local.email = email;
                         user.local.password = user.generateHash(password);
-                        user.local.created_date = Date();
-                        user.local.email = email;
+                        user.created_date = Date();
+                        user.name = email;
                         
                         user.save(function (err) {
                           if (err) {
