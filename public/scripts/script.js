@@ -9,10 +9,8 @@ var CONNECTED_STATUS = {
 };
 
 var COMMANDS = {
-  PING : "ping", //+
-  INFO : "plz_system_info", //+
-  CONFIG : "plz_config",
-  SET_CONFIG : "plz_set_config"
+  PING : "ping",
+  INFO : "plz_system_info"
 };
 
 // state parse
@@ -32,12 +30,7 @@ function is_ping_command(msgObj) {
 function is_info_command(msgObj) {
   return msgObj.command === COMMANDS.INFO;    
 }
-function is_config_command(msgObj) {
-  return msgObj.command === COMMANDS.CONFIG;    
-}
-function is_set_config_command(msgObj) {
-  return msgObj.command === COMMANDS.SET_CONFIG;    
-}
+
 // status off command
 function is_failed_command(msgObj) {
   return msgObj.status === STATUS.FAIL;    
@@ -90,8 +83,8 @@ function parse_command_out(msg) {
   return undefined;
 }
 
-// server functions
-function ping_server(id, name, socket) {
+// device functions
+function ping_device(id, name, socket) {
   if(name === undefined){
     return;
   }
@@ -100,30 +93,12 @@ function ping_server(id, name, socket) {
   socket.emit('publish_redis', msg);
 }
 
-function server_info(id, name, socket) {
+function device_info(id, name, socket) {
   if(name === undefined){
     return;
   }
     
   var msg = name + " " + id + " " + COMMANDS.INFO;
-  socket.emit('publish_redis', msg);
-}
-
-function sync_server_config(id, name, socket) {
-  if(name === undefined){
-    return;
-  }
-    
-  var msg = name + " " + id + " " + COMMANDS.CONFIG;
-  socket.emit('publish_redis', msg);
-}
-
-function set_server_config(id, name, config, socket) {
-  if(name === undefined){
-    return;
-  } 
-  
-  var msg = name + " " + id + " " + COMMANDS.SET_CONFIG + " " + config;
   socket.emit('publish_redis', msg);
 }
 

@@ -96,7 +96,7 @@
           </div>
           <div class="row">
             <div class="col-sm-6">
-              2) Please choose which channel do you want to see on your device.
+              2) Please choose which channel do you want to watching.
             </div>
             <div class="col-sm-6">
               <form action="/channels" method="get">
@@ -115,9 +115,22 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-6">
-              4) Start application on your device and enjoy watching.
-            <div>
+            <strong>
+              4) Start application and enjoy watching.
+            <strong>
+          </div>
+          <div class="well">
+            <div class="row">
+              <div class="col-sm-6">
+                Test is your device online.
+              </div>
+              <div class="col-sm-6">
+                <form action="/device_details" method="post">
+                  <input type="hidden" class="form-control" name="login" value="<%= user.name %>">
+                  <button type="submit" class="btn btn-success">Test</button>
+                </form>
+              </div>
+            </div>
           </div>
         <% } %>
       </div>

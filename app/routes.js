@@ -160,6 +160,17 @@ module.exports = function(app, passport) {
       });
     }); 
   });
+  
+  app.post('/device_details', function(req, res) {
+    var user = req.user;
+    var login = req.body.login;
+    
+    res.render('device_details.ejs', {
+        user_id: user._id,
+        login: login
+    });
+  });
+  
   app.get('/build_installer_request', function(req, res) {
       var user = req.user;
       var walk = function(dir, done) {  
