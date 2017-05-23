@@ -18,7 +18,7 @@
   }
 
   function handle_state_changed(stateObj) {                
-    handle_on_connection_changed(stateObj.host, stateObj.status === CONNECTED_STATUS.CONNECTED);
+    handle_on_connection_changed(stateObj.device, stateObj.status === CONNECTED_STATUS.CONNECTED);
   }
 
   //on connetion, updates connection state and sends subscribe request
