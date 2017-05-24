@@ -103,19 +103,15 @@
   </script>
 </head>
 <body onload = "init()">
-  <div class="row">
-    <div class="container">
-      <legend id="server_name_label"><%- login %></legend>
-      <div class="col-sm-4">
-        <div class="well">                        
-            Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
-            Os: <label id="os_label"></label><br>
-            Processor: <label id="cpu_label"></label><br>
-            Installed memory(RAM): <label id="ram_label"></label>
-        </div>
-        <button id="info_button" disabled onclick="device_info('<%- user_id %>', cmd_id, socket)">Info</button>
-      </div>
+  <div class="container">
+    <legend id="server_name_label"><%- login %></legend>
+    <div class="well">                        
+        Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
+        OS: <label id="os_label"></label><br>
+        Processor: <label id="cpu_label"></label><br>
+        Installed memory(RAM): <label id="ram_label"></label>
     </div>
+    <button class="btn btn-info" id="info_button" disabled onclick="device_info('<%- user_id %>', cmd_id, socket)">Info</button>
   </div>
 </body>
 </html>
