@@ -36,18 +36,18 @@
       handle_onconnection_changed(device_state.connected);
     }
     
-    function handle_command_received(msgObj) {
-      if (cmd_id !== msgObj.id) {
+    function handle_command_received(responce) {
+      if (cmd_id !== responce.request_id) {
         return;
       }
       
-      var is_ok = is_succsess_command(msgObj);
+      var is_ok = is_succsess_command(responce);
       
-      if (is_ping_command(msgObj)) {
+      if (is_ping_command(responce)) {
         handle_onconnection_changed(is_ok);
-      } else if(is_info_command(msgObj)) {
+      } else if(is_info_command(responce)) {
         if (is_ok) {
-          var system_info = JSON.parse(msgObj.responce_json);
+          var system_info = JSON.parse(responce.responce_json);
           $('#os_label').html(system_info.os);
           $('#cpu_label').html(system_info.cpu);
           var ram_total_gb = system_info.ram_total/GB;
@@ -76,19 +76,19 @@
       var msg = data.text;
       
       if (data.channel === '<%= back_end.pub_sub_channel_out %>') {
-        var msgObj = parse_command_out(msg);
-        if(msgObj == undefined){
+        var responce = parse_command_out(msg);
+        if(responce == undefined){
           return;
         }
         
-        handle_command_received(msgObj);
+        handle_command_received(responce);
       } else if(data.channel === '<%= back_end.pub_sub_channel_client_state %>') {
-        var state_obj = parse_state_msg(msg);
-        if(state_obj == undefined){
+        var state = parse_state_msg(msg);
+        if(state == undefined){
           return;
         }
         
-        handle_state_changed(state_obj);
+        handle_state_changed(state);
       }
     });
     
