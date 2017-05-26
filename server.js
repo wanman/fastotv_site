@@ -95,7 +95,7 @@ var rabbit_connection = amqp.createConnection({
                                                 password: settings_config.rabbitmq_password
                                              });
 rabbit_connection.on('error', function (err) {
-    console.error("rabbit_connection.on:", err);
+  console.error("rabbit_connection.on:", err);
 });
 
 listener.on('connection', function (socket) {
@@ -174,11 +174,11 @@ var redis_sub = redis.createClient();
 var redis_pub = redis.createClient();
 
 redis_sub.on('error', function (err) {
-    console.error(err);
+  console.error(err);
 });
 
 redis_pub.on('error', function (err) {
-    console.error(err);
+  console.error(err);
 });
 
 redis_sub.on('ready', function() {
@@ -186,8 +186,8 @@ redis_sub.on('ready', function() {
 });
 
 redis_sub.on('message', function(channel, message){
-    var resp = {'text': message, 'channel':channel};
-    listener.in(channel).emit('message', resp);
+  var resp = {'text': message, 'channel':channel};
+  listener.in(channel).emit('message', resp);
 });
 
 // configuration ===============================================================

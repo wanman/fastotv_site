@@ -1,26 +1,23 @@
 var STATUS = { 
-  OK : 1,
-  FAIL : 0
-};
-
-var CONNECTED_STATUS = { 
-  CONNECTED : 1,
-  DISCONNECTED : 0
+  OK : "ok",
+  FAIL : "fail"
 };
 
 var COMMANDS = {
   PING : "server_ping",
-  INFO : "plz_system_info"
+  INFO : "get_client_info"
 };
 
-// state parse
+// parse string to UserStateInfo
+// {std::string user_id; bool connected;}
 function parse_state_msg(msg) {
-  var msg_device_state = msg.split(" ");
-  if(msg_device_state.length === 2){
-    return {device : msg_device_state[0], status : msg_device_state[1] == "connected" ? CONNECTED_STATUS.CONNECTED : CONNECTED_STATUS.DISCONNECTED };
+  var user_state_info;
+  try {
+    user_state_info = JSON.parse(msg);
+  } catch (e) {
+    return undefined;
   }
-  
-  return undefined;
+  return user_state_info;
 }
 
 // is_commands
@@ -33,54 +30,23 @@ function is_info_command(msgObj) {
 
 // status off command
 function is_failed_command(msgObj) {
-  return msgObj.status === STATUS.FAIL;    
+  return msgObj.state === STATUS.FAIL;    
 }
 
 function is_succsess_command(msgObj) {
-  return msgObj.status === STATUS.OK;    
+  return msgObj.state === STATUS.OK;    
 }
-// parse string to msgObj
 
+// parse string to ResponceInfo
+// {std::string request_id; std::string state; std::string command; std::string responce_json;}
 function parse_command_out(msg) {
-  var msg_length = msg.length;
-  var pos = 0;
-  var data = "";
-  
-  var id = 0;
-  var status = STATUS.FAIL;
-  var command = "";
-  
-  for (var i = 0; i < msg_length; i++) {
-    var c = msg[i];
-    if (c === ' ') {
-      if(pos === 0){
-        //id = parseInt(data, 10);
-        id = data;
-      } else if(pos === 1) {
-        if (data === "ok") {
-          status = STATUS.OK;
-        } else if(data === "fail") {
-          status = STATUS.FAIL;
-        } else {
-          break;
-        }
-      } else if(pos === 2) {
-        command = data;
-        return {
-          id: id,
-          status: status,
-          command: command,
-          args : msg.substr(i, msg_length - i)
-               };
-      }
-        pos++;
-        data = "";
-      } else {
-        data += c;
-      }
+  var responce_info;
+  try {
+    responce_info = JSON.parse(msg);
+  } catch (e) {
+    return undefined;
   }
-  
-  return undefined;
+  return responce_info;
 }
 
 // device functions

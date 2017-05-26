@@ -8,8 +8,8 @@
   <script>
   var socket = io.connect('<%= site.domain %>:<%= back_end.socketio_port %>');
 
-  function handle_on_connection_changed(host, is_connected) {
-    var id_control = '#status_img' + host;
+  function handle_on_connection_changed(user_id, is_connected) {
+    var id_control = '#status_img' + user_id;
     if (is_connected) {
       $(id_control).attr("src", SERVER_STATUS_IMG.ONLINE);
     } else {
@@ -17,8 +17,8 @@
     }
   }
 
-  function handle_state_changed(stateObj) {                
-    handle_on_connection_changed(stateObj.device, stateObj.status === CONNECTED_STATUS.CONNECTED);
+  function handle_state_changed(user_state) {                
+    handle_on_connection_changed(user_state.user_id, user_state.connected);
   }
 
   //on connetion, updates connection state and sends subscribe request
@@ -34,12 +34,12 @@
   socket.on('message', function (data) {
     var msg = data.text;
     if (data.channel === '<%= back_end.pub_sub_channel_client_state %>') {
-      var stateObj = parse_state_msg(msg);
-      if (stateObj == undefined) {
+      var user_state = parse_state_msg(msg);
+      if (user_state == undefined) {
         return;
       }
 
-      handle_state_changed(stateObj);
+      handle_state_changed(user_state);
     }
   });
 
