@@ -56,7 +56,7 @@
           var ram_total_fr = system_info.ram_free/GB;
           $('#ram_label').html(ram_total_gb.toFixed(2) + " GB (" + ram_total_fr.toFixed(2) + " GB free)");
           
-          var mbit_s = system_info.bandwidth / MB;
+          var mbit_s = system_info.bandwidth / MB * 8;
           $('#bandwidth_label').html(mbit_s.toFixed(2) + " Mbit/s");
         } else {
           $('#os_label').html(SERVER_OS_DEFAULT_LABEL);
