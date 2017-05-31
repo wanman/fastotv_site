@@ -115,7 +115,8 @@ module.exports = function(app, passport) {
    // APPLY channels 
   app.post('/apply_channels', function(req, res) {
     var user = req.user;
-    var offical_channels_id = JSON.parse(req.body.apply_channels_id);
+    var offical_channels_ids = JSON.parse(req.body.apply_channels_offical_ids);
+    var private_channels_ids = JSON.parse(req.body.apply_channels_private_ids);
     Channel.find({}, function(err, all_channels) {
       if (err) {
         console.error(err);
@@ -126,8 +127,8 @@ module.exports = function(app, passport) {
       var offical_channels = [];
       for (var i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
-        for (var j = 0; j < offical_channels_id.length; j++) {
-          if (channel._id == offical_channels_id[j]) {
+        for (var j = 0; j < offical_channels_ids.length; j++) {
+          if (channel._id == offical_channels_ids[j]) {
             offical_channels.push(channel);
             redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
             break;
@@ -140,8 +141,8 @@ module.exports = function(app, passport) {
       var user_private_pool_channels = user.private_pool_channels;
       for (var i = 0; i < user_private_pool_channels.length; i++) {
         var channel = user_private_pool_channels[i];
-        for (var j = 0; j < offical_channels_id.length; j++) {
-          if (channel._id == offical_channels_id[j]) {
+        for (var j = 0; j < private_channels_ids.length; j++) {
+          if (channel._id == private_channels_ids[j]) {
             private_channels.push(channel);
             redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
             break;
