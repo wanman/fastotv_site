@@ -2,30 +2,49 @@
 <html>
 <head>
   <%- include('head/main'); %>
+  <style>
+    table {
+      table-layout: fixed;
+    }
+    th.user_channel_number {
+      width: 5%;
+    }
+    th.user_channel_name {
+      width: 10%;
+    }
+    th.user_channel_url {
+      width: 50%;
+    }
+    th.user_channel_tags {
+      width: 20%;
+    }
+    th.user_channel_action {
+      width: 15%;
+    }
+  </style>
   <script>
-    function on_total_update() {
-      var arr = document.getElementsByName('channel');
-      var total = document.getElementById('total');
-      var channels_id = document.getElementById('c_id');
+    function on_total_price_update() {
+      var arr = $('[name=offical_channel]');
+      var total = $('#total');
+      var offical_ids = $('#offical_ids');
       var sum = 0;
-      var channels_id_type = [];
+      var selecetd_offical_id = [];
       for(var i = 0; i < arr.length; i++){
         var checkbox = arr[i];
         if(checkbox.checked) {
           sum += parseFloat(checkbox.value);
           var cid = checkbox.getAttribute('channel_id');
-          channels_id_type.push(cid);
+          selecetd_offical_id.push(cid);
         }
       }
       total.value = sum;
-      channels_id.value = JSON.stringify(channels_id_type);
-    
+      offical_ids.value = JSON.stringify(selecetd_offical_id);
     }
   </script>
   <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
 </head>
-<body onload="on_total_update()">
+<body onload="on_total_price_update()">
   <div class="container">
     <div class="well">                
       <h2>Availible channels:</h2>
@@ -50,7 +69,7 @@
               <input value="<%- offical_channels[i].tags %>" disabled>
             </td>
             <td>
-              <input type="checkbox" name="channel" channel_id="<%- offical_channels[i].id %>" onclick="on_total_update()" 
+              <input type="checkbox" name="offical_channel" channel_id="<%- offical_channels[i].id %>" onclick="on_total_update()" 
               value=<%-offical_channels[i].price %> <%- offical_channels[i].checked %>>
             </td>
           </tr>
@@ -64,11 +83,11 @@
       <table class="table">
         <thead>
           <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Url</th>
-          <th>Tags</th>
-          <th>Actions</th>
+          <th class="user_channel_number">#</th>
+          <th class="user_channel_name">Name</th>
+          <th class="user_channel_url">Url</th>
+          <th class="user_channel_tags">Tags</th>
+          <th class="user_channel_action">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -117,12 +136,12 @@
     <!-- Apply channels FORM -->
     <form class="form-inline" action="/apply_channels" method="post">
       <div class="form-group">
-        <label>TOTAL:</label>
+        <label>TOTAL PRICE:</label>
       </div>
       <div class="form-group">
         <input class="form-control" id="total", value=0 disabled>
       </div>
-      <input type="hidden" id="c_id" class="form-control" name="apply_channels_id" value="">
+      <input type="hidden" id="offical_ids" class="form-control" name="apply_channels_id" value="">
       <button type="submit" class="btn btn-warning btn-small">Apply</button>
     </form>
   </div>
