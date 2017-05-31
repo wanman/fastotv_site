@@ -23,13 +23,16 @@ module.exports = function(app, passport) {
   // normal routes ===============================================================
   // show the home page (will also have our login links)
   app.get('/', function(req, res) {
-      res.render('index.ejs');
+    res.render('index.ejs');
+  });
+  app.get('/supported_devices', function(req, res) {
+    res.render('supported_devices.ejs');
   });
   app.get('/help', function(req, res) {
-      res.render('help.ejs');
+    res.render('help.ejs');
   });
   app.get('/brodcasters_help', function(req, res) {
-      res.render('brodcasters_help.ejs');
+    res.render('brodcasters_help.ejs');
   });
   app.get('/channels', function(req, res) {
     var user = req.user;
