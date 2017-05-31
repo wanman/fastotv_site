@@ -115,7 +115,6 @@ module.exports = function(app, passport) {
    // APPLY channels 
   app.post('/apply_channels', function(req, res) {
     var user = req.user;
-    console.log(user);
     var offical_channels_ids = JSON.parse(req.body.apply_channels_offical_ids);
     var private_channels_ids = JSON.parse(req.body.apply_channels_private_ids);
     Channel.find({}, function(err, all_channels) {

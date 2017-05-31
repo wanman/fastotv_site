@@ -41,7 +41,7 @@
         }
       }
       total.value = sum;
-      offical_ids.value = JSON.stringify(selecetd_offical_id);
+      offical_ids.val(JSON.stringify(selecetd_offical_id));
     }
     
     function on_private_list_update() {
@@ -55,7 +55,7 @@
           selecetd_private_id.push(cid);
         }
       }
-      private_ids.value = JSON.stringify(selecetd_private_id);
+      private_ids.val(JSON.stringify(selecetd_private_id));
     }
     function on_load() {
       on_private_list_update();
