@@ -18,6 +18,9 @@
     th.user_channel_tags {
       width: 20%;
     }
+    th.user_channel_playlist {
+      width: 15%;
+    }
     th.user_channel_action {
       width: 15%;
     }
@@ -40,22 +43,41 @@
       total.value = sum;
       offical_ids.value = JSON.stringify(selecetd_offical_id);
     }
+    
+    function on_private_list_update() {
+      var arr = $('[name=private_channel]');
+      var private_ids = $('#private_ids');
+      var selecetd_private_id = [];
+      for(var i = 0; i < arr.length; i++){
+        var checkbox = arr[i];
+        if(checkbox.checked) {
+          var cid = checkbox.getAttribute('channel_id');
+          selecetd_private_id.push(cid);
+        }
+      }
+      private_ids.value = JSON.stringify(selecetd_private_id);
+    }
+    function on_load() {
+      on_private_list_update();
+      on_total_price_update();
+    }
   </script>
   <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
 </head>
-<body onload="on_total_price_update()">
+<body onload="on_load()">
   <div class="container">
     <div class="well">                
       <h2>Availible channels:</h2>
       <table class="table">
         <thead>
           <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Tags</th>
-          <th>In playlist</th>
+            <th>#</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Tags</th>
+            <th>In playlist</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -72,6 +94,8 @@
               <input type="checkbox" name="offical_channel" channel_id="<%- offical_channels[i].id %>" onclick="on_total_price_update()" 
               value=<%-offical_channels[i].price %> <%- offical_channels[i].checked %>>
             </td>
+            <td>
+            </td>
           </tr>
           <% } %>
           <% } %>
@@ -87,6 +111,7 @@
           <th class="user_channel_name">Name</th>
           <th class="user_channel_url">Url</th>
           <th class="user_channel_tags">Tags</th>
+          <th class="user_channel_playlist">In playlist</th>
           <th class="user_channel_action">Actions</th>
           </tr>
         </thead>
@@ -101,8 +126,11 @@
               <input value="<%- private_channels[i].tags %>" disabled>
             </td>
             <td>
+              <input type="checkbox" name="private_channel" channel_id="<%- private_channels[i].id %>" onclick="on_private_list_update()" <%- private_channels[i].checked %>>
+            </td>
+            <td>
               <form action="/remove_private_channel" method="post">
-                <input type="hidden" class="form-control" name="remove_channel_id" value="<%= private_channels[i]._id %>">
+                <input type="hidden" class="form-control" name="remove_channel_id" value="<%= private_channels[i].id %>">
                 <button type="submit" class="btn btn-danger btn-xs">Remove</button>
               </form>
             </td>
@@ -142,6 +170,7 @@
         <input class="form-control" id="total", value=0 disabled>
       </div>
       <input type="hidden" id="offical_ids" class="form-control" name="apply_channels_id" value="">
+      <input type="hidden" id="private_ids" class="form-control" name="apply_channels_id" value="">
       <button type="submit" class="btn btn-warning btn-small">Apply</button>
     </form>
   </div>

@@ -41,6 +41,20 @@ module.exports = function(app, passport) {
         return;
       }
 
+      var private_pool_channels = user.private_pool_channels;
+      var pchannels = [];
+      for (var i = 0; i < private_pool_channels.length; i++) {
+        var channel = private_pool_channels[i];
+        var exist = false;
+        for (var j = 0; j < user_private_channels.length; j++) {
+          if (user_private_channels[j].equals(channel._id)) {
+            exist = true;
+            break;
+          }
+        }
+        pchannels.push({id : channel._id, tags: channel.tags, name : channel.name, url : channel.url, price : channel.price, checked :  exist ? "checked" : ""});
+      }
+      
       var ochannels = [];
       for (var i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
@@ -55,7 +69,7 @@ module.exports = function(app, passport) {
       }
       res.render('channels.ejs', {
         offical_channels: ochannels,
-        private_channels: user_private_channels
+        private_channels: pchannels
       });
     });
   });
@@ -71,7 +85,7 @@ module.exports = function(app, passport) {
       tags.push(private_channel_tags_array[i]);
     }
     var new_channel = {url : channel_url, name : channel_name, tags: tags}
-    user.private_channels.push(new_channel);
+    user.private_pool_channels.push(new_channel);
     user.save(function(err) {
       if (err) {
         req.flash('statusProfileMessage', err);
@@ -86,7 +100,7 @@ module.exports = function(app, passport) {
   app.post('/remove_private_channel', function(req, res) {
     var user = req.user;
     var channel_id = req.body.remove_channel_id;
-    user.private_channels.pull({_id: channel_id});
+    user.private_pool_channels.pull({_id: channel_id});
     user.save(function(err) {
       if (err) {
         req.flash('statusProfileMessage', err);
@@ -101,7 +115,7 @@ module.exports = function(app, passport) {
    // APPLY channels 
   app.post('/apply_channels', function(req, res) {
     var user = req.user;
-    var channels_id = JSON.parse(req.body.apply_channels_id);
+    var offical_channels_id = JSON.parse(req.body.apply_channels_id);
     Channel.find({}, function(err, all_channels) {
       if (err) {
         console.error(err);
@@ -109,25 +123,33 @@ module.exports = function(app, passport) {
       }
 
       var redis_channels = []; // Create a new empty array.
-      var channels = [];
+      var offical_channels = [];
       for (var i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
-        for (var j = 0; j < channels_id.length; j++) {
-          if (channel._id == channels_id[j]) {
-            channels.push(channel);
+        for (var j = 0; j < offical_channels_id.length; j++) {
+          if (channel._id == offical_channels_id[j]) {
+            offical_channels.push(channel);
             redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
             break;
           }
         }
       }
+      user.offical_channels = offical_channels;
       
-      user.offical_channels = channels;
-      
-      var user_private_channels = user.private_channels;
-      for (var i = 0; i < user_private_channels.length; i++) {
-        var channel = user_private_channels[i];
-        redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
+      var private_channels = [];
+      var user_private_pool_channels = user.private_pool_channels;
+      for (var i = 0; i < user_private_pool_channels.length; i++) {
+        var channel = user_private_pool_channels[i];
+        for (var j = 0; j < offical_channels_id.length; j++) {
+          if (channel._id == offical_channels_id[j]) {
+            private_channels.push(channel);
+            redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
+            break;
+          }
+        }
       }
+      user.private_channels = private_channels;
+      
       user.save(function(err) {
         if (err) {
           req.flash('statusProfileMessage', err);
