@@ -20,6 +20,12 @@ function deleteFolderRecursive(path) {
 };
 
 module.exports = function(app, passport, nev) {
+  var updateRedisUser = function(user, channels, callback) {
+    var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : channels};
+    var needed_val_str = JSON.stringify(needed_val);
+    app.redis_connection.set(user.local.email, needed_val_str);
+    return callback(null, user);
+  }
   // normal routes ===============================================================
   // show the home page (will also have our login links)
   app.get('/', function(req, res) {
@@ -160,10 +166,13 @@ module.exports = function(app, passport, nev) {
           return;
         }
         
-        var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : redis_channels};
-        var needed_val_str = JSON.stringify(needed_val);
-        app.redis_connection.set(user.local.email, needed_val_str);
-        res.redirect('/profile');
+        this.updateRedisUser(user, redis_channels, function(err, user){
+          if (err) {
+            req.flash('statusProfileMessage', err);
+            return;
+          }
+          res.redirect('/profile');
+        });
       });
     });
   });
@@ -311,10 +320,12 @@ module.exports = function(app, passport, nev) {
             return res.status(404).send('ERROR: sending confirmation email FAILED');
           }
           
-          var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : []};
-          var needed_val_str = JSON.stringify(needed_val);
-          app.redis_connection.set(user.local.email, needed_val_str);
-          res.json({msg: 'CONFIRMED!', info: info});
+          this.updateRedisUser(user, [], function(err, user){
+            if (err) {
+              return res.status(404).send('ERROR: save into cache');
+            }
+            res.json({msg: 'CONFIRMED!', info: info});
+          });
         });
       } else {
         return res.status(404).send('ERROR: confirming temp user FAILED');
