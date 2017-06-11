@@ -19,6 +19,40 @@ function deleteFolderRecursive(path) {
   }
 };
 
+function update_redis_user(user){
+  var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : []};
+  var needed_val_str = JSON.stringify(needed_val);
+  redis_connection.set(user.local.email, needed_val_str);
+  return;
+}
+
+function update_user(user, done) {
+  user.save(function(err) {
+    if (err) {
+     return done(err);
+    }
+    update_redis_user(user);
+    return done(null, user);
+  });
+}
+
+function add_user(email, password, done) {
+  var new_user = new User();
+  new_user.local.email = email;
+  new_user.local.password = new_user.generateHash(password);
+  new_user.created_date = Date();
+  new_user.name = email;
+  return update_user(new_user, done);
+}
+
+function update_user(user, email, password, done) {
+  user.local.email = email;
+  user.local.password = user.generateHash(password);
+  user.created_date = Date();
+  user.name = email;
+  return update_user(user, done);
+}
+
 module.exports = function(app, passport, nev) {
   // normal routes ===============================================================
   // show the home page (will also have our login links)
@@ -301,15 +335,18 @@ module.exports = function(app, passport, nev) {
   // user accesses the link that is sent
   app.get('/email-verification/:URL', function(req, res) {
     var url = req.params.URL;
-  
     nev.confirmTempUser(url, function(err, user) {
-      console.log(user);
       if (user) {
-        nev.sendConfirmationEmail(user.email, function(err, info) {
+        nev.sendConfirmationEmail(user.local.email, function(err, info) {
           if (err) {
             return res.status(404).send('ERROR: sending confirmation email FAILED');
           }
-          res.json({msg: 'CONFIRMED!', info: info});
+          update_user(user, function(err, user){
+            if (err) {
+              return res.status(404).send('ERROR: sending confirmation email FAILED');
+            }
+            res.json({msg: 'CONFIRMED!', info: info});
+          });
         });
       } else {
         return res.status(404).send('ERROR: confirming temp user FAILED');

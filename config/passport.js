@@ -35,41 +35,6 @@ module.exports = function(nev, redis_connection, passport) {
       });
     });
 
-    function update_redis_user(user){
-      var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : []};
-      var needed_val_str = JSON.stringify(needed_val);
-      redis_connection.set(user.local.email, needed_val_str);
-      return;
-    }
-
-    function add_user(email, password, done) {
-      var new_user = new User();
-      new_user.local.email = email;
-      new_user.local.password = new_user.generateHash(password);
-      new_user.created_date = Date();
-      new_user.name = email;
-      new_user.save(function(err) {
-        if (err) {
-          return done(err);
-        }
-        update_redis_user(new_user);
-        return done(null, new_user);
-      });
-    }
-    
-    function update_user(user, email, password, done) {
-      user.local.email = email;
-      user.local.password = user.generateHash(password);
-      user.created_date = Date();
-      user.name = email;
-      user.save(function (err) {
-      if (err) {
-        return done(err);
-      }
-      update_redis_user(user);
-      return done(null, user);
-      });
-    }
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
