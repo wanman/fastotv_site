@@ -166,7 +166,7 @@ module.exports = function(app, passport, nev) {
           return;
         }
         
-        this.updateRedisUser(user, redis_channels, function(err, user){
+        updateRedisUser(user, redis_channels, function(err, user){
           if (err) {
             req.flash('statusProfileMessage', err);
             return;
@@ -320,7 +320,7 @@ module.exports = function(app, passport, nev) {
             return res.status(404).send('ERROR: sending confirmation email FAILED');
           }
           
-          this.updateRedisUser(user, [], function(err, user){
+          updateRedisUser(user, [], function(err, user){
             if (err) {
               return res.status(404).send('ERROR: save into cache');
             }
