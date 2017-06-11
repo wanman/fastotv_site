@@ -35,23 +35,38 @@ module.exports = function(nev, redis_connection, passport) {
       });
     });
 
-    passport.add_user(function(done) {
+    passport.add_user(function(email, password, done) {
       var new_user = new User();
       new_user.local.email = email;
       new_user.local.password = new_user.generateHash(password);
       new_user.created_date = Date();
       new_user.name = email;
       new_user.save(function(err) {
-      if (err) {
-        return done(err);
-      }
-      var needed_val = { id: new_user._id, login : new_user.local.email, password : new_user.local.password, channels : []};
-      var needed_val_str = JSON.stringify(needed_val);
+        if (err) {
+          return done(err);
+        }
+        var needed_val = { id: new_user._id, login : new_user.local.email, password : new_user.local.password, channels : []};
+        var needed_val_str = JSON.stringify(needed_val);
         redis_connection.set(new_user.local.email, needed_val_str);
         return done(null, new_user);
       });
     });
     
+    passport.update_user(function(user, email, password, done) {
+      user.local.email = email;
+      user.local.password = user.generateHash(password);
+      user.created_date = Date();
+      user.name = email;
+      user.save(function (err) {
+      if (err) {
+        return done(err);
+      }
+      var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : []};
+      var needed_val_str = JSON.stringify(needed_val);
+      redis_connection.set(user.local.email, needed_val_str);
+        return done(null,user);
+      });
+    });
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
@@ -127,20 +142,7 @@ module.exports = function(nev, redis_connection, passport) {
             }
             
             // create the user
-            var new_user = new User();
-            new_user.local.email = email;
-            new_user.local.password = new_user.generateHash(password);
-            new_user.created_date = Date();
-            new_user.name = email;
-            new_user.save(function(err) {
-            if (err) {
-              return done(err);
-            }
-            var needed_val = { id: new_user._id, login : new_user.local.email, password : new_user.local.password, channels : []};
-            var needed_val_str = JSON.stringify(needed_val);
-              redis_connection.set(new_user.local.email, needed_val_str);
-              return done(null, new_user);
-            });
+            passport.add_user(email, password, done);
           });
         } else if (!req.user.local.email) {  // if the user is logged in but has no local account...
           // ...presumably they're trying to connect a local account
@@ -155,20 +157,8 @@ module.exports = function(nev, redis_connection, passport) {
             // Using 'loginMessage instead of signupMessage because it's used by /connect/local'
             }
             
-            var user = req.user;
-            user.local.email = email;
-            user.local.password = user.generateHash(password);
-            user.created_date = Date();
-            user.name = email;
-            user.save(function (err) {
-            if (err) {
-              return done(err);
-            }
-            var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : []};
-            var needed_val_str = JSON.stringify(needed_val);
-            redis_connection.set(user.local.email, needed_val_str);
-              return done(null,user);
-            });
+            // update user
+            passport.update_user(req.user, email, password, done);
           });
         } else {  // user is logged in and already has a local account. Ignore signup. (You should log out before trying to create a new account, user!)
           return done(null, req.user);
