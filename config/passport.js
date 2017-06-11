@@ -35,7 +35,7 @@ module.exports = function(nev, redis_connection, passport) {
       });
     });
 
-    passport.add_user = function(email, password, done) {
+    function add_user(email, password, done) {
       var new_user = new User();
       new_user.local.email = email;
       new_user.local.password = new_user.generateHash(password);
@@ -52,7 +52,7 @@ module.exports = function(nev, redis_connection, passport) {
       });
     };
     
-    passport.update_user = function(user, email, password, done) {
+    function update_user(user, email, password, done) {
       user.local.email = email;
       user.local.password = user.generateHash(password);
       user.created_date = Date();
@@ -142,7 +142,7 @@ module.exports = function(nev, redis_connection, passport) {
             }
             
             // create the user
-            this.add_user(email, password, done);
+            add_user(email, password, done);
           });
         } else if (!req.user.local.email) {  // if the user is logged in but has no local account...
           // ...presumably they're trying to connect a local account
@@ -158,7 +158,7 @@ module.exports = function(nev, redis_connection, passport) {
             }
             
             // update user
-            this.update_user(req.user, email, password, done);
+            update_user(req.user, email, password, done);
           });
         } else {  // user is logged in and already has a local account. Ignore signup. (You should log out before trying to create a new account, user!)
           return done(null, req.user);
