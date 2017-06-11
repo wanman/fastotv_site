@@ -35,7 +35,7 @@ module.exports = function(nev, redis_connection, passport) {
       });
     });
 
-    passport.add_user(function(email, password, done) {
+    passport.add_user = function(email, password, done) {
       var new_user = new User();
       new_user.local.email = email;
       new_user.local.password = new_user.generateHash(password);
@@ -50,9 +50,9 @@ module.exports = function(nev, redis_connection, passport) {
         redis_connection.set(new_user.local.email, needed_val_str);
         return done(null, new_user);
       });
-    });
+    };
     
-    passport.update_user(function(user, email, password, done) {
+    passport.update_user = function(user, email, password, done) {
       user.local.email = email;
       user.local.password = user.generateHash(password);
       user.created_date = Date();
@@ -66,7 +66,7 @@ module.exports = function(nev, redis_connection, passport) {
       redis_connection.set(user.local.email, needed_val_str);
         return done(null,user);
       });
-    });
+    };
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
