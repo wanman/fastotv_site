@@ -35,6 +35,13 @@ module.exports = function(nev, redis_connection, passport) {
       });
     });
 
+    function update_redis_user(user){
+      var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : []};
+      var needed_val_str = JSON.stringify(needed_val);
+      redis_connection.set(user.local.email, needed_val_str);
+      return;
+    }
+
     function add_user(email, password, done) {
       var new_user = new User();
       new_user.local.email = email;
@@ -45,12 +52,10 @@ module.exports = function(nev, redis_connection, passport) {
         if (err) {
           return done(err);
         }
-        var needed_val = { id: new_user._id, login : new_user.local.email, password : new_user.local.password, channels : []};
-        var needed_val_str = JSON.stringify(needed_val);
-        redis_connection.set(new_user.local.email, needed_val_str);
+        update_redis_user(new_user);
         return done(null, new_user);
       });
-    };
+    }
     
     function update_user(user, email, password, done) {
       user.local.email = email;
@@ -61,12 +66,10 @@ module.exports = function(nev, redis_connection, passport) {
       if (err) {
         return done(err);
       }
-      var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : []};
-      var needed_val_str = JSON.stringify(needed_val);
-      redis_connection.set(user.local.email, needed_val_str);
-        return done(null,user);
+      update_redis_user(user);
+      return done(null, user);
       });
-    };
+    }
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
@@ -78,12 +81,12 @@ module.exports = function(nev, redis_connection, passport) {
     },
     function(req, email, password, done) {
         if (!email){
-            return done(null, false, req.flash('loginMessage', 'Invalid input.' ));
+          return done(null, false, req.flash('loginMessage', 'Invalid input.' ));
         }
             
         email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
         if(!validateEmail(email)){
-            return done(null, false, req.flash('loginMessage', 'Invalid email ' + email + '.' ));
+          return done(null, false, req.flash('loginMessage', 'Invalid email ' + email + '.' ));
         }
         
         // asynchronous
@@ -170,13 +173,11 @@ module.exports = function(nev, redis_connection, passport) {
     // FACEBOOK ================================================================
     // =========================================================================
     passport.use(new FacebookStrategy({
-
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
         profileFields   : ['id', 'name', 'email'],
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-
     },
     function(req, token, refreshToken, profile, done) {
 
