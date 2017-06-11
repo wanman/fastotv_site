@@ -196,17 +196,6 @@ redis_sub.on('message', function(channel, message){
 mongoose.Promise = global.Promise;
 mongoose.connect(configDB.url); // connect to our database
 
-require('./config/passport')(app.redis_connection, passport); // pass passport for configuration
-
-// set up our express application
-app.use(express.static(public_dir_abs_path));
-app.use(morgan('dev')); // log every request to the console
-app.use(cookieParser()); // read cookies (needed for auth)
-app.use(bodyParser.json()); // get information from html forms
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.set('view engine', 'ejs'); // set up ejs for templating
-
 // NEV configuration =====================
 // our persistent user model
 var User = require('./app/models/user');
@@ -253,6 +242,17 @@ nev.generateTempUserModel(User, function(err, tempUserModel) {
 
   console.log('generated temp user model: ' + (typeof tempUserModel === 'function'));
 });
+
+require('./config/passport')(nev, app.redis_connection, passport); // pass passport for configuration
+
+// set up our express application
+app.use(express.static(public_dir_abs_path));
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser.json()); // get information from html forms
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
 app.use(session({ secret: app.locals.project.name_lowercase })); // session secret
