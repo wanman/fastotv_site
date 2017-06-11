@@ -275,27 +275,27 @@ module.exports = function(app, passport, nev) {
   // LOGIN ===============================
   // show the login form
   app.get('/login', function(req, res) {
-      res.render('login.ejs', { message: req.flash('loginMessage') });
+    res.render('login.ejs', { message: req.flash('loginMessage') });
   });
 
   // process the login form
   app.post('/login', passport.authenticate('local-login', {
-      successRedirect : '/profile', // redirect to the secure profile section
-      failureRedirect : '/login', // redirect back to the signup page if there is an error
-      failureFlash : true // allow flash messages
+    successRedirect : '/profile', // redirect to the secure profile section
+    failureRedirect : '/login', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
   }));
 
   // SIGNUP =================================
   // show the signup form
   app.get('/signup', function(req, res) {
-      res.render('signup.ejs', { message: req.flash('signupMessage') });
+    res.render('signup.ejs', { message: req.flash('signupMessage') });
   });
 
   // process the signup form
   app.post('/signup', passport.authenticate('local-signup', {
-      successRedirect : '/profile', // redirect to the secure profile section
-      failureRedirect : '/signup', // redirect back to the signup page if there is an error
-      failureFlash : true // allow flash messages
+    successRedirect : '/profile', // redirect to the secure profile section
+    failureRedirect : '/signup', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
   }));
 
   // user accesses the link that is sent
@@ -303,15 +303,13 @@ module.exports = function(app, passport, nev) {
     var url = req.params.URL;
   
     nev.confirmTempUser(url, function(err, user) {
+      console.log(user);
       if (user) {
         nev.sendConfirmationEmail(user.email, function(err, info) {
           if (err) {
             return res.status(404).send('ERROR: sending confirmation email FAILED');
           }
-          res.json({
-            msg: 'CONFIRMED!',
-            info: info
-          });
+          res.json({msg: 'CONFIRMED!', info: info});
         });
       } else {
         return res.status(404).send('ERROR: confirming temp user FAILED');
@@ -360,14 +358,14 @@ module.exports = function(app, passport, nev) {
   // =============================================================================
 
   // locally --------------------------------
-      app.get('/connect/local', function(req, res) {
-          res.render('connect_local.ejs', { message: req.flash('loginMessage') });
-      });
-      app.post('/connect/local', passport.authenticate('local-signup', {
-          successRedirect : '/profile', // redirect to the secure profile section
-          failureRedirect : '/connect/local', // redirect back to the signup page if there is an error
-          failureFlash : true // allow flash messages
-      }));
+  app.get('/connect/local', function(req, res) {
+      res.render('connect_local.ejs', { message: req.flash('loginMessage') });
+  });
+  app.post('/connect/local', passport.authenticate('local-signup', {
+      successRedirect : '/profile', // redirect to the secure profile section
+      failureRedirect : '/connect/local', // redirect back to the signup page if there is an error
+      failureFlash : true // allow flash messages
+  }));
 
   // facebook -------------------------------
 
@@ -376,10 +374,10 @@ module.exports = function(app, passport, nev) {
 
   // handle the callback after facebook has authorized the user
   app.get('/connect/facebook/callback',
-      passport.authorize('facebook', {
-          successRedirect : '/profile',
-          failureRedirect : '/'
-      }));
+    passport.authorize('facebook', {
+      successRedirect : '/profile',
+      failureRedirect : '/'
+  }));
 
   // twitter --------------------------------
 
@@ -388,10 +386,10 @@ module.exports = function(app, passport, nev) {
 
   // handle the callback after twitter has authorized the user
   app.get('/connect/twitter/callback',
-      passport.authorize('twitter', {
-          successRedirect : '/profile',
-          failureRedirect : '/'
-      }));
+    passport.authorize('twitter', {
+      successRedirect : '/profile',
+      failureRedirect : '/'
+  }));
 
 
   // google ---------------------------------
@@ -421,7 +419,7 @@ module.exports = function(app, passport, nev) {
       
       user.save(function(err) {
           if (err) {
-              console.error(err);
+            console.error(err);
           }
           res.redirect('/profile');
       });
@@ -460,7 +458,7 @@ module.exports = function(app, passport, nev) {
       
       user.save(function(err) {
           if (err) {
-              console.error(err);
+            console.error(err);
           }
           res.redirect('/profile');
       });
