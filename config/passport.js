@@ -129,11 +129,37 @@ module.exports = function(nev, redis_connection, passport) {
         return done(null, false, req.flash('signupMessage', 'Invalid email ' + email + '.' ));
       }
       
-      var URL = newTempUser[nev.options.URLFieldName];
-        nev.sendVerificationEmail(email, URL, function(err, info) {
-          if (err) { // if there are any errors, return the error
-            return done(err);
-          }
+      
+      var new_user = new User();
+      new_user.local.email = email;
+      new_user.local.password = new_user.generateHash(password);
+      new_user.created_date = Date();
+      new_user.name = email;
+      nev.createTempUser(new_user, function(err, existingPersistentUser, newTempUser) {
+        // some sort of error
+        console.log(err, existingPersistentUser, newTempUser);
+        if (err) {
+          return done(err);
+        }
+
+        // user already exists in persistent collection...
+        if (existingPersistentUser) {
+          return done(null, req.user);
+        }
+        // a new user
+        if (newTempUser) {
+          var URL = newTempUser[nev.options.URLFieldName];
+          nev.sendVerificationEmail(email, URL, function(err, info) {
+            if (err) {
+              return done(err);
+            }
+            
+            return done(null, false, req.flash('signupMessage', 'Please check your email to verify your account.'));
+          });
+          // user already exists in temporary collection...
+        } else {
+          // flash message of failure...
+        }
       });
       
       // asynchronous

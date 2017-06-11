@@ -18,7 +18,6 @@ var express  = require('express');
 var app      = express();
 var port     = settings_config.http_server_port;
 var mongoose = require('mongoose');
-var crypto = require('crypto');
 var nev = require('email-verification')(mongoose);
 var redis = require('redis');
 var passport = require('passport');
@@ -200,8 +199,7 @@ mongoose.connect(configDB.url); // connect to our database
 // our persistent user model
 var User = require('./app/models/user');
 var myHasher = function(password, tempUserData, insertTempUser, callback) {
-  var hash = crypto.createHash('md5').update(password).digest('hex');
-  return insertTempUser(hash, tempUserData, callback);
+  return insertTempUser(password, tempUserData, callback);
 };
 
 nev.configure({
@@ -210,7 +208,9 @@ nev.configure({
 
   verificationURL: app.locals.site.domain + '/email-verification/${URL}',
   transportOptions: {
-    service: 'Gmail',
+    host: 'sg2plcpnl0020.prod.sin2.secureserver.net',
+    port: 465,
+    secure: true, // secure:true for port 465, secure:false for port 587
     auth: {
       user: app.locals.site.support_email,
       pass: app.locals.site.support_email_password
@@ -224,6 +224,7 @@ nev.configure({
   },
 
   hashingFunction: myHasher,
+  emailFieldName: 'local.email',
   passwordFieldName: 'local.password',
 }, function(err, options) {
   if (err) {
