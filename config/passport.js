@@ -114,7 +114,7 @@ module.exports = function(nev, redis_connection, passport) {
         if (newTempUser) {
           var URL = newTempUser[nev.options.URLFieldName];
           nev.sendVerificationEmail(email, URL, function(err, info) {
-            console.log("mail sended to: " + email, err);
+            console.log("verified mail sended to: " + email + ", error: " err);
             if (err) {
               return done(err);
             }

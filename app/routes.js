@@ -334,10 +334,12 @@ module.exports = function(app, passport, nev) {
 
   // user accesses the link that is sent
   app.get('/email-verification/:URL', function(req, res) {
+    console.log("req:", req)
     var url = req.params.URL;
     nev.confirmTempUser(url, function(err, user) {
       if (user) {
         nev.sendConfirmationEmail(user.local.email, function(err, info) {
+          console.log("confirm mail sended to: " + email + ", error: " err);
           if (err) {
             return res.status(404).send('ERROR: sending confirmation email FAILED');
           }
