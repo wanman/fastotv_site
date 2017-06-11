@@ -62,6 +62,9 @@ app.locals.site = {
     twitter_name: 'FastoTV',
     twitter_link: 'https://twitter.com/FastoTV',
     facebook_appid: auth_config.facebookAuth.clientID,
+    support_email_service_host : settings_config.support_email_service_host,
+    support_email_service_port : settings_config.support_email_service_port,
+    support_email_service_secure : settings_config.support_email_service_secure,
     support_email : settings_config.support_email,
     support_email_password : settings_config.support_email_password
 };
@@ -208,9 +211,9 @@ nev.configure({
 
   verificationURL: app.locals.site.domain + '/email-verification/${URL}',
   transportOptions: {
-    host: 'sg2plcpnl0020.prod.sin2.secureserver.net',
-    port: 465,
-    secure: true, // secure:true for port 465, secure:false for port 587
+    host: app.locals.site.support_email_service_host,
+    port: app.locals.site.support_email_service_port,
+    secure: app.locals.site.support_email_service_secure, // secure:true for port 465, secure:false for port 587
     auth: {
       user: app.locals.site.support_email,
       pass: app.locals.site.support_email_password
