@@ -201,9 +201,6 @@ mongoose.connect(configDB.url); // connect to our database
 // NEV configuration =====================
 // our persistent user model
 var User = require('./app/models/user');
-var myHasher = function(password, tempUserData, insertTempUser, callback) {
-  return insertTempUser(password, tempUserData, callback);
-};
 
 nev.configure({
   persistentUserModel: User,
@@ -226,7 +223,6 @@ nev.configure({
       text: 'Please confirm your account by clicking the following link: ${URL}'
   },
 
-  hashingFunction: myHasher,
   emailFieldName: 'local.email',
   passwordFieldName: 'local.password',
 }, function(err, options) {
