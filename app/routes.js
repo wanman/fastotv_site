@@ -19,7 +19,7 @@ function deleteFolderRecursive(path) {
   }
 };
 
-module.exports = function(app, passport) {
+module.exports = function(app, passport, nev) {
   // normal routes ===============================================================
   // show the home page (will also have our login links)
   app.get('/', function(req, res) {
@@ -214,6 +214,10 @@ module.exports = function(app, passport) {
             var file_name = file;
             file = path.resolve(dir, file);
             fs.stat(file, function(err, stat) {
+              if (err) {
+                return done(err, []);
+              }
+          
               if (stat && stat.isDirectory()) {
               } else {
                 var path = file.replace(app.locals.site.public_directory, '');
@@ -293,6 +297,27 @@ module.exports = function(app, passport) {
       failureRedirect : '/signup', // redirect back to the signup page if there is an error
       failureFlash : true // allow flash messages
   }));
+
+  // user accesses the link that is sent
+  app.get('/email-verification/:URL', function(req, res) {
+    var url = req.params.URL;
+  
+    nev.confirmTempUser(url, function(err, user) {
+      if (user) {
+        nev.sendConfirmationEmail(user.email, function(err, info) {
+          if (err) {
+            return res.status(404).send('ERROR: sending confirmation email FAILED');
+          }
+          res.json({
+            msg: 'CONFIRMED!',
+            info: info
+          });
+        });
+      } else {
+        return res.status(404).send('ERROR: confirming temp user FAILED');
+      }
+    });
+  });
 
 // facebook -------------------------------
 

@@ -18,13 +18,13 @@ var express  = require('express');
 var app      = express();
 var port     = settings_config.http_server_port;
 var mongoose = require('mongoose');
+var crypto = require('crypto');
+var nev = require('email-verification')(mongoose);
 var redis = require('redis');
 var passport = require('passport');
 var flash    = require('connect-flash');
 var amqp = require('amqp');
 var mkdirp = require('mkdirp');
-const util = require('util');
-
 
 var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -62,7 +62,9 @@ app.locals.site = {
     github_link_without_host: 'fastogt/fastotv',
     twitter_name: 'FastoTV',
     twitter_link: 'https://twitter.com/FastoTV',
-    facebook_appid: auth_config.facebookAuth.clientID
+    facebook_appid: auth_config.facebookAuth.clientID,
+    support_email : settings_config.support_email,
+    support_email_password : settings_config.support_email_password
 };
 app.locals.project = {
     name: 'FastoTV',
@@ -205,6 +207,53 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs'); // set up ejs for templating
 
+// NEV configuration =====================
+// our persistent user model
+var User = require('./app/models/user');
+var myHasher = function(password, tempUserData, insertTempUser, callback) {
+  var hash = crypto.createHash('md5').update(password).digest('hex');
+  return insertTempUser(hash, tempUserData, callback);
+};
+
+nev.configure({
+  persistentUserModel: User,
+  expirationTime: 600, // 10 minutes
+
+  verificationURL: app.locals.site.domain + '/email-verification/${URL}',
+  transportOptions: {
+    service: 'Gmail',
+    auth: {
+      user: app.locals.site.support_email,
+      pass: app.locals.site.support_email_password
+    }
+  },
+  verifyMailOptions: {
+      from: 'Do Not Reply <'+ app.locals.site.support_email +'>',
+      subject: 'Please confirm account',
+      html: 'Click the following link to confirm your account:</p><p>${URL}</p>',
+      text: 'Please confirm your account by clicking the following link: ${URL}'
+  },
+
+  hashingFunction: myHasher,
+  passwordFieldName: 'local.password',
+}, function(err, options) {
+  if (err) {
+    console.log(err);
+    return;
+  }
+
+  console.log('configured: ' + (typeof options === 'object'));
+});
+
+nev.generateTempUserModel(User, function(err, tempUserModel) {
+  if (err) {
+    console.log(err);
+    return;
+  }
+
+  console.log('generated temp user model: ' + (typeof tempUserModel === 'function'));
+});
+
 // required for passport
 app.use(session({ secret: app.locals.project.name_lowercase })); // session secret
 app.use(passport.initialize());
@@ -212,7 +261,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, passport, nev); // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================
 app.listen(port);
