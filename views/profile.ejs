@@ -7,18 +7,21 @@
   <div class="container">
     <div class="page-header text-left">
       <div class="well">
-        <h1><img src="logo32x32.png"/><%= site.title %><a href="/logout" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out""</span> Sign out</a></h1>      
-          <% if (user.isReadOnlyMode()) { %>
-            <a href="/connect/local" class="btn btn-warning">Connect</a>
-          <% } else { %>
-            <p>
-              <strong>id</strong>: <%= user._id %><br>
-              <strong>email</strong>: <%= user.local.email %><br>
-              <!-- <strong>password</strong>: <%= user.local.password %> -->
-            </p>
-            <a href="/unlink/local" class="btn btn-warning disabled">Unlink</a>
-          <% } %>
-        <a href="/" class="btn btn-warning btn-md pull-right"><span class="glyphicon glyphicon-home"></span> Home</a>
+        <div class="row">
+          <div class="col-md-12">
+            <h1>
+              <img src="logo32x32.png"/><%= site.title %>
+              <a href="/" class="btn btn-warning btn-md pull-right"><span class="glyphicon glyphicon-home"></span> Home</a>
+            </h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <strong>id</strong>: <%= user._id %><br>
+            <strong>email</strong>: <%= user.email %><br>
+            <a href="/logout" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out""</span> Sign out</a>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -82,6 +85,16 @@
         <div class="col-sm-6">
         <% if (user.isReadOnlyMode()) { %>
           <div class="alert alert-danger">Read only mode</div>
+          <div class="row">
+            <div class="col-sm-6">
+              1) You can see how much members are in our community.
+            </div>
+            <div class="col-sm-6">
+              <form action="/user_status" method="get">
+                <button type="submit" class="btn btn-info btn-small">Registered users</button>
+              </form>
+            </div>
+          </div>
         <% } else { %> 
           <div class="alert alert-success">Nice to meet you <strong><%= user.name %></strong></div>
           <div class="row">

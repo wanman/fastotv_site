@@ -223,8 +223,8 @@ nev.configure({
       text: 'Please confirm your account by clicking the following link: ${URL}'
   },
 
-  emailFieldName: 'local.email',
-  passwordFieldName: 'local.password',
+  emailFieldName: 'email',
+  passwordFieldName: 'password',
 }, function(err, options) {
   if (err) {
     console.log(err);

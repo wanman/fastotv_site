@@ -5,10 +5,6 @@ var ChannelSchema = require('./channel_scheme');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
-    local            : {
-        email        : String,
-        password     : String
-    },
     facebook         : {
         id           : String,
         token        : String,
@@ -29,6 +25,8 @@ var userSchema = mongoose.Schema({
     },
     
     name : String,
+    email        : String,
+    password     : String,
     created_date : Date,
     offical_channels : [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}],
     private_channels : [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}],
@@ -44,12 +42,12 @@ userSchema.methods.generateHash = function(password) {
 // checking if password is valid
 userSchema.methods.validPassword = function(password) {
     var hash = crypto.createHash('md5').update(password).digest('hex');
-    return hash === this.local.password;
+    return hash === this.password;
 };
 
 // checking if password is valid
 userSchema.methods.isReadOnlyMode = function() {
-    return !this.local.email;
+    return !this.email;
 };
 
 // create the model for users and expose it to our app
