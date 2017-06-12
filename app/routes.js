@@ -6,7 +6,7 @@ var fs = require('fs');
 var path = require('path');
 
 function deleteFolderRecursive(path) {
-  if( fs.existsSync(path) ) {
+  if(fs.existsSync(path)) {
     fs.readdirSync(path).forEach(function(file,index){
       var curPath = path + "/" + file;
       if(fs.lstatSync(curPath).isDirectory()) { // recurse
@@ -201,8 +201,8 @@ module.exports = function(app, passport, nev) {
     var login = req.body.login;
     
     res.render('device_details.ejs', {
-        user_id: user._id,
-        login: login
+      user_id: user._id,
+      login: login
     });
   });
   
@@ -265,15 +265,15 @@ module.exports = function(app, passport, nev) {
   
   // PROFILE SECTION =========================
   app.get('/profile', isLoggedIn, function(req, res) {
-      res.render('profile.ejs', {
-          user : req.user,
-          message: req.flash('statusProfileMessage')
-      });
+    res.render('profile.ejs', {
+      user : req.user,
+      message: req.flash('statusProfileMessage')
+    });
   });
   // LOGOUT ==============================
   app.get('/logout', function(req, res) {
-      req.logout();
-      res.redirect('/');
+    req.logout();
+    res.redirect('/');
   });
 
   // =============================================================================
@@ -312,7 +312,6 @@ module.exports = function(app, passport, nev) {
     var url = req.params.URL;
     nev.confirmTempUser(url, function(err, user) {
       if (user) {
-        console.log("user:", user);
         var email = user.email;
         nev.sendConfirmationEmail(email, function(err, info) {
           console.log("confirm message sended to: " + email + ", error: " + err);
@@ -324,7 +323,7 @@ module.exports = function(app, passport, nev) {
             if (err) {
               return res.status(404).send('ERROR: save into cache');
             }
-            res.json({msg: 'CONFIRMED!', info: info});
+            res.render('after_confirm.ejs');
           });
         });
       } else {
@@ -340,10 +339,11 @@ module.exports = function(app, passport, nev) {
 
   // handle the callback after facebook has authenticated the user
   app.get('/auth/facebook/callback',
-      passport.authenticate('facebook', {
-          successRedirect : '/profile',
-          failureRedirect : '/'
-      }));
+    passport.authenticate('facebook', {
+      successRedirect : '/profile',
+      failureRedirect : '/'
+    })
+  );
 
     // twitter --------------------------------
 
@@ -352,10 +352,11 @@ module.exports = function(app, passport, nev) {
 
   // handle the callback after twitter has authenticated the user
   app.get('/auth/twitter/callback',
-      passport.authenticate('twitter', {
-          successRedirect : '/profile',
-          failureRedirect : '/'
-      }));
+    passport.authenticate('twitter', {
+      successRedirect : '/profile',
+      failureRedirect : '/'
+    })
+  );
 
 
   // google ---------------------------------
@@ -364,24 +365,15 @@ module.exports = function(app, passport, nev) {
 
   // the callback after google has authenticated the user
   app.get('/auth/google/callback',
-      passport.authenticate('google', {
-          successRedirect : '/profile',
-          failureRedirect : '/'
-      }));
+    passport.authenticate('google', {
+        successRedirect : '/profile',
+        failureRedirect : '/'
+    })
+  );
 
   // =============================================================================
   // AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
   // =============================================================================
-
-  // locally --------------------------------
-  app.get('/connect/local', function(req, res) {
-      res.render('connect_local.ejs', { message: req.flash('loginMessage') });
-  });
-  app.post('/connect/local', passport.authenticate('local-signup', {
-      successRedirect : '/profile', // redirect to the secure profile section
-      failureRedirect : '/connect/local', // redirect back to the signup page if there is an error
-      failureFlash : true // allow flash messages
-  }));
 
   // facebook -------------------------------
 
@@ -393,7 +385,8 @@ module.exports = function(app, passport, nev) {
     passport.authorize('facebook', {
       successRedirect : '/profile',
       failureRedirect : '/'
-  }));
+    })
+  );
 
   // twitter --------------------------------
 
@@ -405,7 +398,8 @@ module.exports = function(app, passport, nev) {
     passport.authorize('twitter', {
       successRedirect : '/profile',
       failureRedirect : '/'
-  }));
+    })
+  );
 
 
   // google ---------------------------------
@@ -415,10 +409,11 @@ module.exports = function(app, passport, nev) {
 
   // the callback after google has authorized the user
   app.get('/connect/google/callback',
-      passport.authorize('google', {
-          successRedirect : '/profile',
-          failureRedirect : '/'
-      }));
+    passport.authorize('google', {
+        successRedirect : '/profile',
+        failureRedirect : '/'
+    })
+  );
 
   // =============================================================================
   // UNLINK ACCOUNTS =============================================================
@@ -429,41 +424,38 @@ module.exports = function(app, passport, nev) {
 
   // facebook -------------------------------
   app.get('/unlink/facebook', isLoggedIn, function(req, res) {
-      var user            = req.user;
-      user.facebook.token = undefined;
-      
-      user.save(function(err) {
-          if (err) {
-              console.error(err);
-          }
-          res.redirect('/profile');
-      });
+    var user            = req.user;
+    user.facebook.token = undefined;  
+    user.save(function(err) {
+      if (err) {
+        console.error(err);
+      }
+      res.redirect('/profile');
+    });
   });
 
   // twitter --------------------------------
   app.get('/unlink/twitter', isLoggedIn, function(req, res) {
-      var user           = req.user;
-      user.twitter.token = undefined;
-      
-      user.save(function(err) {
-          if (err) {
-              console.error(err);
-          }
-          res.redirect('/profile');
-      });
+    var user           = req.user;
+    user.twitter.token = undefined;
+    user.save(function(err) {
+      if (err) {
+        console.error(err);
+      }
+      res.redirect('/profile');
+    });
   });
 
   // google ---------------------------------
   app.get('/unlink/google', isLoggedIn, function(req, res) {
-      var user          = req.user;
-      user.google.token = undefined;
-      
-      user.save(function(err) {
-          if (err) {
-            console.error(err);
-          }
-          res.redirect('/profile');
-      });
+    var user          = req.user;
+    user.google.token = undefined;
+    user.save(function(err) {
+      if (err) {
+        console.error(err);
+      }
+      res.redirect('/profile');
+    });
   });
 };
 
