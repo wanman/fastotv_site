@@ -77,6 +77,16 @@
         <div class="col-sm-6">
         <% if (user.isReadOnlyMode()) { %>
           <div class="alert alert-danger">Read only mode</div>
+          <div class="row">
+            <div class="col-sm-6">
+              1) You can see how much members are in our community.
+            </div>
+            <div class="col-sm-6">
+              <form action="/user_status" method="get">
+                <button type="submit" class="btn btn-info btn-small">Registered users</button>
+              </form>
+            </div>
+          </div>
         <% } else { %> 
           <div class="alert alert-success">Nice to meet you <strong><%= user.name %></strong></div>
           <div class="row">
