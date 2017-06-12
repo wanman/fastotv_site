@@ -7,13 +7,21 @@
   <div class="container">
     <div class="page-header text-left">
       <div class="well">
-        <h1><img src="logo32x32.png"/><%= site.title %><a href="/logout" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out""</span> Sign out</a></h1>      
-          <p>
+        <div class="row">
+          <div class="col-md-12">
+            <h1>
+              <img src="logo32x32.png"/><%= site.title %>
+              <a href="/" class="btn btn-warning btn-md pull-right"><span class="glyphicon glyphicon-home"></span> Home</a>
+            </h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
             <strong>id</strong>: <%= user._id %><br>
             <strong>email</strong>: <%= user.email %><br>
-            <!-- <strong>password</strong>: <%= user.password %> -->
-          </p>
-        <a href="/" class="btn btn-warning btn-md pull-right"><span class="glyphicon glyphicon-home"></span> Home</a>
+            <a href="/logout" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out""</span> Sign out</a>
+          </div>
+        </div>
       </div>
     </div>
     
