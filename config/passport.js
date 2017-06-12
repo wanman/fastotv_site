@@ -56,7 +56,7 @@ module.exports = function(nev, redis_connection, passport) {
         
         // asynchronous
         process.nextTick(function() {
-          User.findOne({ 'local.email' :  email }, function(err, user) {
+          User.findOne({ 'email' :  email }, function(err, user) {
             // if there are any errors, return the error
             if (err) {
               return done(err);
@@ -96,8 +96,8 @@ module.exports = function(nev, redis_connection, passport) {
       
       
       var new_user = new User();
-      new_user.local.email = email;
-      new_user.local.password = new_user.generateHash(password);
+      new_user.email = email;
+      new_user.password = new_user.generateHash(password);
       new_user.created_date = Date();
       new_user.name = email;
       nev.createTempUser(new_user, function(err, existingPersistentUser, newTempUser) {

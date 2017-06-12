@@ -21,9 +21,9 @@ function deleteFolderRecursive(path) {
 
 module.exports = function(app, passport, nev) {
   var updateRedisUser = function(user, channels, callback) {
-    var needed_val = { id: user._id, login : user.local.email, password : user.local.password, channels : channels};
+    var needed_val = { id: user._id, login : user.email, password : user.password, channels : channels};
     var needed_val_str = JSON.stringify(needed_val);
-    app.redis_connection.set(user.local.email, needed_val_str);
+    app.redis_connection.set(user.email, needed_val_str);
     return callback(null, user);
   }
   // normal routes ===============================================================
@@ -240,7 +240,7 @@ module.exports = function(app, passport, nev) {
         });
       };
       
-      walk(app.locals.site.users_directory + '/' + user.local.email, function(err, results) {
+      walk(app.locals.site.users_directory + '/' + user.email, function(err, results) {
         if (err) {
           console.error(err);
         }
@@ -256,7 +256,7 @@ module.exports = function(app, passport, nev) {
   // CLEAR user packages
   app.post('/clear_packages', function(req, res) {
     var user = req.user;
-    deleteFolderRecursive(app.locals.site.users_directory + '/' + user.local.email);
+    deleteFolderRecursive(app.locals.site.users_directory + '/' + user.email);
     res.render('build_installer_request.ejs', {
       user : user,
       builded_packages : []
@@ -313,7 +313,7 @@ module.exports = function(app, passport, nev) {
     nev.confirmTempUser(url, function(err, user) {
       if (user) {
         console.log("user:", user);
-        var email = user.local.email;
+        var email = user.email;
         nev.sendConfirmationEmail(email, function(err, info) {
           console.log("confirm mail sended to: " + email + ", error: " + err);
           if (err) {
@@ -430,8 +430,8 @@ module.exports = function(app, passport, nev) {
   // local -----------------------------------
   app.get('/unlink/local', isLoggedIn, function(req, res) {
       var user            = req.user;
-      user.local.email    = undefined;
-      user.local.password = undefined;
+      user.email    = undefined;
+      user.password = undefined;
       
       user.save(function(err) {
           if (err) {
