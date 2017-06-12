@@ -331,6 +331,10 @@ module.exports = function(app, passport, nev) {
       }
     });
   });
+  
+  app.get('/after_confirm', function(req, res) {
+    res.render('after_confirm.ejs');
+  });
 
 // facebook -------------------------------
 
