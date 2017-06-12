@@ -94,7 +94,6 @@ module.exports = function(nev, redis_connection, passport) {
         return done(null, false, req.flash('signupMessage', 'Invalid email ' + email + '.' ));
       }
       
-      
       var new_user = new User();
       new_user.email = email;
       new_user.password = new_user.generateHash(password);
@@ -114,7 +113,7 @@ module.exports = function(nev, redis_connection, passport) {
         if (newTempUser) {
           var URL = newTempUser[nev.options.URLFieldName];
           nev.sendVerificationEmail(email, URL, function(err, info) {
-            console.log("verified mail sended to: " + email + ", error: " + err);
+            console.log("verfy email message sended to: " + email + ", error: " + err);
             if (err) {
               return done(err);
             }
@@ -126,40 +125,6 @@ module.exports = function(nev, redis_connection, passport) {
           // flash message of failure...
         }
       });
-      
-      // asynchronous
-      /*process.nextTick(function() {
-        // if the user is not already logged in:
-        if (!req.user) {
-          User.findOne({ 'local.email' :  email }, function(err, user) {
-            if (err) { // if there are any errors, return the error
-              return done(err);
-            }
-            if (user) { // check to see if theres already a user with that email
-              return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-            }
-            
-            // create the user
-            // add_user(email, password, done);
-          });
-        } else if (!req.user.local.email) {  // if the user is logged in but has no local account...
-          // ...presumably they're trying to connect a local account
-          // BUT let's check if the email used to connect a local account is being used by another user
-          User.findOne({ 'local.email' :  email }, function(err, user) {
-            if (err) {
-              return done(err);
-            }
-            if (user) {
-              return done(null, false, req.flash('loginMessage', 'That email is already taken.'));
-            // Using 'loginMessage instead of signupMessage because it's used by /connect/local'
-            }
-            // update user
-            // update_user(req.user, email, password, done);
-          });
-        } else {  // user is logged in and already has a local account. Ignore signup. (You should log out before trying to create a new account, user!)
-          return done(null, req.user);
-        }
-      });*/
     }));
 
     // =========================================================================

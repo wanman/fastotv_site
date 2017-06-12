@@ -8,16 +8,11 @@
     <div class="page-header text-left">
       <div class="well">
         <h1><img src="logo32x32.png"/><%= site.title %><a href="/logout" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out""</span> Sign out</a></h1>      
-          <% if (user.isReadOnlyMode()) { %>
-            <a href="/connect/local" class="btn btn-warning">Connect</a>
-          <% } else { %>
-            <p>
-              <strong>id</strong>: <%= user._id %><br>
-              <strong>email</strong>: <%= user.email %><br>
-              <!-- <strong>password</strong>: <%= user.password %> -->
-            </p>
-            <a href="/unlink/local" class="btn btn-warning disabled">Unlink</a>
-          <% } %>
+          <p>
+            <strong>id</strong>: <%= user._id %><br>
+            <strong>email</strong>: <%= user.email %><br>
+            <!-- <strong>password</strong>: <%= user.password %> -->
+          </p>
         <a href="/" class="btn btn-warning btn-md pull-right"><span class="glyphicon glyphicon-home"></span> Home</a>
       </div>
     </div>
