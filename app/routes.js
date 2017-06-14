@@ -21,7 +21,7 @@ function deleteFolderRecursive(path) {
 
 
 function createRedisChannel(id, url, title, icon, programs) {  // ChannelInfo
-  var epg = {id: id, url: url, display-name: title, icon: icon, programs: programs}; // EpgInfo
+  var epg = {id: id, url: url, display_name: title, icon: icon, programs: programs}; // EpgInfo
   return {epg : epg, video : true, audio : true}
 }
 
