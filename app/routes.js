@@ -67,7 +67,7 @@ module.exports = function(app, passport, nev) {
             break;
           }
         }
-        pchannels.push({id : channel._id, tags: channel.tags, name : channel.name, url : channel.url, price : channel.price, checked :  exist ? "checked" : ""});
+        pchannels.push({id : channel._id, tags: channel.tags, name : channel.name, url : channel.url, price : channel.price, icon: channel.icon, checked :  exist ? "checked" : ""});
       }
       
       var ochannels = [];
@@ -80,7 +80,7 @@ module.exports = function(app, passport, nev) {
             break;
           }
         }
-        ochannels.push({id : channel._id, tags: channel.tags, name : channel.name, price : channel.price, checked :  exist ? "checked" : ""});
+        ochannels.push({id : channel._id, tags: channel.tags, name : channel.name, price : channel.price, icon: channel.icon, checked :  exist ? "checked" : ""});
       }
       res.render('channels.ejs', {
         offical_channels: ochannels,
