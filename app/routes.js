@@ -19,6 +19,12 @@ function deleteFolderRecursive(path) {
   }
 };
 
+
+function createRedisChannel(id, url, title, icon, programs) {  // ChannelInfo
+  var epg = {id: id, url: url, display-name: title, icon: icon, programs: programs}; // EpgInfo
+  return {epg : epg, video : true, audio : true}
+}
+
 module.exports = function(app, passport, nev) {
   var updateRedisUser = function(user, channels, callback) {
     var needed_val = { id: user._id, login : user.email, password : user.password, channels : channels};
@@ -139,7 +145,8 @@ module.exports = function(app, passport, nev) {
         for (var j = 0; j < offical_channels_ids.length; j++) {
           if (channel._id == offical_channels_ids[j]) {
             offical_channels.push(channel);
-            redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
+            var redChannel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, []);
+            redis_channels.push(redChannel);
             break;
           }
         }
@@ -153,7 +160,8 @@ module.exports = function(app, passport, nev) {
         for (var j = 0; j < private_channels_ids.length; j++) {
           if (channel._id == private_channels_ids[j]) {
             private_channels.push(channel);
-            redis_channels.push({id : channel._id, name : channel.name, url : channel.url});
+            var redChannel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, []);
+            redis_channels.push(redChannel);
             break;
           }
         }
