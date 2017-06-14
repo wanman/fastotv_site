@@ -1,7 +1,8 @@
 // load the things we need
 var mongoose = require('mongoose');
+var public_settings_config = require('../../config/public_settings.js');
 
-var DEFAUL_ICON_PATH = '/images/unknown_channel.png';
+var DEFAUL_ICON_PATH = public_settings_config.site_domain + '/images/unknown_channel.png';
 
 // define the schema for our channel model
 var ChannelSchema = mongoose.Schema({

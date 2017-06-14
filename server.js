@@ -6,6 +6,7 @@ function gen_routing_key(platform, arch) {
 
 // load configs
 var configDB = require('./config/database.js');
+var public_settings_config = require('./config/public_settings.js');
 var settings_config = require('./config/settings.js');
 var auth_config = require('./config/auth.js'); 
 var root_abs_path = __dirname; 
@@ -16,7 +17,7 @@ var public_downloads_users_dir_abs_path = public_downloads_dir_abs_path + '/user
 // get all the tools we need
 var express  = require('express');
 var app      = express();
-var port     = settings_config.http_server_port;
+var port     = public_settings_config.http_server_port;
 var mongoose = require('mongoose');
 var nev = require('email-verification')(mongoose);
 var redis = require('redis');
@@ -44,9 +45,9 @@ var listener = io.listen(server);
 
 // settings
 app.locals.site = {
-    title: 'FastoTV',
-    version: '0.1.0',
-    domain: 'http://fastotv.com',
+    title: public_settings_config.site_title,
+    version: public_settings_config.site_version,
+    domain: public_settings_config.site_domain,
     keywords: 'FastoTV, IPTV, Open source, Free, Tv player, Cross-platform',
     description: 'FastoTV it is open source iptv solution.',
     small_description: 'FastoTV - cross-platform solution for watching tv.',
@@ -69,10 +70,10 @@ app.locals.site = {
     support_email_password : settings_config.support_email_password
 };
 app.locals.project = {
-    name: 'FastoTV',
-    name_lowercase: 'fastotv',
-    version: settings_config.app_version,
-    version_type: settings_config.app_version_type
+    name: public_settings_config.app_title,
+    name_lowercase: public_settings_config.app_lowercase,
+    version: public_settings_config.app_version,
+    version_type: public_settings_config.app_version_type
 };
 app.locals.author = {
     name: 'Topilski Alexandr',
@@ -86,7 +87,7 @@ app.locals.company = {
 };
 
 app.locals.back_end = {
-    socketio_port : settings_config.socketio_port,
+    socketio_port : public_settings_config.socketio_port,
     pub_sub_channel_in : settings_config.pub_sub_channel_in,
     pub_sub_channel_out : settings_config.pub_sub_channel_out,
     pub_sub_channel_client_state : settings_config.pub_sub_channel_client_state
