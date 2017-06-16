@@ -12,7 +12,7 @@ var ChannelSchema = mongoose.Schema({
   price : {type : Number, default: 0},
   tags : [String],
   icon : {type : String, default: DEFAUL_ICON_PATH}, 
-  programms : [ProgrammeSchema]
+  programmes : [ProgrammeSchema]
 });
 
 module.exports = ChannelSchema;

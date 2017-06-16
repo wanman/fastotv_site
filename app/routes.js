@@ -1,9 +1,26 @@
 // load up the user model
 var User = require('../app/models/user');
 var Channel = require('../app/models/channel');
+var XmltvParser = require('xmltv-parser');
 
 var fs = require('fs');
 var path = require('path');
+
+function parserXmltvFile(xml_file_path) {
+  if(fs.existsSync(path)) {
+    var input = fs.createReadStream(xml_file_path);
+    var parser = new XmltvParser();
+    var programmeArray = [];
+    input.pipe(parser);
+
+    parser.on('programme', function (programme) {
+      programmeArray.push(programme);
+    });
+    return programmeArray;
+  }
+
+  return [];
+}
 
 function deleteFolderRecursive(path) {
   if(fs.existsSync(path)) {
@@ -126,7 +143,27 @@ module.exports = function(app, passport, nev) {
     });
   });
   
-  
+  // UPLOAD xmltv private channel
+  app.post('/upload_xmltv', function(req, res) {
+    var user = req.user;
+    var file_path = req.body.file_path;
+    var channel_id = req.body.channel_id;
+    for (var i = 0; i < user.private_channels.length; i++) {
+       if (user.private_channels[i].equals(channel_id)) {
+         user.private_channels[i].programmes = parserXmltvFile(file_path);           
+         user.save(function(err) {
+      	   if (err) {
+             req.flash('statusProfileMessage', err);
+             return;
+           }
+           
+           console.log("programmes: ", user.programmes);
+        });  
+      }
+    }
+    res.redirect('/channels');
+  });
+
    // APPLY channels 
   app.post('/apply_channels', function(req, res) {
     var user = req.user;
