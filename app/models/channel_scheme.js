@@ -1,5 +1,6 @@
 // load the things we need
 var mongoose = require('mongoose');
+var ProgrammeSchema = require('./programme');
 var public_settings_config = require('../../config/public_settings.js');
 
 var DEFAUL_ICON_PATH = public_settings_config.site_domain + '/images/unknown_channel.png';
@@ -10,7 +11,8 @@ var ChannelSchema = mongoose.Schema({
   name : String,
   price : {type : Number, default: 0},
   tags : [String],
-  icon : {type : String, default: DEFAUL_ICON_PATH} 
+  icon : {type : String, default: DEFAUL_ICON_PATH}, 
+  programms : [ProgrammeSchema]
 });
 
 module.exports = ChannelSchema;
