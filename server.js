@@ -25,6 +25,7 @@ var passport = require('passport');
 var flash    = require('connect-flash');
 var amqp = require('amqp');
 var mkdirp = require('mkdirp');
+var file_upload = require('express-fileupload');
 
 var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -260,6 +261,8 @@ app.use(session({ secret: app.locals.project.name_lowercase })); // session secr
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
+
+app.use(file_upload());
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport, nev); // load our routes and pass in our app and fully configured passport

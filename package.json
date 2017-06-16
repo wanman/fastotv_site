@@ -24,6 +24,7 @@
     "method-override": "latest",
     "express-session": "latest",
     "email-verification": "latest",
-    "xmltv-parser": "latest"
+    "xmltv": "latest",
+    "express-fileupload": "latest"
   }
 }

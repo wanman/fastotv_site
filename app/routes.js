@@ -1,26 +1,10 @@
 // load up the user model
 var User = require('../app/models/user');
 var Channel = require('../app/models/channel');
-var XmltvParser = require('xmltv-parser');
+var xmltv = require('xmltv');
 
 var fs = require('fs');
 var path = require('path');
-
-function parserXmltvFile(xml_file_path) {
-  if(fs.existsSync(path)) {
-    var input = fs.createReadStream(xml_file_path);
-    var parser = new XmltvParser();
-    var programmeArray = [];
-    input.pipe(parser);
-
-    parser.on('programme', function (programme) {
-      programmeArray.push(programme);
-    });
-    return programmeArray;
-  }
-
-  return [];
-}
 
 function deleteFolderRecursive(path) {
   if(fs.existsSync(path)) {
@@ -145,22 +129,47 @@ module.exports = function(app, passport, nev) {
   
   // UPLOAD xmltv private channel
   app.post('/upload_xmltv', function(req, res) {
-    var user = req.user;
-    var file_path = req.body.file_path;
-    var channel_id = req.body.channel_id;
-    for (var i = 0; i < user.private_channels.length; i++) {
-       if (user.private_channels[i].equals(channel_id)) {
-         user.private_channels[i].programmes = parserXmltvFile(file_path);           
-         user.save(function(err) {
-      	   if (err) {
-             req.flash('statusProfileMessage', err);
-             return;
-           }
-           
-           console.log("programmes: ", user.programmes);
-        });  
-      }
+    if (!req.files) {
+      req.flash('statusProfileMessage', 'No files were uploaded.');
+      return;
     }
+    
+    let sampleFile = req.files.sampleFile;
+    var channel_id = req.body.channel_id;
+    var tmp_path = '/tmp/' + channel_id;
+    sampleFile.mv(tmp_path, function(err) {
+      if (err) {
+        req.flash('statusProfileMessage', err);
+        return;
+      }
+
+      var user = req.user;
+      var file_path = req.body.file_path;
+      var channel_id = req.body.channel_id;
+      for (var i = 0; i < user.private_pool_channels.length; i++) {
+         if (user.private_pool_channels[i].equals(channel_id)) {
+           var input = fs.createReadStream(tmp_path);
+           var parser = new xmltv.Parser();
+           input.pipe(parser);
+           var programmes = [];
+           parser.on('programme', function (programme) {
+             programmes.push(programme);
+    	   });
+
+           console.log(programmes);
+           user.private_pool_channels[i].programmes = programmes;           
+           user.save(function(err) {
+      	     if (err) {
+               req.flash('statusProfileMessage', err);
+               return;
+             }
+            
+             console.log("programmes: ", user.private_pool_channels[i]);
+          });
+          break;  
+        }
+      }
+    });
     res.redirect('/channels');
   });
 
