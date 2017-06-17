@@ -127,6 +127,55 @@ module.exports = function(app, passport, nev) {
     });
   });
   
+  // UPLOAD xmltv offical channel
+  app.post('/upload_offical_xmltv', function(req, res) {
+    if (!req.files) {
+      req.flash('statusProfileMessage', 'No files were uploaded.');
+      return;
+    }
+    
+    let sampleFile = req.files.sampleFile;
+    var channel_id = req.body.channel_id;
+    var tmp_path = '/tmp/' + channel_id;
+    sampleFile.mv(tmp_path, function(err) {
+      if (err) {
+        req.flash('statusProfileMessage', err);
+        return;
+      }
+
+      Channel.find({}, function(err, all_channels) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      
+        var channel_id = req.body.channel_id;
+        for (var i = 0; i < all_channels.length; i++) {
+          if (all_channels[i].equals(channel_id)) {
+            var input = fs.createReadStream(tmp_path);
+            var parser = new xmltv.Parser();
+            var programmes = [];
+            input.pipe(parser);
+            parser.on('programme', function (programme) {
+              programmes.push(programme);
+            });
+            parser.on('end', function (){
+              all_channels[i].programmes = programmes;
+              all_channels[i].save(function(err) {
+                if (err) {
+                  req.flash('statusProfileMessage', err);
+                  return;
+                }
+              });
+            });
+            break;  
+          }
+        }
+      });
+    });
+    res.redirect('/channels');
+  });
+  
   // UPLOAD xmltv private channel
   app.post('/upload_xmltv', function(req, res) {
     if (!req.files) {
@@ -144,7 +193,6 @@ module.exports = function(app, passport, nev) {
       }
 
       var user = req.user;
-      var file_path = req.body.file_path;
       var channel_id = req.body.channel_id;
       for (var i = 0; i < user.private_pool_channels.length; i++) {
         if (user.private_pool_channels[i].equals(channel_id)) {

@@ -30,7 +30,12 @@ var userSchema = mongoose.Schema({
     created_date : Date,
     offical_channels : [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}],
     private_channels : [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}],
-    private_pool_channels : [ChannelSchema]
+    private_pool_channels : [ChannelSchema],
+    type: {
+        type: String,
+        enum : ['USER','ADMIN'],
+        default: 'USER'
+    }
 });
 
 // generating a hash
@@ -48,6 +53,11 @@ userSchema.methods.validPassword = function(password) {
 // checking if password is valid
 userSchema.methods.isReadOnlyMode = function() {
     return !this.email;
+};
+
+// checking if password is valid
+userSchema.methods.isAdministrator = function() {
+    return this.type === 'ADMIN';
 };
 
 // create the model for users and expose it to our app

@@ -116,6 +116,26 @@
               value=<%-offical_channels[i].price %> <%- offical_channels[i].checked %>>
             </td>
             <td>
+            <% if (user.isAdministrator()) { %>
+            <form class="form-group row" action="/upload_offical_xmltv" encType="multipart/form-data" method="post">
+              <input style="display: none;" class="form-control" name="channel_id" value="<%= offical_channels[i].id %>">
+              <div class="input-group">
+              <div class="col-md-4">
+                <label class="input-group-btn">
+                  <span class="btn btn-primary btn-xs">
+                    Browse&hellip; <input type="file" name="sampleFile" style="display: none;">
+                  </span>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <input type="text" class="form-control input-sm" readonly>
+              </div>
+              <div class="col-md-4">
+                <button type="submit" class="btn btn-danger btn-xs">Upload XMLTV</button>
+              </div>
+              </div>
+              </form>
+            <% } %>
             </td>
           </tr>
           <% } %>
