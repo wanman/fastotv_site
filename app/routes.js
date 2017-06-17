@@ -84,6 +84,7 @@ module.exports = function(app, passport, nev) {
         ochannels.push({id : channel._id, tags: channel.tags, name : channel.name, price : channel.price, icon: channel.icon, checked :  exist ? "checked" : ""});
       }
       res.render('channels.ejs', {
+        user : req.user,
         offical_channels: ochannels,
         private_channels: pchannels
       });
