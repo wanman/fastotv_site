@@ -147,24 +147,22 @@ module.exports = function(app, passport, nev) {
       var file_path = req.body.file_path;
       var channel_id = req.body.channel_id;
       for (var i = 0; i < user.private_pool_channels.length; i++) {
-         if (user.private_pool_channels[i].equals(channel_id)) {
-           var input = fs.createReadStream(tmp_path);
-           var parser = new xmltv.Parser();
-           input.pipe(parser);
-           var programmes = [];
-           parser.on('programme', function (programme) {
-             programmes.push(programme);
-    	   });
-
-           console.log(programmes);
-           user.private_pool_channels[i].programmes = programmes;           
-           user.save(function(err) {
-      	     if (err) {
-               req.flash('statusProfileMessage', err);
-               return;
-             }
-            
-             console.log("programmes: ", user.private_pool_channels[i]);
+        if (user.private_pool_channels[i].equals(channel_id)) {
+          var input = fs.createReadStream(tmp_path);
+          var parser = new xmltv.Parser();
+          var programmes = [];
+          input.pipe(parser);
+          parser.on('programme', function (programme) {
+            programmes.push(programme);
+          });
+          parser.on('end', function (){
+            user.private_pool_channels[i].programmes = programmes;
+            user.save(function(err) {
+              if (err) {
+                req.flash('statusProfileMessage', err);
+                return;
+              }
+            });
           });
           break;  
         }

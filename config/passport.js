@@ -118,7 +118,7 @@ module.exports = function(nev, redis_connection, passport) {
               return done(err);
             }
             
-            return done(null, false, req.flash('signupMessage', 'Please check your email to verify your account.'));
+            return done(null, false, req.flash('signupMessage', 'Please check ' + email + ' to verify your account.'));
           });
           // user already exists in temporary collection...
         } else {

@@ -142,7 +142,9 @@
               </form>
               <form ref='uploadForm' id='uploadForm' action="/upload_xmltv" encType="multipart/form-data" method="post">
                 <input type="hidden" class="form-control" name="channel_id" value="<%= private_channels[i].id %>">
-                <input type="file" name="sampleFile" />
+                <label class="btn btn-default btn-file">
+                  Browse <input type="file" name="sampleFile" style="display: none;">
+                </label>
                 <button type="submit" class="btn btn-danger btn-xs">Upload XMLTV</button>
               </form>
             </td>
