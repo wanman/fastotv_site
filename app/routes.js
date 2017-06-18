@@ -262,7 +262,7 @@ module.exports = function (app, passport, nev) {
                                 {
                                     channel: progr.channel,
                                     start: progr.start.getTime(),
-                                    stop: progr.stop.getTime(),
+                                    stop: progr.end.getTime(),
                                     title: progr.title
                                 });
                         }
@@ -288,7 +288,7 @@ module.exports = function (app, passport, nev) {
                                 {
                                     channel: progr.channel,
                                     start: progr.start.getTime(),
-                                    stop: progr.stop.getTime(),
+                                    stop: progr.end.getTime(),
                                     title: progr.title
                                 });
                         }
