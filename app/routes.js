@@ -18,7 +18,7 @@ function deleteFolderRecursive(path) {
         });
         fs.rmdirSync(path);
     }
-};
+}
 
 
 function createRedisChannel(id, url, title, icon, programs) {  // ChannelInfo
@@ -263,7 +263,7 @@ module.exports = function (app, passport, nev) {
                                     channel: progr.channel,
                                     start: progr.start.getTime(),
                                     stop: progr.end.getTime(),
-                                    title: progr.title
+                                    title: progr.title[0]
                                 });
                         }
                         var redChannel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
@@ -289,7 +289,7 @@ module.exports = function (app, passport, nev) {
                                     channel: progr.channel,
                                     start: progr.start.getTime(),
                                     stop: progr.end.getTime(),
-                                    title: progr.title
+                                    title: progr.title[0]
                                 });
                         }
                         var redChannel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
