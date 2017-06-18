@@ -5,58 +5,58 @@ var ChannelSchema = require('./channel_scheme');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
-    facebook         : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String
+    facebook: {
+        id: String,
+        token: String,
+        email: String,
+        name: String
     },
-    twitter          : {
-        id           : String,
-        token        : String,
-        displayName  : String,
-        username     : String
+    twitter: {
+        id: String,
+        token: String,
+        displayName: String,
+        username: String
     },
-    google           : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String
+    google: {
+        id: String,
+        token: String,
+        email: String,
+        name: String
     },
-    
-    name : String,
-    email        : String,
-    password     : String,
-    created_date : Date,
-    offical_channels : [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}],
-    private_channels : [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}],
-    private_pool_channels : [ChannelSchema],
+
+    name: String,
+    email: String,
+    password: String,
+    created_date: Date,
+    offical_channels: [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}],
+    private_channels: [{type: mongoose.Schema.Types.ObjectId, ref: 'Channel'}],
+    private_pool_channels: [ChannelSchema],
     type: {
         type: String,
-        enum : ['USER','ADMIN'],
+        enum: ['USER', 'ADMIN'],
         default: 'USER'
     }
 });
 
 // generating a hash
-userSchema.methods.generateHash = function(password) {
+userSchema.methods.generateHash = function (password) {
     var hash = crypto.createHash('md5').update(password).digest('hex');
     return hash;
 };
 
 // checking if password is valid
-userSchema.methods.validPassword = function(password) {
+userSchema.methods.validPassword = function (password) {
     var hash = crypto.createHash('md5').update(password).digest('hex');
     return hash === this.password;
 };
 
 // checking if password is valid
-userSchema.methods.isReadOnlyMode = function() {
+userSchema.methods.isReadOnlyMode = function () {
     return !this.email;
 };
 
 // checking if password is valid
-userSchema.methods.isAdministrator = function() {
+userSchema.methods.isAdministrator = function () {
     return this.type === 'ADMIN';
 };
 
