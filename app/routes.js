@@ -257,7 +257,7 @@ module.exports = function (app, passport, nev) {
                         offical_channels.push(channel);
                         var programs = [];
                         for (var k = 0; k < channel.programmes; k++) {
-                            var progr = channel.programmes[i];
+                            var progr = channel.programmes[k];
                             programs.push(
                                 {
                                     channel: progr.channel,
@@ -283,7 +283,7 @@ module.exports = function (app, passport, nev) {
                         private_channels.push(channel);
                         var programs = [];
                         for (var k = 0; k < channel.programmes; k++) {
-                            var progr = channel.programmes[i];
+                            var progr = channel.programmes[k];
                             programs.push(
                                 {
                                     channel: progr.channel,
