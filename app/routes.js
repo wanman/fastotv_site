@@ -261,7 +261,7 @@ module.exports = function (app, passport, nev) {
                                     channel: progr.channel,
                                     start: progr.start.getTime(),
                                     stop: progr.end.getTime(),
-                                    title: progr.title.length > 0 ? progr.title[0] : null
+                                    title: progr.title.length > 0 ? progr.title[0] : "N/A"
                                 });
                         }
                         var red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
@@ -287,7 +287,7 @@ module.exports = function (app, passport, nev) {
                                     channel: progr.channel,
                                     start: progr.start.getTime(),
                                     stop: progr.end.getTime(),
-                                    title: progr.title.length > 0 ? progr.title[0] : null
+                                    title: progr.title.length > 0 ? progr.title[0] : "N/A"
                                 });
                         }
                         var red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
