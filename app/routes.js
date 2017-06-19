@@ -1,8 +1,8 @@
 // load up the user model
 var User = require('../app/models/user');
 var Channel = require('../app/models/channel');
-var xmltv = require('xmltv');
 
+var xmltv = require('xmltv');
 var fs = require('fs');
 var path = require('path');
 
@@ -20,7 +20,6 @@ function deleteFolderRecursive(path) {
     }
 }
 
-
 function createRedisChannel(id, url, title, icon, programs) {  // ChannelInfo
     var epg = {id: id, url: url, display_name: title, icon: icon, programs: programs}; // EpgInfo
     return {epg: epg, video: true, audio: true}
@@ -32,7 +31,7 @@ module.exports = function (app, passport, nev) {
         var needed_val_str = JSON.stringify(needed_val);
         app.redis_connection.set(user.email, needed_val_str);
         return callback(null, user);
-    }
+    };
     // normal routes ===============================================================
     // show the home page (will also have our login links)
     app.get('/', function (req, res) {
@@ -58,7 +57,7 @@ module.exports = function (app, passport, nev) {
             }
 
             var private_pool_channels = user.private_pool_channels;
-            var pchannels = [];
+            var private_channels = [];
             for (var i = 0; i < private_pool_channels.length; i++) {
                 var channel = private_pool_channels[i];
                 var exist = false;
@@ -68,7 +67,7 @@ module.exports = function (app, passport, nev) {
                         break;
                     }
                 }
-                pchannels.push(
+                private_channels.push(
                     {
                         id: channel._id,
                         tags: channel.tags,
@@ -80,7 +79,7 @@ module.exports = function (app, passport, nev) {
                     });
             }
 
-            var ochannels = [];
+            var offical_channels = [];
             for (var i = 0; i < all_channels.length; i++) {
                 var channel = all_channels[i];
                 var exist = false;
@@ -90,7 +89,7 @@ module.exports = function (app, passport, nev) {
                         break;
                     }
                 }
-                ochannels.push(
+                offical_channels.push(
                     {
                         id: channel._id,
                         tags: channel.tags,
@@ -102,8 +101,8 @@ module.exports = function (app, passport, nev) {
             }
             res.render('channels.ejs', {
                 user: req.user,
-                offical_channels: ochannels,
-                private_channels: pchannels
+                offical_channels: offical_channels,
+                private_channels: private_channels
             });
         });
     });
@@ -152,7 +151,7 @@ module.exports = function (app, passport, nev) {
             return;
         }
 
-        let sampleFile = req.files.sampleFile;
+        var sampleFile = req.files.sampleFile;
         var channel_id = req.body.channel_id;
         var tmp_path = '/tmp/' + channel_id;
         sampleFile.mv(tmp_path, function (err) {
@@ -182,7 +181,6 @@ module.exports = function (app, passport, nev) {
                             all_channels[i].save(function (err) {
                                 if (err) {
                                     req.flash('statusProfileMessage', err);
-                                    return;
                                 }
                             });
                         });
@@ -201,7 +199,7 @@ module.exports = function (app, passport, nev) {
             return;
         }
 
-        let sampleFile = req.files.sampleFile;
+        var sampleFile = req.files.sampleFile;
         var channel_id = req.body.channel_id;
         var tmp_path = '/tmp/' + channel_id;
         sampleFile.mv(tmp_path, function (err) {
@@ -263,11 +261,11 @@ module.exports = function (app, passport, nev) {
                                     channel: progr.channel,
                                     start: progr.start.getTime(),
                                     stop: progr.end.getTime(),
-                                    title: progr.title[0]
+                                    title: progr.title.length > 0 ? progr.title[0] : null
                                 });
                         }
-                        var redChannel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
-                        redis_channels.push(redChannel);
+                        var red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
+                        redis_channels.push(red_channel);
                         break;
                     }
                 }
@@ -289,11 +287,11 @@ module.exports = function (app, passport, nev) {
                                     channel: progr.channel,
                                     start: progr.start.getTime(),
                                     stop: progr.end.getTime(),
-                                    title: progr.title[0]
+                                    title: progr.title.length > 0 ? progr.title[0] : null
                                 });
                         }
-                        var redChannel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
-                        redis_channels.push(redChannel);
+                        var red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
+                        redis_channels.push(red_channel);
                         break;
                     }
                 }
