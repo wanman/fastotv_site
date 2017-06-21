@@ -95,6 +95,13 @@
                 hwaccel_value = 'auto';
             }
 
+            var deinterlace = null;
+            var deinterlace_checkbox = $('#deinterlace');
+            if (deinterlace_checkbox.is(':checked')) {
+                deinterlace = 'yadif';
+            }
+ 
+            var vf = deinterlace ? deinterlace : '';
             if (device_selected == "pc_device") {
                 var platform = $('.operatting_systems .active > a').attr('aria-controls');
                 var platform_ctrl = $('input[name=' + platform + ']:checked');
@@ -102,7 +109,7 @@
                 var package_type = platform_ctrl.attr('package_type');
                 var arch = platform_ctrl.attr('arch');
                 var argv = [];
-                var config = {"hwaccel": hwaccel_value};
+                var config = {"hwaccel": hwaccel_value, "vf": vf};
                 return send_build_request(id, user, password, platform, package_type, arch, config);
             }
 
@@ -116,11 +123,16 @@
             var width_input = $('#width');
             var height_input = $('#height');
             var scale = 'scale=' + width_input.val() + 'x' + height_input.val();
+            if(deinterlace) {
+              vf = deinterlace + ',' + scale;
+            } else {
+              vf = scale;
+            }
 
             var power_off_on_exit_checkbox = $('#power_off_on_exit');
             var power_off_checked = power_off_on_exit_checkbox.is(':checked');
 
-            var config = {"hwaccel": hwaccel_value, "poweroffonexit": power_off_checked, "vf": scale};
+            var config = {"hwaccel": hwaccel_value, "poweroffonexit": power_off_checked, "vf": vf};
             return send_build_request(id, user, password, platform, package_type, arch, config);
         }
     </script>
@@ -311,13 +323,13 @@
                                 <label>Email: <input type="text" disabled id="email" value='<%- user.email %>'></label>
                             </div>
                         </div>
-                        <div role="tabpane2" class="tab-pane form-inline" id="advanced">
-                            <div>
-                                <div class="checkbox">
-                                    <label><input id="hwaccel" type="checkbox" value="" checked>Hardware
-                                        acceleration</label>
-                                </div>
-                            </div>
+                        <div role="tabpane2" class="tab-pane form-inline" id="advanced">                          
+                          <div class="checkbox">
+                            <label><input id="hwaccel" type="checkbox" value="" checked>Hardware acceleration</label>
+                          </div>
+                          <div class="checkbox">
+                            <label><input id="deinterlace" type="checkbox" value="" checked>Deinterlace</label>
+                          </div>
                         </div>
                     </div>
 
