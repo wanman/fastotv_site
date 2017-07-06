@@ -346,6 +346,7 @@ module.exports = function (app, passport, nev) {
 
     app.get('/build_installer_request', function (req, res) {
         var user = req.user;
+        
         var walk = function (dir, done) {
             console.log('scan folder: ', dir);
             var results = [];
@@ -362,19 +363,25 @@ module.exports = function (app, passport, nev) {
                     file = path.resolve(dir, file);
                     fs.stat(file, function (err, stat) {
                         if (err) {
-                            return done(err, []);
+                          return done(err, []);
                         }
 
                         if (stat && stat.isDirectory()) {
+                          walk(file, function(err, res) {
+                            results = results.concat(res);
+                            if (!--pending) {
+                              done(null, results);
+                            }
+                          });
                         } else {
                             var path = file.replace(app.locals.site.public_directory, '');
                             results.push({
-                                'path': app.locals.site.domain + path,
-                                'file_name': file_name,
-                                'size': parseInt(stat.size / 1024)
+                              'path': app.locals.site.domain + path,
+                              'file_name': file_name,
+                              'size': parseInt(stat.size / 1024)
                             });
                             if (!--pending) {
-                                done(null, results);
+                              done(null, results);
                             }
                         }
                     });
