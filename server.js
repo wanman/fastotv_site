@@ -1,7 +1,7 @@
 // server.js
 
-function gen_routing_key(platform, arch) {
-    return platform + '_' + arch;
+function gen_routing_key(device, platform, arch) {
+    return device + '_' + platform + '_' + arch;
 }
 
 // load configs
@@ -117,7 +117,7 @@ listener.on('connection', function (socket) {
     socket.on('publish_rabbitmq', function (msg) {
         var in_json = JSON.parse(msg);
 
-        var user_package_dir = public_downloads_users_dir_abs_path + '/' + in_json.email;
+        var user_package_dir = public_downloads_users_dir_abs_path + '/' + in_json.email + '/' + in_json.device;
         mkdirp(user_package_dir, function (err) {
             if (err) {
                 console.error(err);
@@ -152,7 +152,7 @@ listener.on('connection', function (socket) {
                 'package_type': in_json.package_type,
                 'destination': user_package_dir
             };
-            var routing_key = gen_routing_key(in_json.platform, in_json.arch);
+            var routing_key = gen_routing_key(in_json.device, in_json.platform, in_json.arch);
             console.log("request_data_json", request_data_json);
             console.log("routing_key", routing_key);
 
