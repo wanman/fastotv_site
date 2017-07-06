@@ -141,7 +141,8 @@ listener.on('connection', function (socket) {
             }
             if (config.hasOwnProperty("poweroffonexit")) {
                 var poweroffonexit = config.poweroffonexit;
-                branding_variables += ' -DCONFIG_POWER_OFF_ON_EXIT=' + poweroffonexit ? 'ON' : 'OFF';
+                var on_off_str = poweroffonexit ? 'ON' : 'OFF';
+                branding_variables += ' -DCONFIG_POWER_OFF_ON_EXIT=' + on_off_str;
             }
             if (config.hasOwnProperty("vf")) {
                 var vf_string = config.vf;
