@@ -250,7 +250,7 @@ module.exports = function (app, passport, nev) {
       var official_channels = [];
       for (i = 0; i < all_channels.length; i++) {
         var of_channel = all_channels[i];
-        for (j = 0; j < official_channels.length; j++) {
+        for (j = 0; j < official_channels_ids.length; j++) {
           if (of_channel._id == official_channels_ids[j]) {  // FIX ME find how to compare
             official_channels.push(of_channel);
             var programs = [];
@@ -297,8 +297,6 @@ module.exports = function (app, passport, nev) {
         }
       }
       user.private_channels = private_channels;
-
-      console.log(user);
 
       user.save(function (err) {
         if (err) {
