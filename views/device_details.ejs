@@ -1,127 +1,127 @@
 <!doctype html>
 <html>
 <head>
-    <%- include('head/main') %>
-    <script src="scripts/script.js" type="text/javascript"></script>
-    <script src="<%= site.domain %>:<%= back_end.socketio_port %>/socket.io/socket.io.js"></script>
+  <%- include('head/main') %>
+  <script src="scripts/script.js" type="text/javascript"></script>
+  <script src="<%= site.domain %>:<%= back_end.socketio_port %>/socket.io/socket.io.js"></script>
 
-    <script>
-        const GB = (1024 * 1024 * 1024);
-        const MB = (1024 * 1024);
-        const cmd_id = '<%- user_id %>';
-        //socket io client
-        //var io = require('socket.io');
-        var socket = io.connect('<%= site.domain %>:<%= back_end.socketio_port %>');
+  <script>
+    const GB = (1024 * 1024 * 1024);
+    const MB = (1024 * 1024);
+    const cmd_id = '<%- user_id %>';
+    //socket io client
+    //var io = require('socket.io');
+    var socket = io.connect('<%= site.domain %>:<%= back_end.socketio_port %>');
 
-        function handle_onconnection_changed(is_connected) {
-            if (is_connected) {
-                $('#status_label').html(SERVER_STATUS.ONLINE);
-                $('#status_img').attr("src", SERVER_STATUS_IMG.ONLINE);
-                $('#info_button').prop('disabled', false);
-            } else {
-                $('#status_label').html(SERVER_STATUS.OFFLINE);
-                $('#status_img').attr("src", SERVER_STATUS_IMG.OFFLINE);
-                $('#info_button').prop('disabled', true);
+    function handle_onconnection_changed(is_connected) {
+      if (is_connected) {
+        $('#status_label').html(SERVER_STATUS.ONLINE);
+        $('#status_img').attr("src", SERVER_STATUS_IMG.ONLINE);
+        $('#info_button').prop('disabled', false);
+      } else {
+        $('#status_label').html(SERVER_STATUS.OFFLINE);
+        $('#status_img').attr("src", SERVER_STATUS_IMG.OFFLINE);
+        $('#info_button').prop('disabled', true);
 
-                $('#os_label').html(SERVER_OS_DEFAULT_LABEL);
-                $('#cpu_label').html(SERVER_CPU_DEFAULT_LABEL);
-                $('#ram_label').html(SERVER_RAM_DEFAULT_LABEL);
-                $('#bandwidth_label').html(SERVER_NETWORK_BANDWIDTH_DEFAULT_LABEL);
-            }
+        $('#os_label').html(SERVER_OS_DEFAULT_LABEL);
+        $('#cpu_label').html(SERVER_CPU_DEFAULT_LABEL);
+        $('#ram_label').html(SERVER_RAM_DEFAULT_LABEL);
+        $('#bandwidth_label').html(SERVER_NETWORK_BANDWIDTH_DEFAULT_LABEL);
+      }
+    }
+
+    function handle_state_changed(device_state) {
+      if (device_state.user_id !== cmd_id) {
+        return;
+      }
+
+      handle_onconnection_changed(device_state.connected);
+    }
+
+    function handle_command_received(responce) {
+      if (cmd_id !== responce.request_id) {
+        return;
+      }
+
+      var is_ok = is_succsess_command(responce);
+
+      if (is_ping_command(responce)) {
+        handle_onconnection_changed(is_ok);
+      } else if (is_info_command(responce)) {
+        if (is_ok) {
+          var system_info = JSON.parse(responce.responce_json);
+          $('#os_label').html(system_info.os);
+          $('#cpu_label').html(system_info.cpu);
+          var ram_total_gb = system_info.ram_total / GB;
+          var ram_total_fr = system_info.ram_free / GB;
+          $('#ram_label').html(ram_total_gb.toFixed(2) + " GB (" + ram_total_fr.toFixed(2) + " GB free)");
+
+          var mbit_s = system_info.bandwidth / MB * 8;
+          $('#bandwidth_label').html(mbit_s.toFixed(2) + " Mbit/s");
+        } else {
+          $('#os_label').html(SERVER_OS_DEFAULT_LABEL);
+          $('#cpu_label').html(SERVER_CPU_DEFAULT_LABEL);
+          $('#ram_label').html(SERVER_RAM_DEFAULT_LABEL);
+          $('#bandwidth_label').html(SERVER_NETWORK_BANDWIDTH_DEFAULT_LABEL);
+        }
+      }
+    }
+
+    //on connetion, updates connection state and sends subscribe request
+    socket.on('connect', function (data) {
+      socket.emit('subscribe_redis', {channel: '<%= back_end.pub_sub_channel_out %>'});
+      socket.emit('subscribe_redis', {channel: '<%= back_end.pub_sub_channel_client_state %>'});
+    });
+
+    //when reconnection is attempted, updates status
+    socket.on('reconnecting', function (data) {
+    });
+
+    //on new message adds a new message to display
+    socket.on('message', function (data) {
+      var msg = data.text;
+
+      if (data.channel === '<%= back_end.pub_sub_channel_out %>') {
+        var responce = parse_command_out(msg);
+        if (responce === undefined) {
+          return;
         }
 
-        function handle_state_changed(device_state) {
-            if (device_state.user_id !== cmd_id) {
-                return;
-            }
-
-            handle_onconnection_changed(device_state.connected);
+        handle_command_received(responce);
+      } else if (data.channel === '<%= back_end.pub_sub_channel_client_state %>') {
+        var state = parse_state_msg(msg);
+        if (state === undefined) {
+          return;
         }
 
-        function handle_command_received(responce) {
-            if (cmd_id !== responce.request_id) {
-                return;
-            }
+        handle_state_changed(state);
+      }
+    });
 
-            var is_ok = is_succsess_command(responce);
-
-            if (is_ping_command(responce)) {
-                handle_onconnection_changed(is_ok);
-            } else if (is_info_command(responce)) {
-                if (is_ok) {
-                    var system_info = JSON.parse(responce.responce_json);
-                    $('#os_label').html(system_info.os);
-                    $('#cpu_label').html(system_info.cpu);
-                    var ram_total_gb = system_info.ram_total / GB;
-                    var ram_total_fr = system_info.ram_free / GB;
-                    $('#ram_label').html(ram_total_gb.toFixed(2) + " GB (" + ram_total_fr.toFixed(2) + " GB free)");
-
-                    var mbit_s = system_info.bandwidth / MB * 8;
-                    $('#bandwidth_label').html(mbit_s.toFixed(2) + " Mbit/s");
-                } else {
-                    $('#os_label').html(SERVER_OS_DEFAULT_LABEL);
-                    $('#cpu_label').html(SERVER_CPU_DEFAULT_LABEL);
-                    $('#ram_label').html(SERVER_RAM_DEFAULT_LABEL);
-                    $('#bandwidth_label').html(SERVER_NETWORK_BANDWIDTH_DEFAULT_LABEL);
-                }
-            }
-        }
-
-        //on connetion, updates connection state and sends subscribe request
-        socket.on('connect', function (data) {
-            socket.emit('subscribe_redis', {channel: '<%= back_end.pub_sub_channel_out %>'});
-            socket.emit('subscribe_redis', {channel: '<%= back_end.pub_sub_channel_client_state %>'});
-        });
-
-        //when reconnection is attempted, updates status
-        socket.on('reconnecting', function (data) {
-        });
-
-        //on new message adds a new message to display
-        socket.on('message', function (data) {
-            var msg = data.text;
-
-            if (data.channel === '<%= back_end.pub_sub_channel_out %>') {
-                var responce = parse_command_out(msg);
-                if (responce === undefined) {
-                    return;
-                }
-
-                handle_command_received(responce);
-            } else if (data.channel === '<%= back_end.pub_sub_channel_client_state %>') {
-                var state = parse_state_msg(msg);
-                if (state === undefined) {
-                    return;
-                }
-
-                handle_state_changed(state);
-            }
-        });
-
-        function init() {
-            ping_device('<%- user_id %>', cmd_id, socket);
-            $('#status_label').html(SERVER_STATUS.OFFLINE);
-            $('#status_img').attr("src", SERVER_STATUS_IMG.OFFLINE);
-            $('#os_label').html(SERVER_OS_DEFAULT_LABEL);
-            $('#cpu_label').html(SERVER_CPU_DEFAULT_LABEL);
-            $('#ram_label').html(SERVER_RAM_DEFAULT_LABEL);
-            $('#bandwidth_label').html(SERVER_NETWORK_BANDWIDTH_DEFAULT_LABEL);
-        }
-    </script>
+    function init() {
+      ping_device('<%- user_id %>', cmd_id, socket);
+      $('#status_label').html(SERVER_STATUS.OFFLINE);
+      $('#status_img').attr("src", SERVER_STATUS_IMG.OFFLINE);
+      $('#os_label').html(SERVER_OS_DEFAULT_LABEL);
+      $('#cpu_label').html(SERVER_CPU_DEFAULT_LABEL);
+      $('#ram_label').html(SERVER_RAM_DEFAULT_LABEL);
+      $('#bandwidth_label').html(SERVER_NETWORK_BANDWIDTH_DEFAULT_LABEL);
+    }
+  </script>
 </head>
 <body onload="init()">
 <div class="container">
-    <span id="server_name_label"><%- login %></span>
-    <div class="well">
-        Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
-        OS: <label id="os_label"></label><br>
-        Processor: <label id="cpu_label"></label><br>
-        Installed memory(RAM): <label id="ram_label"></label><br>
-        Network bandwidth: <label id="bandwidth_label"></label>
-    </div>
-    <button class="btn btn-info" id="info_button" disabled onclick="device_info('<%- user_id %>', cmd_id, socket)">
-        Info
-    </button>
+  <span id="server_name_label"><%- login %></span>
+  <div class="well">
+    Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
+    OS: <label id="os_label"></label><br>
+    Processor: <label id="cpu_label"></label><br>
+    Installed memory(RAM): <label id="ram_label"></label><br>
+    Network bandwidth: <label id="bandwidth_label"></label>
+  </div>
+  <button class="btn btn-info" id="info_button" disabled onclick="device_info('<%- user_id %>', cmd_id, socket)">
+    Info
+  </button>
 </div>
 </body>
 </html>

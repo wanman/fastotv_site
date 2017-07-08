@@ -1,434 +1,434 @@
 <!doctype html>
 <html>
 <head>
-    <%- include('head/main') %>
-    <style>
-        .progress {
-            position: relative;
-        }
+  <%- include('head/main') %>
+  <style>
+    .progress {
+      position: relative;
+    }
 
-        .progress span {
-            position: absolute;
-            display: block;
-            width: 100%;
-            color: black;
-        }
-    </style>
-    <script src="scripts/script.js" type="text/javascript"></script>
-    <script src="<%= site.domain %>:<%= back_end.socketio_port %>/socket.io/socket.io.js"></script>
+    .progress span {
+      position: absolute;
+      display: block;
+      width: 100%;
+      color: black;
+    }
+  </style>
+  <script src="scripts/script.js" type="text/javascript"></script>
+  <script src="<%= site.domain %>:<%= back_end.socketio_port %>/socket.io/socket.io.js"></script>
 
-    <script>
-        function update_bar(progress, text) {
-            var $bar = $('.progress-bar');
-            $bar.css('width', progress + '%').attr('aria-valuenow', progress);
-            var $span = $bar.find('span');
-            var ptext = progress + '% ' + text;
-            $span.text(ptext);
-            if (progress === 100) {
-                $('.progress').removeClass('active');
-            }
-        }
+  <script>
+    function update_bar(progress, text) {
+      var $bar = $('.progress-bar');
+      $bar.css('width', progress + '%').attr('aria-valuenow', progress);
+      var $span = $bar.find('span');
+      var ptext = progress + '% ' + text;
+      $span.text(ptext);
+      if (progress === 100) {
+        $('.progress').removeClass('active');
+      }
+    }
 
-        var socket = io.connect('<%= site.domain %>:<%= back_end.socketio_port %>');
-        //on connetion, updates connection state and sends subscribe request
-        socket.on('connect', function (data) {
-        });
+    var socket = io.connect('<%= site.domain %>:<%= back_end.socketio_port %>');
+    //on connetion, updates connection state and sends subscribe request
+    socket.on('connect', function (data) {
+    });
 
-        //when reconnection is attempted, updates status
-        socket.on('reconnecting', function (data) {
-        });
+    //when reconnection is attempted, updates status
+    socket.on('reconnecting', function (data) {
+    });
 
-        //on new message adds a new message to display
-        socket.on('message_rabbitmq', function (responce_json) {
-            if (responce_json.email !== '<%= user.email %>') {
-                return;
-            }
+    //on new message adds a new message to display
+    socket.on('message_rabbitmq', function (responce_json) {
+      if (responce_json.email !== '<%= user.email %>') {
+        return;
+      }
 
-            if (responce_json.hasOwnProperty('error')) {
-                var progress_bar = $('.progress-bar');
-                progress_bar.removeClass('progress-bar-success');
-                progress_bar.addClass('progress-bar-danger');
-                update_bar(100, responce_json.error);
-            } else {
-                var package_link = $('#package_link');
-                package_link.attr("href", responce_json.body);
-                package_link.show();
+      if (responce_json.hasOwnProperty('error')) {
+        var progress_bar = $('.progress-bar');
+        progress_bar.removeClass('progress-bar-success');
+        progress_bar.addClass('progress-bar-danger');
+        update_bar(100, responce_json.error);
+      } else {
+        var package_link = $('#package_link');
+        package_link.attr("href", responce_json.body);
+        package_link.show();
 
-                var wget_package_link = $('#wget_package_link');
-                wget_package_link.text("wget " + responce_json.body);
-                wget_package_link.show();
-            }
-            var build_button = $('#build_button');
-            build_button.prop('disabled', false);
-        });
+        var wget_package_link = $('#wget_package_link');
+        wget_package_link.text("wget " + responce_json.body);
+        wget_package_link.show();
+      }
+      var build_button = $('#build_button');
+      build_button.prop('disabled', false);
+    });
 
-        socket.on('status_rabbitmq', function (responce_json) {
-            if (responce_json.email !== '<%= user.email %>') {
-                return;
-            }
-            update_bar(responce_json.progress, responce_json.message);
-        });
+    socket.on('status_rabbitmq', function (responce_json) {
+      if (responce_json.email !== '<%= user.email %>') {
+        return;
+      }
+      update_bar(responce_json.progress, responce_json.message);
+    });
 
-        function send_build_request(id, user, password, device, platform, package_type, arch, config) {
-            var build_args = {
-                "id": id,
-                "email": user,
-                "password": password,
-                "device": device,
-                "platform": platform,
-                "arch": arch,
-                "package_type": package_type,
-                "config": config
-            };
-            var msg = JSON.stringify(build_args);
-            socket.emit('publish_rabbitmq', msg);
-        }
+    function send_build_request(id, user, password, device, platform, package_type, arch, config) {
+      var build_args = {
+        "id": id,
+        "email": user,
+        "password": password,
+        "device": device,
+        "platform": platform,
+        "arch": arch,
+        "package_type": package_type,
+        "config": config
+      };
+      var msg = JSON.stringify(build_args);
+      socket.emit('publish_rabbitmq', msg);
+    }
 
-        function send_build_request_local(id, user, password) {
-            var build_button = $('#build_button');
-            build_button.prop('disabled', true);
-            var progress_bar = $('.progress-bar');
-            progress_bar.removeClass('progress-bar-danger');
-            progress_bar.addClass('progress-bar-success');
-            $('#package_link').hide();
-            $('#wget_package_link').hide();
+    function send_build_request_local(id, user, password) {
+      var build_button = $('#build_button');
+      build_button.prop('disabled', true);
+      var progress_bar = $('.progress-bar');
+      progress_bar.removeClass('progress-bar-danger');
+      progress_bar.addClass('progress-bar-success');
+      $('#package_link').hide();
+      $('#wget_package_link').hide();
 
-            var device_selected = $('.device .active > a').attr('aria-controls');
-            var hwaccel_checkbox = $('#hwaccel');
-            var hwaccel_value = 'none';
-            if (hwaccel_checkbox.is(':checked')) {
-                hwaccel_value = 'auto';
-            }
+      var device_selected = $('.device .active > a').attr('aria-controls');
+      var hwaccel_checkbox = $('#hwaccel');
+      var hwaccel_value = 'none';
+      if (hwaccel_checkbox.is(':checked')) {
+        hwaccel_value = 'auto';
+      }
 
-            var deinterlace = null;
-            var deinterlace_checkbox = $('#deinterlace');
-            if (deinterlace_checkbox.is(':checked')) {
-                deinterlace = 'yadif';
-            }
+      var deinterlace = null;
+      var deinterlace_checkbox = $('#deinterlace');
+      if (deinterlace_checkbox.is(':checked')) {
+        deinterlace = 'yadif';
+      }
 
-            var vf = deinterlace ? deinterlace : '';
-            if (device_selected === "pc_device") {
-                var platform = $('.operatting_systems .active > a').attr('aria-controls');
-                var platform_ctrl = $('input[name=' + platform + ']:checked');
+      var vf = deinterlace ? deinterlace : '';
+      if (device_selected === "pc_device") {
+        var platform = $('.operatting_systems .active > a').attr('aria-controls');
+        var platform_ctrl = $('input[name=' + platform + ']:checked');
 
-                var package_type = platform_ctrl.attr('data-package_type');
-                var arch = platform_ctrl.attr('data-arch');
-                var config = {"hwaccel": hwaccel_value, "vf": vf};
-                return send_build_request(id, user, password, 'pc', platform, package_type, arch, config);
-            }
+        var package_type = platform_ctrl.attr('data-package_type');
+        var arch = platform_ctrl.attr('data-arch');
+        var config = {"hwaccel": hwaccel_value, "vf": vf};
+        return send_build_request(id, user, password, 'pc', platform, package_type, arch, config);
+      }
 
-            var tv_device = $('.tv_device .active > a').attr('aria-controls');  // "orange_pi", "raspberry_pi", "banana_pi"
-            var device_ctrl = $('input[name=' + tv_device + ']:checked');
+      var tv_device = $('.tv_device .active > a').attr('aria-controls');  // "orange_pi", "raspberry_pi", "banana_pi"
+      var device_ctrl = $('input[name=' + tv_device + ']:checked');
 
-            var platform = device_ctrl.attr('data-platform');
-            var package_type = device_ctrl.attr('data-package_type');
-            var arch = device_ctrl.attr('data-arch');
+      var platform = device_ctrl.attr('data-platform');
+      var package_type = device_ctrl.attr('data-package_type');
+      var arch = device_ctrl.attr('data-arch');
 
-            var width_input = $('#width');
-            var height_input = $('#height');
-            var scale = 'scale=' + width_input.val() + 'x' + height_input.val();
-            if (deinterlace) {
-                vf = deinterlace + ',' + scale;
-            } else {
-                vf = scale;
-            }
+      var width_input = $('#width');
+      var height_input = $('#height');
+      var scale = 'scale=' + width_input.val() + 'x' + height_input.val();
+      if (deinterlace) {
+        vf = deinterlace + ',' + scale;
+      } else {
+        vf = scale;
+      }
 
-            var power_off_on_exit_checkbox = $('#power_off_on_exit');
-            var power_off_checked = power_off_on_exit_checkbox.is(':checked');
+      var power_off_on_exit_checkbox = $('#power_off_on_exit');
+      var power_off_checked = power_off_on_exit_checkbox.is(':checked');
 
-            var config = {"hwaccel": hwaccel_value, "poweroffonexit": power_off_checked, "vf": vf};
-            return send_build_request(id, user, password, tv_device, platform, package_type, arch, config);
-        }
-    </script>
+      var config = {"hwaccel": hwaccel_value, "poweroffonexit": power_off_checked, "vf": vf};
+      return send_build_request(id, user, password, tv_device, platform, package_type, arch, config);
+    }
+  </script>
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-            <div class="well">
-                <h2>Devices:</h2>
-                <div>
-                    <ul class="nav nav-tabs device" role="tablist">
-                        <li role="presentation" class="active"><a href="#pc_device" aria-controls="pc_device" role="tab"
-                                                                  data-toggle="tab"><i class="fa fa-laptop"></i> PC</a>
-                        </li>
-                        <li role="presentation"><a href="#tv_device" aria-controls="tv_device" role="tab"
-                                                   data-toggle="tab"><i class="fa fa-television"></i> TV</a></li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="pc_device">
-                            <h3>Operating systems:</h3>
-                            <div>
-                                <ul class="nav nav-tabs operatting_systems" role="tablist">
-                                    <li role="presentation" class="active"><a href="#windows" aria-controls="windows"
-                                                                              role="tab" data-toggle="tab"><i
-                                                    class="fa fa-windows"></i> Windows</a></li>
-                                    <li role="presentation"><a href="#linux" aria-controls="linux" role="tab"
-                                                               data-toggle="tab"><i class="fa fa-linux"></i> Linux</a>
-                                    </li>
-                                    <li role="presentation"><a href="#macosx" aria-controls="macosx" role="tab"
-                                                               data-toggle="tab"><i class="fa fa-apple"></i> MacOS</a>
-                                    </li>
-                                </ul>
-                                <!-- Tab panes -->
-                                <div class="tab-content">
-                                    <div role="tabpanel" class="tab-pane active" id="windows">
-                                        <div data-toggle="buttons" class="buttons-row">
-                                            <label class="btn btn-primary active">
-                                                <input type="radio" name="windows" value="windows_7_x64"
-                                                       data-arch="x86_64"
-                                                       data-package_type="NSIS" autocomplete="off" checked="checked">
-                                                Windows
-                                                7 x64
-                                            </label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="windows" value="windows_8_x64"
-                                                       data-arch="x86_64"
-                                                       data-package_type="NSIS" autocomplete="off"> Windows 8 x64
-                                            </label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="windows" value="windows_10_x64"
-                                                       data-arch="x86_64"
-                                                       data-package_type="NSIS" autocomplete="off"> Windows 10 x64
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="linux">
-                                        <div data-toggle="buttons" class="buttons-row">
-                                            <label class="btn btn-primary active">
-                                                <input type="radio" name="linux" value="ubuntu_x64" data-arch="x86_64"
-                                                       data-package_type="DEB" autocomplete="off" checked="checked">
-                                                Ubuntu
-                                                x64</label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="linux" value="debian_x64" data-arch="x86_64"
-                                                       data-package_type="DEB" autocomplete="off"> Debian x64</label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="linux" value="centOS_x64" data-arch="x86_64"
-                                                       data-package_type="RPM" autocomplete="off"> CentOS x64</label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="linux" value="fedora_x64" data-arch="x86_64"
-                                                       data-package_type="RPM" autocomplete="off"> Fedora x64</label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="linux" value="arch_linux_x64"
-                                                       data-arch="x86_64"
-                                                       data-package_type="TGZ" autocomplete="off"> Arch Linux
-                                                x64</label>
-                                        </div>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="macosx">
-                                        <div data-toggle="buttons" class="buttons-row">
-                                            <label class="btn btn-primary active">
-                                                <input type="radio" name="macosx" value="macosx_10_8_x64"
-                                                       data-arch="x86_64"
-                                                       data-package_type="DragNDrop" autocomplete="off"
-                                                       checked="checked">
-                                                MacOS 10.8 x64
-                                            </label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="macosx" value="macosx_10_9_x64"
-                                                       data-arch="x86_64"
-                                                       data-package_type="DragNDrop" autocomplete="off"> MacOS 10.9 x64
-                                            </label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="macosx" value="macosx_10_10_x64"
-                                                       data-arch="x86_64"
-                                                       data-package_type="DragNDrop" autocomplete="off"> MacOS 10.10 x64
-                                            </label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="macosx" value="macosx_10_11_x64"
-                                                       data-arch="x86_64"
-                                                       data-package_type="DragNDrop" autocomplete="off"> MacOS 10.11 x64
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="tv_device">
-                            <h3>Supported devices:</h3>
-                            <div>
-                                <ul class="nav nav-tabs tv_device" role="tablist">
-                                    <li role="presentation" class="active"><a href="#orange_pi"
-                                                                              aria-controls="orange_pi" role="tab"
-                                                                              data-toggle="tab"><i
-                                                    class="fa fa-orange-pi"></i> Orange PI</a></li>
-                                    <li role="presentation"><a href="#raspberry_pi" aria-controls="raspberry_pi"
-                                                               role="tab" data-toggle="tab"><i
-                                                    class="fa fa-raspberry-pi"></i> Raspberry PI</a></li>
-                                    <li role="presentation"><a href="#banana_pi" aria-controls="banana_pi" role="tab"
-                                                               data-toggle="tab"><i class="fa fa-banana-pi"></i> Banana
-                                            PI</a></li>
-                                </ul>
-                                <!-- Tab panes -->
-                                <div class="tab-content">
-                                    <div role="tabpanel" class="tab-pane active" id="orange_pi">
-                                        <div data-toggle="buttons" class="buttons-row">
-                                            <label class="btn btn-primary active">
-                                                <input type="radio" name="orange_pi" value="orange_pi_one"
-                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
-                                                       autocomplete="off" checked="checked"> Orange Pi One
-                                            </label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="orange_pi" value="orange_pi_lite"
-                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
-                                                       autocomplete="off"> Orange Pi Lite
-                                            </label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="orange_pi" value="orange_pi_pc"
-                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
-                                                       autocomplete="off"> Orange Pi PC
-                                            </label>
-                                        </div>
-                                        <!-- common for orange_pi -->
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="raspberry_pi">
-                                        <div data-toggle="buttons" class="buttons-row">
-                                            <label class="btn btn-primary active">
-                                                <input type="radio" name="raspberry_pi" value="raspberry_pi_1_b_plus"
-                                                       data-platform="linux" data-arch="armv6" data-package_type="DEB"
-                                                       autocomplete="off"
-                                                       checked="checked"> Raspberry Pi 1 Model B+
-                                            </label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="raspberry_pi" value="raspberry_pi_2_b"
-                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
-                                                       autocomplete="off"
-                                                       checked="checked"> Raspberry Pi 2 Model B
-                                            </label>
-                                            <label class="btn btn-primary">
-                                                <input type="radio" name="raspberry_pi" value="raspberry_pi_3_b"
-                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
-                                                       autocomplete="off"
-                                                       checked="checked"> Raspberry Pi 3 Model B
-                                            </label>
-                                        </div>
-                                        <!-- common for raspberry_pi -->
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="banana_pi">
-                                        <div data-toggle="buttons" class="buttons-row">
-                                            <label class="btn btn-primary active">
-                                                <input type="radio" name="banana_pi" value="banana_pi_bpi_m1"
-                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
-                                                       autocomplete="off"
-                                                       checked="checked"> Banana Pi BPI M1
-                                            </label>
-                                        </div>
-                                        <!-- common for banana_pi -->
-                                    </div>
-                                    <!-- common for embedded -->
-                                    <label>Resoution: <input id="width" value="1920" min="720" max="3840"
-                                                             placeholder="width">x<input id="height" value="1080"
-                                                                                         min="480" max="2160"
-                                                                                         placeholder="height"></label>
-                                    <div class="checkbox">
-                                        <label><input id="power_off_on_exit" type="checkbox" value="" checked>Power OFF
-                                            on exit</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <div class="well">
+        <h2>Devices:</h2>
+        <div>
+          <ul class="nav nav-tabs device" role="tablist">
+            <li role="presentation" class="active"><a href="#pc_device" aria-controls="pc_device" role="tab"
+                                                      data-toggle="tab"><i class="fa fa-laptop"></i> PC</a>
+            </li>
+            <li role="presentation"><a href="#tv_device" aria-controls="tv_device" role="tab"
+                                       data-toggle="tab"><i class="fa fa-television"></i> TV</a></li>
+          </ul>
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="pc_device">
+              <h3>Operating systems:</h3>
+              <div>
+                <ul class="nav nav-tabs operatting_systems" role="tablist">
+                  <li role="presentation" class="active"><a href="#windows" aria-controls="windows"
+                                                            role="tab" data-toggle="tab"><i
+                              class="fa fa-windows"></i> Windows</a></li>
+                  <li role="presentation"><a href="#linux" aria-controls="linux" role="tab"
+                                             data-toggle="tab"><i class="fa fa-linux"></i> Linux</a>
+                  </li>
+                  <li role="presentation"><a href="#macosx" aria-controls="macosx" role="tab"
+                                             data-toggle="tab"><i class="fa fa-apple"></i> MacOS</a>
+                  </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="windows">
+                    <div data-toggle="buttons" class="buttons-row">
+                      <label class="btn btn-primary active">
+                        <input type="radio" name="windows" value="windows_7_x64"
+                               data-arch="x86_64"
+                               data-package_type="NSIS" autocomplete="off" checked="checked">
+                        Windows
+                        7 x64
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="windows" value="windows_8_x64"
+                               data-arch="x86_64"
+                               data-package_type="NSIS" autocomplete="off"> Windows 8 x64
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="windows" value="windows_10_x64"
+                               data-arch="x86_64"
+                               data-package_type="NSIS" autocomplete="off"> Windows 10 x64
+                      </label>
                     </div>
-                </div>
-            </div>
-
-            <div class="well">
-                <h2>Profile settings:</h2>
-                <div>
-                    <ul class="nav nav-tabs" role="tablist" id="connection_settings">
-                        <li role="presentation" class="active">
-                            <a href="#base" aria-controls="base" role="tab" data-toggle="tab"><i class="fa fa-cog"></i>
-                                Base</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="#advanced" aria-controls="advanced" role="tab" data-toggle="tab"><i
-                                        class="fa fa-cogs"></i> Advanced</a>
-                        </li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane form-inline active" id="base">
-                            <div>
-                                <label>Email: <input type="text" disabled id="email" value='<%- user.email %>'></label>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane form-inline" id="advanced">
-                            <div class="checkbox">
-                                <label><input id="hwaccel" type="checkbox" value="" checked>Hardware
-                                    acceleration</label>
-                            </div>
-                            <div class="checkbox">
-                                <label><input id="deinterlace" type="checkbox" value="" checked>Deinterlace</label>
-                            </div>
-                        </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="linux">
+                    <div data-toggle="buttons" class="buttons-row">
+                      <label class="btn btn-primary active">
+                        <input type="radio" name="linux" value="ubuntu_x64" data-arch="x86_64"
+                               data-package_type="DEB" autocomplete="off" checked="checked">
+                        Ubuntu
+                        x64</label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="linux" value="debian_x64" data-arch="x86_64"
+                               data-package_type="DEB" autocomplete="off"> Debian x64</label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="linux" value="centOS_x64" data-arch="x86_64"
+                               data-package_type="RPM" autocomplete="off"> CentOS x64</label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="linux" value="fedora_x64" data-arch="x86_64"
+                               data-package_type="RPM" autocomplete="off"> Fedora x64</label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="linux" value="arch_linux_x64"
+                               data-arch="x86_64"
+                               data-package_type="TGZ" autocomplete="off"> Arch Linux
+                        x64</label>
                     </div>
-
-                    <button id="build_package_button" class="btn btn-success btn-send" data-toggle="modal"
-                            data-target="#myModal">
-                        Build Package
-                    </button>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="macosx">
+                    <div data-toggle="buttons" class="buttons-row">
+                      <label class="btn btn-primary active">
+                        <input type="radio" name="macosx" value="macosx_10_8_x64"
+                               data-arch="x86_64"
+                               data-package_type="DragNDrop" autocomplete="off"
+                               checked="checked">
+                        MacOS 10.8 x64
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="macosx" value="macosx_10_9_x64"
+                               data-arch="x86_64"
+                               data-package_type="DragNDrop" autocomplete="off"> MacOS 10.9 x64
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="macosx" value="macosx_10_10_x64"
+                               data-arch="x86_64"
+                               data-package_type="DragNDrop" autocomplete="off"> MacOS 10.10 x64
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="macosx" value="macosx_10_11_x64"
+                               data-arch="x86_64"
+                               data-package_type="DragNDrop" autocomplete="off"> MacOS 10.11 x64
+                      </label>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+            <div role="tabpanel" class="tab-pane" id="tv_device">
+              <h3>Supported devices:</h3>
+              <div>
+                <ul class="nav nav-tabs tv_device" role="tablist">
+                  <li role="presentation" class="active"><a href="#orange_pi"
+                                                            aria-controls="orange_pi" role="tab"
+                                                            data-toggle="tab"><i
+                              class="fa fa-orange-pi"></i> Orange PI</a></li>
+                  <li role="presentation"><a href="#raspberry_pi" aria-controls="raspberry_pi"
+                                             role="tab" data-toggle="tab"><i
+                              class="fa fa-raspberry-pi"></i> Raspberry PI</a></li>
+                  <li role="presentation"><a href="#banana_pi" aria-controls="banana_pi" role="tab"
+                                             data-toggle="tab"><i class="fa fa-banana-pi"></i> Banana
+                      PI</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="orange_pi">
+                    <div data-toggle="buttons" class="buttons-row">
+                      <label class="btn btn-primary active">
+                        <input type="radio" name="orange_pi" value="orange_pi_one"
+                               data-platform="linux" data-arch="armv7l" data-package_type="DEB"
+                               autocomplete="off" checked="checked"> Orange Pi One
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="orange_pi" value="orange_pi_lite"
+                               data-platform="linux" data-arch="armv7l" data-package_type="DEB"
+                               autocomplete="off"> Orange Pi Lite
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="orange_pi" value="orange_pi_pc"
+                               data-platform="linux" data-arch="armv7l" data-package_type="DEB"
+                               autocomplete="off"> Orange Pi PC
+                      </label>
+                    </div>
+                    <!-- common for orange_pi -->
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="raspberry_pi">
+                    <div data-toggle="buttons" class="buttons-row">
+                      <label class="btn btn-primary active">
+                        <input type="radio" name="raspberry_pi" value="raspberry_pi_1_b_plus"
+                               data-platform="linux" data-arch="armv6" data-package_type="DEB"
+                               autocomplete="off"
+                               checked="checked"> Raspberry Pi 1 Model B+
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="raspberry_pi" value="raspberry_pi_2_b"
+                               data-platform="linux" data-arch="armv7l" data-package_type="DEB"
+                               autocomplete="off"
+                               checked="checked"> Raspberry Pi 2 Model B
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="raspberry_pi" value="raspberry_pi_3_b"
+                               data-platform="linux" data-arch="armv7l" data-package_type="DEB"
+                               autocomplete="off"
+                               checked="checked"> Raspberry Pi 3 Model B
+                      </label>
+                    </div>
+                    <!-- common for raspberry_pi -->
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="banana_pi">
+                    <div data-toggle="buttons" class="buttons-row">
+                      <label class="btn btn-primary active">
+                        <input type="radio" name="banana_pi" value="banana_pi_bpi_m1"
+                               data-platform="linux" data-arch="armv7l" data-package_type="DEB"
+                               autocomplete="off"
+                               checked="checked"> Banana Pi BPI M1
+                      </label>
+                    </div>
+                    <!-- common for banana_pi -->
+                  </div>
+                  <!-- common for embedded -->
+                  <label>Resoution: <input id="width" value="1920" min="720" max="3840"
+                                           placeholder="width">x<input id="height" value="1080"
+                                                                       min="480" max="2160"
+                                                                       placeholder="height"></label>
+                  <div class="checkbox">
+                    <label><input id="power_off_on_exit" type="checkbox" value="" checked>Power OFF
+                      on exit</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Confirmation</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="build_container">
-                        <p>Do you want to start build package?</p>
-                        <div class="progress progress-striped active">
-                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0"
-                                 aria-valuemin="0" aria-valuemax="100" style="max-width:1600px;">
-                                <span></span>
-                            </div>
-                        </div>
-                        <a href="" id="package_link" style="display:none">Click to download</a><br />
-                        <code id="wget_package_link" class="text-muted"></code>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" id="build_button" class="btn btn-primary"
-                            onclick="send_build_request_local('<%- user._id %>', '<%- user.email %>', '<%- user.password %>')">
-                        Start build
-                    </button>
-                </div>
+      <div class="well">
+        <h2>Profile settings:</h2>
+        <div>
+          <ul class="nav nav-tabs" role="tablist" id="connection_settings">
+            <li role="presentation" class="active">
+              <a href="#base" aria-controls="base" role="tab" data-toggle="tab"><i class="fa fa-cog"></i>
+                Base</a>
+            </li>
+            <li role="presentation">
+              <a href="#advanced" aria-controls="advanced" role="tab" data-toggle="tab"><i
+                        class="fa fa-cogs"></i> Advanced</a>
+            </li>
+          </ul>
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane form-inline active" id="base">
+              <div>
+                <label>Email: <input type="text" disabled id="email" value='<%- user.email %>'></label>
+              </div>
             </div>
+            <div role="tabpanel" class="tab-pane form-inline" id="advanced">
+              <div class="checkbox">
+                <label><input id="hwaccel" type="checkbox" value="" checked>Hardware
+                  acceleration</label>
+              </div>
+              <div class="checkbox">
+                <label><input id="deinterlace" type="checkbox" value="" checked>Deinterlace</label>
+              </div>
+            </div>
+          </div>
+
+          <button id="build_package_button" class="btn btn-success btn-send" data-toggle="modal"
+                  data-target="#myModal">
+            Build Package
+          </button>
         </div>
+      </div>
     </div>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Hot link</th>
-            <th>Wget link</th>
-            <th>Size KB</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% if (builded_packages.length > 0) { %>
-        <% for (var i = 0; i < builded_packages.length; i++) { %>
-        <tr>
-            <td><%= i + 1 %></td>
-            <td><a href="<%= builded_packages[i].path %>"><%= builded_packages[i].file_name %></a></td>
-            <td><code class="text-muted">wget <%= builded_packages[i].path %></code></td>
-            <td><%= builded_packages[i].size %></td>
-        </tr>
-        <% } %>
-        <% } %>
-        </tbody>
-    </table>
-    <!-- Clear packages FORM -->
-    <form class="form-inline" action="/clear_packages" method="post">
-        <button type="submit" class="btn btn-warning btn-small">Clear</button>
-    </form>
+  </div>
+
+  <div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Confirmation</h4>
+        </div>
+        <div class="modal-body">
+          <div class="build_container">
+            <p>Do you want to start build package?</p>
+            <div class="progress progress-striped active">
+              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0"
+                   aria-valuemin="0" aria-valuemax="100" style="max-width:1600px;">
+                <span></span>
+              </div>
+            </div>
+            <a href="" id="package_link" style="display:none">Click to download</a><br/>
+            <code id="wget_package_link" class="text-muted"></code>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" id="build_button" class="btn btn-primary"
+                  onclick="send_build_request_local('<%- user._id %>', '<%- user.email %>', '<%- user.password %>')">
+            Start build
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Hot link</th>
+      <th>Wget link</th>
+      <th>Size KB</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if (builded_packages.length > 0) { %>
+    <% for (var i = 0; i < builded_packages.length; i++) { %>
+    <tr>
+      <td><%= i + 1 %></td>
+      <td><a href="<%= builded_packages[i].path %>"><%= builded_packages[i].file_name %></a></td>
+      <td><code class="text-muted">wget <%= builded_packages[i].path %></code></td>
+      <td><%= builded_packages[i].size %></td>
+    </tr>
+    <% } %>
+    <% } %>
+    </tbody>
+  </table>
+  <!-- Clear packages FORM -->
+  <form class="form-inline" action="/clear_packages" method="post">
+    <button type="submit" class="btn btn-warning btn-small">Clear</button>
+  </form>
 </div>
 </body>
 </html>

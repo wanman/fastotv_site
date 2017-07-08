@@ -1,156 +1,156 @@
 <!doctype html>
 <html>
 <head>
-    <%- include('head/main'); %>
+  <%- include('head/main'); %>
 </head>
 <body>
 <div class="container">
-    <div class="page-header text-left">
-        <div class="well">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>
-                        <img src="logo32x32.png"/><%= site.title %>
-                        <a href="/" class="btn btn-warning btn-md pull-right"><span
-                                    class="glyphicon glyphicon-home"></span> Home</a>
-                    </h1>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <strong>id</strong>: <%= user._id %><br>
-                    <strong>email</strong>: <%= user.email %><br>
-                    <a href="/logout" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Sign
-                        out</a>
-                </div>
-            </div>
+  <div class="page-header text-left">
+    <div class="well">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>
+            <img src="logo32x32.png"/><%= site.title %>
+            <a href="/" class="btn btn-warning btn-md pull-right"><span
+                      class="glyphicon glyphicon-home"></span> Home</a>
+          </h1>
         </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <strong>id</strong>: <%= user._id %><br>
+          <strong>email</strong>: <%= user.email %><br>
+          <a href="/logout" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Sign
+            out</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if (message.length > 0) { %>
+  <div class="alert alert-danger"><%= message %></div>
+  <% } %>
+
+  <div class="row">
+    <!-- LOCAL INFORMATION -->
+    <div class="col-sm-6">
+      <!-- FACEBOOK INFORMATION -->
+      <div class="well">
+        <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
+        <!-- check if the user has this token (is the user authenticated with this social account) -->
+        <% if (user.facebook.token) { %>
+        <p>
+          <strong>id</strong>: <%= user.facebook.id %><br>
+          <strong>token</strong>: <%= user.facebook.token %><br>
+          <strong>email</strong>: <%= user.facebook.email %><br>
+          <strong>name</strong>: <%= user.facebook.name %><br>
+        </p>
+        <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
+        <% } else { %>
+        <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
+        <% } %>
+      </div>
+
+      <!-- TWITTER INFORMATION -->
+      <div class="well">
+        <h3 class="text-info"><span class="fa fa-twitter"></span> Twitter</h3>
+        <% if (user.twitter.token) { %>
+        <p>
+          <strong>id</strong>: <%= user.twitter.id %><br>
+          <strong>token</strong>: <%= user.twitter.token %><br>
+          <strong>display name</strong>: <%= user.twitter.displayName %><br>
+          <strong>username</strong>: <%= user.twitter.username %>
+        </p>
+        <a href="/unlink/twitter" class="btn btn-info">Unlink</a>
+        <% } else { %>
+        <a href="/connect/twitter" class="btn btn-info">Connect Twitter</a>
+        <% } %>
+      </div>
+
+      <!-- GOOGLE INFORMATION -->
+      <div class="well">
+        <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
+        <% if (user.google.token) { %>
+        <p>
+          <strong>id</strong>: <%= user.google.id %><br>
+          <strong>token</strong>: <%= user.google.token %><br>
+          <strong>email</strong>: <%= user.google.email %><br>
+          <strong>name</strong>: <%= user.google.name %>
+        </p>
+        <a href="/unlink/google" class="btn btn-danger">Unlink</a>
+        <% } else { %>
+        <a href="/connect/google" class="btn btn-danger">Connect Google</a>
+        <% } %>
+      </div>
     </div>
 
-    <% if (message.length > 0) { %>
-      <div class="alert alert-danger"><%= message %></div>
-    <% } %>
-
-    <div class="row">
-        <!-- LOCAL INFORMATION -->
+    <div class="col-sm-6">
+      <% if (user.isReadOnlyMode()) { %>
+      <div class="alert alert-danger">Read only mode</div>
+      <div class="row">
         <div class="col-sm-6">
-            <!-- FACEBOOK INFORMATION -->
-            <div class="well">
-                <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
-                <!-- check if the user has this token (is the user authenticated with this social account) -->
-                <% if (user.facebook.token) { %>
-                <p>
-                    <strong>id</strong>: <%= user.facebook.id %><br>
-                    <strong>token</strong>: <%= user.facebook.token %><br>
-                    <strong>email</strong>: <%= user.facebook.email %><br>
-                    <strong>name</strong>: <%= user.facebook.name %><br>
-                </p>
-                <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
-                <% } else { %>
-                <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
-                <% } %>
-            </div>
-
-            <!-- TWITTER INFORMATION -->
-            <div class="well">
-                <h3 class="text-info"><span class="fa fa-twitter"></span> Twitter</h3>
-                <% if (user.twitter.token) { %>
-                <p>
-                    <strong>id</strong>: <%= user.twitter.id %><br>
-                    <strong>token</strong>: <%= user.twitter.token %><br>
-                    <strong>display name</strong>: <%= user.twitter.displayName %><br>
-                    <strong>username</strong>: <%= user.twitter.username %>
-                </p>
-                <a href="/unlink/twitter" class="btn btn-info">Unlink</a>
-                <% } else { %>
-                <a href="/connect/twitter" class="btn btn-info">Connect Twitter</a>
-                <% } %>
-            </div>
-
-            <!-- GOOGLE INFORMATION -->
-            <div class="well">
-                <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
-                <% if (user.google.token) { %>
-                <p>
-                    <strong>id</strong>: <%= user.google.id %><br>
-                    <strong>token</strong>: <%= user.google.token %><br>
-                    <strong>email</strong>: <%= user.google.email %><br>
-                    <strong>name</strong>: <%= user.google.name %>
-                </p>
-                <a href="/unlink/google" class="btn btn-danger">Unlink</a>
-                <% } else { %>
-                <a href="/connect/google" class="btn btn-danger">Connect Google</a>
-                <% } %>
-            </div>
+          1) You can see how much members are in our community.
         </div>
-
         <div class="col-sm-6">
-            <% if (user.isReadOnlyMode()) { %>
-            <div class="alert alert-danger">Read only mode</div>
-            <div class="row">
-                <div class="col-sm-6">
-                    1) You can see how much members are in our community.
-                </div>
-                <div class="col-sm-6">
-                    <form action="/user_status" method="get">
-                        <button type="submit" class="btn btn-info btn-small">Registered users</button>
-                    </form>
-                </div>
-            </div>
-            <% } else { %>
-            <div class="alert alert-success">Nice to meet you <strong><%= user.name %></strong></div>
-            <div class="row">
-                <div class="col-sm-6">
-                    1) You can see how much members are in our community.
-                </div>
-                <div class="col-sm-6">
-                    <form action="/user_status" method="get">
-                        <button type="submit" class="btn btn-info btn-small">Registered users</button>
-                    </form>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    2) Please choose which channel do you want to watch.
-                </div>
-                <div class="col-sm-6">
-                    <form action="/channels" method="get">
-                        <button type="submit" class="btn btn-primary btn-small">Channels</button>
-                    </form>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    3) Build and install video player for your device.
-                </div>
-                <div class="col-sm-6">
-                    <form action="/build_installer_request" method="get">
-                        <button type="submit" class="btn btn-success">Build last stable <%= project.name %> version
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <strong>
-                        4) Start application and enjoy watching.
-                    </strong>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    Test if your device is online.
-                </div>
-                <div class="col-sm-6">
-                    <form action="/device_details" method="post">
-                        <input type="hidden" class="form-control" name="login" value="<%= user.name %>">
-                        <button type="submit" class="btn btn-success">Test Device</button>
-                    </form>
-                </div>
-            </div>
-            <% } %>
+          <form action="/user_status" method="get">
+            <button type="submit" class="btn btn-info btn-small">Registered users</button>
+          </form>
         </div>
+      </div>
+      <% } else { %>
+      <div class="alert alert-success">Nice to meet you <strong><%= user.name %></strong></div>
+      <div class="row">
+        <div class="col-sm-6">
+          1) You can see how much members are in our community.
+        </div>
+        <div class="col-sm-6">
+          <form action="/user_status" method="get">
+            <button type="submit" class="btn btn-info btn-small">Registered users</button>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          2) Please choose which channel do you want to watch.
+        </div>
+        <div class="col-sm-6">
+          <form action="/channels" method="get">
+            <button type="submit" class="btn btn-primary btn-small">Channels</button>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          3) Build and install video player for your device.
+        </div>
+        <div class="col-sm-6">
+          <form action="/build_installer_request" method="get">
+            <button type="submit" class="btn btn-success">Build last stable <%= project.name %> version
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <strong>
+            4) Start application and enjoy watching.
+          </strong>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          Test if your device is online.
+        </div>
+        <div class="col-sm-6">
+          <form action="/device_details" method="post">
+            <input type="hidden" class="form-control" name="login" value="<%= user.name %>">
+            <button type="submit" class="btn btn-success">Test Device</button>
+          </form>
+        </div>
+      </div>
+      <% } %>
     </div>
+  </div>
 </div>
 </body>
 </html>

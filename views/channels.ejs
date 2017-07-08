@@ -1,258 +1,258 @@
 <!doctype html>
 <html>
 <head>
-    <%- include('head/main'); %>
-    <style>
-        table {
-            table-layout: fixed;
-        }
+  <%- include('head/main'); %>
+  <style>
+    table {
+      table-layout: fixed;
+    }
 
-        th.user_channel_number {
-            width: 5%;
-        }
+    th.user_channel_number {
+      width: 5%;
+    }
 
-        th.user_channel_name {
-            width: 15%;
-        }
+    th.user_channel_name {
+      width: 15%;
+    }
 
-        th.user_channel_price {
-            width: 35%;
-        }
+    th.user_channel_price {
+      width: 35%;
+    }
 
-        th.user_channel_url {
-            width: 35%;
-        }
+    th.user_channel_url {
+      width: 35%;
+    }
 
-        th.user_channel_tags {
-            width: 20%;
-        }
+    th.user_channel_tags {
+      width: 20%;
+    }
 
-        th.user_channel_playlist {
-            width: 15%;
-        }
+    th.user_channel_playlist {
+      width: 15%;
+    }
 
-        th.user_channel_action {
-            width: 25%;
-        }
-    </style>
-    <script>
-        $(function () {
-            // We can attach the `fileselect` event to all file inputs on the page
-            $(document).on('change', ':file', function () {
-                var input = $(this), label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-                input.trigger('fileselect', [1, label]);
-            });
+    th.user_channel_action {
+      width: 25%;
+    }
+  </style>
+  <script>
+    $(function () {
+      // We can attach the `fileselect` event to all file inputs on the page
+      $(document).on('change', ':file', function () {
+        var input = $(this), label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileselect', [1, label]);
+      });
 
-            // We can watch for our custom `fileselect` event like this
-            $(document).ready(function () {
-                $(':file').on('fileselect', function (event, numFiles, label) {
-                    var input = $(this).parents('.input-group').find(':text');
-                    input.val(label);
+      // We can watch for our custom `fileselect` event like this
+      $(document).ready(function () {
+        $(':file').on('fileselect', function (event, numFiles, label) {
+          var input = $(this).parents('.input-group').find(':text');
+          input.val(label);
 
-                    var input_submit = $(this).parents('.input-group').find(':submit');
-                    input_submit.prop('disabled', false);
-                });
-            });
-
+          var input_submit = $(this).parents('.input-group').find(':submit');
+          input_submit.prop('disabled', false);
         });
-        function on_total_price_update() {
-            var arr = $('[name=offical_channel]');
-            var total = $('#total');
-            var offical_ids = $('#offical_ids');
-            var sum = 0;
-            var selecetd_offical_id = [];
-            for (var i = 0; i < arr.length; i++) {
-                var checkbox = arr[i];
-                if (checkbox.checked) {
-                    sum += parseFloat(checkbox.value);
-                    var cid = checkbox.getAttribute('channel_id');
-                    selecetd_offical_id.push(cid);
-                }
-            }
-            total.value = sum;
-            offical_ids.val(JSON.stringify(selecetd_offical_id));
-        }
+      });
 
-        function on_private_list_update() {
-            var arr = $('[name=private_channel]');
-            var private_ids = $('#private_ids');
-            var selecetd_private_id = [];
-            for (var i = 0; i < arr.length; i++) {
-                var checkbox = arr[i];
-                if (checkbox.checked) {
-                    var cid = checkbox.getAttribute('channel_id');
-                    selecetd_private_id.push(cid);
-                }
-            }
-            private_ids.val(JSON.stringify(selecetd_private_id));
+    });
+    function on_total_price_update() {
+      var arr = $('[name=official_channel]');
+      var total = $('#total');
+      var official_ids = $('#official_ids');
+      var sum = 0;
+      var selecetd_official_id = [];
+      for (var i = 0; i < arr.length; i++) {
+        var checkbox = arr[i];
+        if (checkbox.checked) {
+          sum += parseFloat(checkbox.value);
+          var cid = checkbox.getAttribute('channel_id');
+          selecetd_official_id.push(cid);
         }
-        function on_load() {
-            on_private_list_update();
-            on_total_price_update();
+      }
+      total.value = sum;
+      official_ids.val(JSON.stringify(selecetd_official_id));
+    }
+
+    function on_private_list_update() {
+      var arr = $('[name=private_channel]');
+      var private_ids = $('#private_ids');
+      var selecetd_private_id = [];
+      for (var i = 0; i < arr.length; i++) {
+        var checkbox = arr[i];
+        if (checkbox.checked) {
+          var cid = checkbox.getAttribute('channel_id');
+          selecetd_private_id.push(cid);
         }
-    </script>
-    <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+      }
+      private_ids.val(JSON.stringify(selecetd_private_id));
+    }
+    function on_load() {
+      on_private_list_update();
+      on_total_price_update();
+    }
+  </script>
+  <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
 </head>
 <body onload="on_load()">
 <div class="container">
-    <div class="well">
-        <h2>Availible channels:</h2>
-        <table class="table">
-            <thead>
-            <tr>
-                <th class="user_channel_number">#</th>
-                <th class="user_channel_name">Name</th>
-                <th class="user_channel_price">Price</th>
-                <th class="user_channel_tags">Tags</th>
-                <th class="user_channel_playlist">In playlist</th>
-                <th class="user_channel_action">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% if (offical_channels.length > 0) { %>
-            <% for (var i = 0; i < offical_channels.length; i++) { %>
-            <tr>
-                <td><%= i + 1 %></td>
-                <td>
-                    <img width="32px" height="32px"
-                         src="<%= offical_channels[i].icon %>"/> <%= offical_channels[i].name %>
-                </td>
-                <td><%= offical_channels[i].price %></td>
-                <td>
-                    <input value="<%- offical_channels[i].tags %>" disabled>
-                </td>
-                <td>
-                    <input type="checkbox" name="offical_channel" channel_id="<%- offical_channels[i].id %>"
-                           onclick="on_total_price_update()"
-                           value=<%- offical_channels[i].price %> <%- offical_channels[i].checked %>>
-                </td>
-                <td>
-                    <% if (user.isAdministrator()) { %>
-                    <form class="form-group row" action="/upload_offical_xmltv" encType="multipart/form-data"
-                          method="post">
-                        <input style="display: none;" class="form-control" name="channel_id"
-                               value="<%= offical_channels[i].id %>">
-                        <div class="input-group">
-                            <div class="col-md-4">
-                                <label class="input-group-btn">
+  <div class="well">
+    <h2>Availible channels:</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th class="user_channel_number">#</th>
+        <th class="user_channel_name">Name</th>
+        <th class="user_channel_price">Price</th>
+        <th class="user_channel_tags">Tags</th>
+        <th class="user_channel_playlist">In playlist</th>
+        <th class="user_channel_action">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% if (official_channels.length > 0) { %>
+      <% for (var i = 0; i < official_channels.length; i++) { %>
+      <tr>
+        <td><%= i + 1 %></td>
+        <td>
+          <img width="32px" height="32px"
+               src="<%= official_channels[i].icon %>"/> <%= official_channels[i].name %>
+        </td>
+        <td><%= official_channels[i].price %></td>
+        <td>
+          <input value="<%- official_channels[i].tags %>" disabled>
+        </td>
+        <td>
+          <input type="checkbox" name="official_channel" channel_id="<%- official_channels[i].id %>"
+                 onclick="on_total_price_update()"
+                 value=<%- official_channels[i].price %> <%- official_channels[i].checked %>>
+        </td>
+        <td>
+          <% if (user.isAdministrator()) { %>
+          <form class="form-group row" action="/upload_official_xmltv" encType="multipart/form-data"
+                method="post">
+            <input style="display: none;" class="form-control" name="channel_id"
+                   value="<%= official_channels[i].id %>">
+            <div class="input-group">
+              <div class="col-md-4">
+                <label class="input-group-btn">
                     <span class="btn btn-primary btn-xs">
                       Browse&hellip; <input type="file" name="sampleFile" style="display: none;">
                     </span>
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" class="form-control input-sm" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-danger btn-xs" disabled>Upload XMLTV</button>
-                            </div>
-                        </div>
-                    </form>
-                    <% } %>
-                </td>
-            </tr>
-            <% } %>
-            <% } %>
-            </tbody>
-        </table>
-    </div>
-    <div class="well">
-        <h2>Availible user channels:</h2>
-        <table class="table">
-            <thead>
-            <tr>
-                <th class="user_channel_number">#</th>
-                <th class="user_channel_name">Name</th>
-                <th class="user_channel_url">Url</th>
-                <th class="user_channel_tags">Tags</th>
-                <th class="user_channel_playlist">In playlist</th>
-                <th class="user_channel_action">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% if (private_channels.length > 0) { %>
-            <% for (var i = 0; i < private_channels.length; i++) { %>
-            <tr>
-                <td><%= i + 1 %></td>
-                <td>
-                    <img width="32px" height="32px"
-                         src="<%= private_channels[i].icon %>"/> <%= private_channels[i].name %>
-                </td>
-                <td><%= private_channels[i].url %></td>
-                <td>
-                    <input value="<%- private_channels[i].tags %>" disabled>
-                </td>
-                <td>
-                    <input type="checkbox" name="private_channel" channel_id="<%- private_channels[i].id %>"
-                           onclick="on_private_list_update()" <%- private_channels[i].checked %>>
-                </td>
-                <td>
-                    <form action="/remove_private_channel" method="post">
-                        <input type="hidden" class="form-control" name="remove_channel_id"
-                               value="<%= private_channels[i].id %>">
-                        <button type="submit" class="btn btn-danger btn-xs">Remove</button>
-                    </form>
-                    <form class="form-group row" action="/upload_xmltv" encType="multipart/form-data" method="post">
-                        <input style="display: none;" class="form-control" name="channel_id"
-                               value="<%= private_channels[i].id %>">
-                        <div class="input-group">
-                            <div class="col-md-4">
-                                <label class="input-group-btn">
+                </label>
+              </div>
+              <div class="col-md-4">
+                <input type="text" class="form-control input-sm" readonly>
+              </div>
+              <div class="col-md-4">
+                <button type="submit" class="btn btn-danger btn-xs" disabled>Upload XMLTV</button>
+              </div>
+            </div>
+          </form>
+          <% } %>
+        </td>
+      </tr>
+      <% } %>
+      <% } %>
+      </tbody>
+    </table>
+  </div>
+  <div class="well">
+    <h2>Availible user channels:</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th class="user_channel_number">#</th>
+        <th class="user_channel_name">Name</th>
+        <th class="user_channel_url">Url</th>
+        <th class="user_channel_tags">Tags</th>
+        <th class="user_channel_playlist">In playlist</th>
+        <th class="user_channel_action">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% if (private_channels.length > 0) { %>
+      <% for (var i = 0; i < private_channels.length; i++) { %>
+      <tr>
+        <td><%= i + 1 %></td>
+        <td>
+          <img width="32px" height="32px"
+               src="<%= private_channels[i].icon %>"/> <%= private_channels[i].name %>
+        </td>
+        <td><%= private_channels[i].url %></td>
+        <td>
+          <input value="<%- private_channels[i].tags %>" disabled>
+        </td>
+        <td>
+          <input type="checkbox" name="private_channel" channel_id="<%- private_channels[i].id %>"
+                 onclick="on_private_list_update()" <%- private_channels[i].checked %>>
+        </td>
+        <td>
+          <form action="/remove_private_channel" method="post">
+            <input type="hidden" class="form-control" name="remove_channel_id"
+                   value="<%= private_channels[i].id %>">
+            <button type="submit" class="btn btn-danger btn-xs">Remove</button>
+          </form>
+          <form class="form-group row" action="/upload_xmltv" encType="multipart/form-data" method="post">
+            <input style="display: none;" class="form-control" name="channel_id"
+                   value="<%= private_channels[i].id %>">
+            <div class="input-group">
+              <div class="col-md-4">
+                <label class="input-group-btn">
                     <span class="btn btn-primary btn-xs">
                       Browse&hellip; <input type="file" name="sampleFile" style="display: none;">
                     </span>
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" class="form-control input-sm" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-danger btn-xs" disabled>Upload XMLTV</button>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-            <% } %>
-            <% } %>
-            </tbody>
-        </table>
-        <form class="form-inline" action="/add_private_channel" method="post">
-            <div class="form-group">
-                <input class="form-control" name="private_channel_name" placeholder="Name">
+                </label>
+              </div>
+              <div class="col-md-4">
+                <input type="text" class="form-control input-sm" readonly>
+              </div>
+              <div class="col-md-4">
+                <button type="submit" class="btn btn-danger btn-xs" disabled>Upload XMLTV</button>
+              </div>
             </div>
-            <div class="form-group">
-                <input class="form-control" name="private_channel_url" placeholder="Url">
-            </div>
-            <div class="form-group">
-                <input class="form-control" data-role="tagsinput" id="private_channel_tags_id"
-                       name="private_channel_tags" placeholder="tags">
-                <script>
-                    $('#private_channel_tags_id').tagsinput({
-                        typeahead: {
-                            source: function (query) {
-                                return $.getJSON('assets/channels_tags.json');
-                            }
-                        }
-                    });
-                </script>
-            </div>
-            <button type="submit" class="btn btn-warning btn-small">Add</button>
-        </form>
-    </div>
-    <!-- Apply channels FORM -->
-    <form class="form-inline" action="/apply_channels" method="post">
-        <div class="form-group">
-            <label>TOTAL PRICE:</label>
-        </div>
-        <div class="form-group">
-            <input class="form-control" id="total" , value=0 disabled>
-        </div>
-        <input type="hidden" id="offical_ids" class="form-control" name="apply_channels_offical_ids" value="">
-        <input type="hidden" id="private_ids" class="form-control" name="apply_channels_private_ids" value="">
-        <button type="submit" class="btn btn-warning btn-small">Apply</button>
+          </form>
+        </td>
+      </tr>
+      <% } %>
+      <% } %>
+      </tbody>
+    </table>
+    <form class="form-inline" action="/add_private_channel" method="post">
+      <div class="form-group">
+        <input class="form-control" name="private_channel_name" placeholder="Name">
+      </div>
+      <div class="form-group">
+        <input class="form-control" name="private_channel_url" placeholder="Url">
+      </div>
+      <div class="form-group">
+        <input class="form-control" data-role="tagsinput" id="private_channel_tags_id"
+               name="private_channel_tags" placeholder="tags">
+        <script>
+          $('#private_channel_tags_id').tagsinput({
+            typeahead: {
+              source: function (query) {
+                return $.getJSON('assets/channels_tags.json');
+              }
+            }
+          });
+        </script>
+      </div>
+      <button type="submit" class="btn btn-warning btn-small">Add</button>
     </form>
+  </div>
+  <!-- Apply channels FORM -->
+  <form class="form-inline" action="/apply_channels" method="post">
+    <div class="form-group">
+      <label>TOTAL PRICE:</label>
+    </div>
+    <div class="form-group">
+      <input class="form-control" id="total" , value=0 disabled>
+    </div>
+    <input type="hidden" id="official_ids" class="form-control" name="apply_channels_official_ids" value="">
+    <input type="hidden" id="private_ids" class="form-control" name="apply_channels_private_ids" value="">
+    <button type="submit" class="btn btn-warning btn-small">Apply</button>
+  </form>
 </div>
 </body>
 </html>
