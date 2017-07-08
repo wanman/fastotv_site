@@ -248,14 +248,14 @@ module.exports = function (app, passport, nev) {
 
       var redis_channels = []; // Create a new empty array.
       var official_channels = [];
-      for (var i = 0; i < all_channels.length; i++) {
-        var channel = all_channels[i];
-        for (var j = 0; j < official_channels.length; j++) {
-          if (channel._id == official_channels_ids[j]) {  // FIX ME find how to compare
-            official_channels.push(channel);
+      for (i = 0; i < all_channels.length; i++) {
+        var of_channel = all_channels[i];
+        for (j = 0; j < official_channels.length; j++) {
+          if (of_channel._id == official_channels_ids[j]) {  // FIX ME find how to compare
+            official_channels.push(of_channel);
             var programs = [];
-            for (var k = 0; k < channel.programmes.length; k++) {
-              var progr = channel.programmes[k];
+            for (k = 0; k < of_channel.programmes.length; k++) {
+              var progr = of_channel.programmes[k];
               programs.push(
                 {
                   channel: progr.channel,
@@ -264,8 +264,8 @@ module.exports = function (app, passport, nev) {
                   title: progr.title.length > 0 ? progr.title[0] : "N/A"
                 });
             }
-            var red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
-            redis_channels.push(red_channel);
+            var of_red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
+            redis_channels.push(of_red_channel);
             break;
           }
         }
@@ -274,13 +274,13 @@ module.exports = function (app, passport, nev) {
 
       var private_channels = [];
       var user_private_pool_channels = user.private_pool_channels;
-      for (var i = 0; i < user_private_pool_channels.length; i++) {
+      for (i = 0; i < user_private_pool_channels.length; i++) {
         var channel = user_private_pool_channels[i];
-        for (var j = 0; j < private_channels_ids.length; j++) {
+        for (j = 0; j < private_channels_ids.length; j++) {
           if (channel._id == private_channels_ids[j]) {  // FIX ME find how to compare
             private_channels.push(channel);
             var programs = [];
-            for (var k = 0; k < channel.programmes.length; k++) {
+            for (k = 0; k < channel.programmes.length; k++) {
               var progr = channel.programmes[k];
               programs.push(
                 {
@@ -298,14 +298,18 @@ module.exports = function (app, passport, nev) {
       }
       user.private_channels = private_channels;
 
+      console.log(user);
+
       user.save(function (err) {
         if (err) {
+          console.error(err);
           req.flash('statusProfileMessage', err);
           return;
         }
 
         updateRedisUser(user, redis_channels, function (err, user) {
           if (err) {
+            console.error(err);
             req.flash('statusProfileMessage', err);
             return;
           }
