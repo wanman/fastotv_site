@@ -240,6 +240,8 @@ module.exports = function (app, passport, nev) {
     var user = req.user;
     var official_channels_ids = JSON.parse(req.body.apply_channels_official_ids);
     var private_channels_ids = JSON.parse(req.body.apply_channels_private_ids);
+    console.log(official_channels_ids);
+    console.log(private_channels_ids);
     Channel.find({}, function (err, all_channels) {
       if (err) {
         console.error(err);
