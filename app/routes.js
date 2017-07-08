@@ -240,8 +240,6 @@ module.exports = function (app, passport, nev) {
     var user = req.user;
     var official_channels_ids = JSON.parse(req.body.apply_channels_official_ids);
     var private_channels_ids = JSON.parse(req.body.apply_channels_private_ids);
-    console.log(official_channels_ids);
-    console.log(private_channels_ids);
     Channel.find({}, function (err, all_channels) {
       if (err) {
         console.error(err);
@@ -253,7 +251,7 @@ module.exports = function (app, passport, nev) {
       for (var i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
         for (var j = 0; j < official_channels.length; j++) {
-          if (channel._id === official_channels_ids[j]) {
+          if (channel._id == official_channels_ids[j]) {  // FIX ME find how to compare
             official_channels.push(channel);
             var programs = [];
             for (var k = 0; k < channel.programmes.length; k++) {
@@ -279,7 +277,7 @@ module.exports = function (app, passport, nev) {
       for (var i = 0; i < user_private_pool_channels.length; i++) {
         var channel = user_private_pool_channels[i];
         for (var j = 0; j < private_channels_ids.length; j++) {
-          if (channel._id === private_channels_ids[j]) {
+          if (channel._id == private_channels_ids[j]) {  // FIX ME find how to compare
             private_channels.push(channel);
             var programs = [];
             for (var k = 0; k < channel.programmes.length; k++) {
