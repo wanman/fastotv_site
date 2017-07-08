@@ -264,7 +264,7 @@ module.exports = function (app, passport, nev) {
                   title: progr.title.length > 0 ? progr.title[0] : "N/A"
                 });
             }
-            var of_red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
+            var of_red_channel = createRedisChannel(of_channel._id, channel.url, channel.name, channel.icon, programs);
             redis_channels.push(of_red_channel);
             break;
           }
