@@ -35,7 +35,7 @@
             var msg = data.text;
             if (data.channel === '<%= back_end.pub_sub_channel_client_state %>') {
                 var user_state = parse_state_msg(msg);
-                if (user_state == undefined) {
+                if (user_state === undefined) {
                     return;
                 }
 

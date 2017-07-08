@@ -83,14 +83,14 @@
 
             if (data.channel === '<%= back_end.pub_sub_channel_out %>') {
                 var responce = parse_command_out(msg);
-                if (responce == undefined) {
+                if (responce === undefined) {
                     return;
                 }
 
                 handle_command_received(responce);
             } else if (data.channel === '<%= back_end.pub_sub_channel_client_state %>') {
                 var state = parse_state_msg(msg);
-                if (state == undefined) {
+                if (state === undefined) {
                     return;
                 }
 
@@ -111,7 +111,7 @@
 </head>
 <body onload="init()">
 <div class="container">
-    <legend id="server_name_label"><%- login %></legend>
+    <span id="server_name_label"><%- login %></span>
     <div class="well">
         Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
         OS: <label id="os_label"></label><br>
