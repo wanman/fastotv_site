@@ -24,7 +24,7 @@
             var $span = $bar.find('span');
             var ptext = progress + '% ' + text;
             $span.text(ptext);
-            if (progress == 100) {
+            if (progress === 100) {
                 $('.progress').removeClass('active');
             }
         }
@@ -40,27 +40,30 @@
 
         //on new message adds a new message to display
         socket.on('message_rabbitmq', function (responce_json) {
-            if (responce_json.email != '<%= user.email %>') {
+            if (responce_json.email !== '<%= user.email %>') {
                 return;
             }
 
             if (responce_json.hasOwnProperty('error')) {
-                $('.progress-bar').removeClass('progress-bar-success');
-                $('.progress-bar').addClass('progress-bar-danger');
+                var progress_bar = $('.progress-bar');
+                progress_bar.removeClass('progress-bar-success');
+                progress_bar.addClass('progress-bar-danger');
                 update_bar(100, responce_json.error);
             } else {
-                $('#package_link').attr("href", responce_json.body);
-                $('#package_link').show();
+                var package_link = $('#package_link');
+                package_link.attr("href", responce_json.body);
+                package_link.show();
 
-                $('#wget_package_link').text("wget " + responce_json.body);
-                $('#wget_package_link').show();
+                var wget_package_link = $('#wget_package_link');
+                wget_package_link.text("wget " + responce_json.body);
+                wget_package_link.show();
             }
             var build_button = $('#build_button');
             build_button.prop('disabled', false);
         });
 
         socket.on('status_rabbitmq', function (responce_json) {
-            if (responce_json.email != '<%= user.email %>') {
+            if (responce_json.email !== '<%= user.email %>') {
                 return;
             }
             update_bar(responce_json.progress, responce_json.message);
@@ -84,8 +87,9 @@
         function send_build_request_local(id, user, password) {
             var build_button = $('#build_button');
             build_button.prop('disabled', true);
-            $('.progress-bar').removeClass('progress-bar-danger');
-            $('.progress-bar').addClass('progress-bar-success');
+            var progress_bar = $('.progress-bar');
+            progress_bar.removeClass('progress-bar-danger');
+            progress_bar.addClass('progress-bar-success');
             $('#package_link').hide();
             $('#wget_package_link').hide();
 
@@ -103,13 +107,12 @@
             }
 
             var vf = deinterlace ? deinterlace : '';
-            if (device_selected == "pc_device") {
+            if (device_selected === "pc_device") {
                 var platform = $('.operatting_systems .active > a').attr('aria-controls');
                 var platform_ctrl = $('input[name=' + platform + ']:checked');
 
-                var package_type = platform_ctrl.attr('package_type');
-                var arch = platform_ctrl.attr('arch');
-                var argv = [];
+                var package_type = platform_ctrl.attr('data-package_type');
+                var arch = platform_ctrl.attr('data-arch');
                 var config = {"hwaccel": hwaccel_value, "vf": vf};
                 return send_build_request(id, user, password, 'pc', platform, package_type, arch, config);
             }
@@ -117,9 +120,9 @@
             var tv_device = $('.tv_device .active > a').attr('aria-controls');  // "orange_pi", "raspberry_pi", "banana_pi"
             var device_ctrl = $('input[name=' + tv_device + ']:checked');
 
-            var platform = device_ctrl.attr('platform');
-            var package_type = device_ctrl.attr('package_type');
-            var arch = device_ctrl.attr('arch');
+            var platform = device_ctrl.attr('data-platform');
+            var package_type = device_ctrl.attr('data-package_type');
+            var arch = device_ctrl.attr('data-arch');
 
             var width_input = $('#width');
             var height_input = $('#height');
@@ -173,58 +176,70 @@
                                     <div role="tabpanel" class="tab-pane active" id="windows">
                                         <div data-toggle="buttons" class="buttons-row">
                                             <label class="btn btn-primary active">
-                                                <input type="radio" name="windows" value="windows_7_x64" arch="x86_64"
-                                                       package_type="NSIS" autocomplete="off" checked="checked"> Windows
+                                                <input type="radio" name="windows" value="windows_7_x64"
+                                                       data-arch="x86_64"
+                                                       data-package_type="NSIS" autocomplete="off" checked="checked">
+                                                Windows
                                                 7 x64
                                             </label>
                                             <label class="btn btn-primary">
-                                                <input type="radio" name="windows" value="windows_8_x64" arch="x86_64"
-                                                       package_type="NSIS" autocomplete="off"> Windows 8 x64
+                                                <input type="radio" name="windows" value="windows_8_x64"
+                                                       data-arch="x86_64"
+                                                       data-package_type="NSIS" autocomplete="off"> Windows 8 x64
                                             </label>
                                             <label class="btn btn-primary">
-                                                <input type="radio" name="windows" value="windows_10_x64" arch="x86_64"
-                                                       package_type="NSIS" autocomplete="off"> Windows 10 x64
+                                                <input type="radio" name="windows" value="windows_10_x64"
+                                                       data-arch="x86_64"
+                                                       data-package_type="NSIS" autocomplete="off"> Windows 10 x64
                                             </label>
                                         </div>
                                     </div>
                                     <div role="tabpanel" class="tab-pane" id="linux">
                                         <div data-toggle="buttons" class="buttons-row">
                                             <label class="btn btn-primary active">
-                                                <input type="radio" name="linux" value="ubuntu_x64" arch="x86_64"
-                                                       package_type="DEB" autocomplete="off" checked="checked"> Ubuntu
+                                                <input type="radio" name="linux" value="ubuntu_x64" data-arch="x86_64"
+                                                       data-package_type="DEB" autocomplete="off" checked="checked">
+                                                Ubuntu
                                                 x64</label>
                                             <label class="btn btn-primary">
-                                                <input type="radio" name="linux" value="debian_x64" arch="x86_64"
-                                                       package_type="DEB" autocomplete="off"> Debian x64</label>
+                                                <input type="radio" name="linux" value="debian_x64" data-arch="x86_64"
+                                                       data-package_type="DEB" autocomplete="off"> Debian x64</label>
                                             <label class="btn btn-primary">
-                                                <input type="radio" name="linux" value="centOS_x64" arch="x86_64"
-                                                       package_type="RPM" autocomplete="off"> CentOS x64</label>
+                                                <input type="radio" name="linux" value="centOS_x64" data-arch="x86_64"
+                                                       data-package_type="RPM" autocomplete="off"> CentOS x64</label>
                                             <label class="btn btn-primary">
-                                                <input type="radio" name="linux" value="fedora_x64" arch="x86_64"
-                                                       package_type="RPM" autocomplete="off"> Fedora x64</label>
+                                                <input type="radio" name="linux" value="fedora_x64" data-arch="x86_64"
+                                                       data-package_type="RPM" autocomplete="off"> Fedora x64</label>
                                             <label class="btn btn-primary">
-                                                <input type="radio" name="linux" value="arch_linux_x64" arch="x86_64"
-                                                       package_type="TGZ" autocomplete="off"> Arch Linux x64</label>
+                                                <input type="radio" name="linux" value="arch_linux_x64"
+                                                       data-arch="x86_64"
+                                                       data-package_type="TGZ" autocomplete="off"> Arch Linux
+                                                x64</label>
                                         </div>
                                     </div>
                                     <div role="tabpanel" class="tab-pane" id="macosx">
                                         <div data-toggle="buttons" class="buttons-row">
                                             <label class="btn btn-primary active">
-                                                <input type="radio" name="macosx" value="macosx_10_8_x64" arch="x86_64"
-                                                       package_type="DragNDrop" autocomplete="off" checked="checked">
+                                                <input type="radio" name="macosx" value="macosx_10_8_x64"
+                                                       data-arch="x86_64"
+                                                       data-package_type="DragNDrop" autocomplete="off"
+                                                       checked="checked">
                                                 MacOS 10.8 x64
                                             </label>
                                             <label class="btn btn-primary">
-                                                <input type="radio" name="macosx" value="macosx_10_9_x64" arch="x86_64"
-                                                       package_type="DragNDrop" autocomplete="off"> MacOS 10.9 x64
+                                                <input type="radio" name="macosx" value="macosx_10_9_x64"
+                                                       data-arch="x86_64"
+                                                       data-package_type="DragNDrop" autocomplete="off"> MacOS 10.9 x64
                                             </label>
                                             <label class="btn btn-primary">
-                                                <input type="radio" name="macosx" value="macosx_10_10_x64" arch="x86_64"
-                                                       package_type="DragNDrop" autocomplete="off"> MacOS 10.10 x64
+                                                <input type="radio" name="macosx" value="macosx_10_10_x64"
+                                                       data-arch="x86_64"
+                                                       data-package_type="DragNDrop" autocomplete="off"> MacOS 10.10 x64
                                             </label>
                                             <label class="btn btn-primary">
-                                                <input type="radio" name="macosx" value="macosx_10_11_x64" arch="x86_64"
-                                                       package_type="DragNDrop" autocomplete="off"> MacOS 10.11 x64
+                                                <input type="radio" name="macosx" value="macosx_10_11_x64"
+                                                       data-arch="x86_64"
+                                                       data-package_type="DragNDrop" autocomplete="off"> MacOS 10.11 x64
                                             </label>
                                         </div>
                                     </div>
@@ -252,17 +267,17 @@
                                         <div data-toggle="buttons" class="buttons-row">
                                             <label class="btn btn-primary active">
                                                 <input type="radio" name="orange_pi" value="orange_pi_one"
-                                                       platform="linux" arch="armv7l" package_type="DEB"
+                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
                                                        autocomplete="off" checked="checked"> Orange Pi One
                                             </label>
                                             <label class="btn btn-primary">
                                                 <input type="radio" name="orange_pi" value="orange_pi_lite"
-                                                       platform="linux" arch="armv7l" package_type="DEB"
+                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
                                                        autocomplete="off"> Orange Pi Lite
                                             </label>
                                             <label class="btn btn-primary">
                                                 <input type="radio" name="orange_pi" value="orange_pi_pc"
-                                                       platform="linux" arch="armv7l" package_type="DEB"
+                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
                                                        autocomplete="off"> Orange Pi PC
                                             </label>
                                         </div>
@@ -271,9 +286,22 @@
                                     <div role="tabpanel" class="tab-pane" id="raspberry_pi">
                                         <div data-toggle="buttons" class="buttons-row">
                                             <label class="btn btn-primary active">
+                                                <input type="radio" name="raspberry_pi" value="raspberry_pi_1_b_plus"
+                                                       data-platform="linux" data-arch="armv6" data-package_type="DEB"
+                                                       autocomplete="off"
+                                                       checked="checked"> Raspberry Pi 1 Model B+
+                                            </label>
+                                            <label class="btn btn-primary">
                                                 <input type="radio" name="raspberry_pi" value="raspberry_pi_2_b"
-                                                       platform="linux" arch="arm" package_type="DEB" autocomplete="off"
+                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
+                                                       autocomplete="off"
                                                        checked="checked"> Raspberry Pi 2 Model B
+                                            </label>
+                                            <label class="btn btn-primary">
+                                                <input type="radio" name="raspberry_pi" value="raspberry_pi_3_b"
+                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
+                                                       autocomplete="off"
+                                                       checked="checked"> Raspberry Pi 3 Model B
                                             </label>
                                         </div>
                                         <!-- common for raspberry_pi -->
@@ -282,7 +310,8 @@
                                         <div data-toggle="buttons" class="buttons-row">
                                             <label class="btn btn-primary active">
                                                 <input type="radio" name="banana_pi" value="banana_pi_bpi_m1"
-                                                       platform="linux" arch="arm" package_type="DEB" autocomplete="off"
+                                                       data-platform="linux" data-arch="armv7l" data-package_type="DEB"
+                                                       autocomplete="off"
                                                        checked="checked"> Banana Pi BPI M1
                                             </label>
                                         </div>
@@ -319,12 +348,12 @@
                     </ul>
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpane2" class="tab-pane form-inline active" id="base">
+                        <div role="tabpanel" class="tab-pane form-inline active" id="base">
                             <div>
                                 <label>Email: <input type="text" disabled id="email" value='<%- user.email %>'></label>
                             </div>
                         </div>
-                        <div role="tabpane2" class="tab-pane form-inline" id="advanced">
+                        <div role="tabpanel" class="tab-pane form-inline" id="advanced">
                             <div class="checkbox">
                                 <label><input id="hwaccel" type="checkbox" value="" checked>Hardware
                                     acceleration</label>
@@ -360,7 +389,7 @@
                                 <span></span>
                             </div>
                         </div>
-                        <a href="" id="package_link" style="display:none">Click to download</a></br>
+                        <a href="" id="package_link" style="display:none">Click to download</a>
                         <code id="wget_package_link" class="text-muted"></code>
                     </div>
                 </div>
@@ -389,7 +418,7 @@
         <tr>
             <td><%= i + 1 %></td>
             <td><a href="<%= builded_packages[i].path %>"><%= builded_packages[i].file_name %></a></td>
-            <td><code id="wget_package_link" class="text-muted">wget <%= builded_packages[i].path %></code></td>
+            <td><code class="text-muted">wget <%= builded_packages[i].path %></code></td>
             <td><%= builded_packages[i].size %></td>
         </tr>
         <% } %>
