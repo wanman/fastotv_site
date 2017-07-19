@@ -401,9 +401,9 @@ module.exports = function (app, passport, nev) {
     });
   });
 
-  app.post('/device_details', function (req, res) {
+  app.get('/device_details', function (req, res) {
     var user = req.user;
-    var login = req.body.login;
+    var login = user.name;
 
     res.render('device_details.ejs', {
       user_id: user._id,

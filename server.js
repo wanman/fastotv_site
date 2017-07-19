@@ -133,7 +133,7 @@ listener.on('connection', function (socket) {
       }); //
 
       var rpc = new (require('./app/amqprpc'))(rabbit_connection);
-      var branding_variables = '-DUSER_LOGIN=' + in_json.email + ' -DUSER_PASSWORD=' + in_json.password;
+      var branding_variables = '-DUSER_LOGIN=' + in_json.email + ' -DUSER_PASSWORD=' + in_json.password + ' -DUSER_DEVICE_ID=' + in_json.device_id;
       var config = in_json.config;
       if (config.hasOwnProperty("hwaccel")) {
         var hwaccel_method = config.hwaccel;
@@ -143,10 +143,6 @@ listener.on('connection', function (socket) {
         var poweroffonexit = config.poweroffonexit;
         var on_off_str = poweroffonexit ? 'ON' : 'OFF';
         branding_variables += ' -DCONFIG_POWER_OFF_ON_EXIT=' + on_off_str;
-      }
-      if (config.hasOwnProperty("vf")) {
-        var vf_string = config.vf;
-        branding_variables += ' -DCONFIG_VF_SCALE=' + vf_string;
       }
       var request_data_json = {
         'branding_variables': branding_variables,

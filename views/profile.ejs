@@ -152,8 +152,7 @@
           Test if your device is online.
         </div>
         <div class="col-sm-6">
-          <form action="/device_details" method="post">
-            <input type="hidden" class="form-control" name="login" value="<%= user.name %>">
+          <form action="/device_details" method="get">
             <button type="submit" class="btn btn-success">Test Device</button>
           </form>
         </div>

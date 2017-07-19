@@ -69,11 +69,12 @@
       update_bar(responce_json.progress, responce_json.message);
     });
 
-    function send_build_request(id, user, password, device, platform, package_type, arch, config) {
+    function send_build_request(id, user, password, device_id, device, platform, package_type, arch, config) {
       var build_args = {
         "id": id,
         "email": user,
         "password": password,
+        "device_id": device_id,
         "device": device,
         "platform": platform,
         "arch": arch,
@@ -85,6 +86,11 @@
     }
 
     function send_build_request_local(id, user, password) {
+      var device_id = document.getElementById('devices').value;
+      if (!device_id) {
+        return;
+      }
+
       var build_button = $('#build_button');
       build_button.prop('disabled', true);
       var progress_bar = $('.progress-bar');
@@ -100,21 +106,14 @@
         hwaccel_value = 'auto';
       }
 
-      var deinterlace = null;
-      var deinterlace_checkbox = $('#deinterlace');
-      if (deinterlace_checkbox.is(':checked')) {
-        deinterlace = 'yadif';
-      }
-
-      var vf = deinterlace ? deinterlace : '';
       if (device_selected === "pc_device") {
         var platform = $('.operatting_systems .active > a').attr('aria-controls');
         var platform_ctrl = $('input[name=' + platform + ']:checked');
 
         var package_type = platform_ctrl.attr('data-package_type');
         var arch = platform_ctrl.attr('data-arch');
-        var config = {"hwaccel": hwaccel_value, "vf": vf};
-        return send_build_request(id, user, password, 'pc', platform, package_type, arch, config);
+        var config = {"hwaccel": hwaccel_value};
+        return send_build_request(id, user, password, device_id, 'pc', platform, package_type, arch, config);
       }
 
       var tv_device = $('.tv_device .active > a').attr('aria-controls');  // "orange_pi", "raspberry_pi", "banana_pi"
@@ -126,18 +125,12 @@
 
       var width_input = $('#width');
       var height_input = $('#height');
-      var scale = 'scale=' + width_input.val() + 'x' + height_input.val();
-      if (deinterlace) {
-        vf = deinterlace + ',' + scale;
-      } else {
-        vf = scale;
-      }
 
       var power_off_on_exit_checkbox = $('#power_off_on_exit');
       var power_off_checked = power_off_on_exit_checkbox.is(':checked');
 
-      var config = {"hwaccel": hwaccel_value, "poweroffonexit": power_off_checked, "vf": vf};
-      return send_build_request(id, user, password, tv_device, platform, package_type, arch, config);
+      var config = {"hwaccel": hwaccel_value, "poweroffonexit": power_off_checked};
+      return send_build_request(id, user, password, device_id, tv_device, platform, package_type, arch, config);
     }
   </script>
 </head>
@@ -147,11 +140,11 @@
     <div class="col-sm-12 col-md-12 col-lg-12">
       <div class="well">
         <div class="form-group">
-          <label class="col-xs-3 control-label">Availible Devices:</label>
+          <label class="col-xs-3 control-label">Available Devices:</label>
           <div class="col-xs-5 selectContainer">
-            <select class="form-control" name="color">
+            <select id="devices" class="form-control">
               <% for (var i = 0; i < user.devices.length; i++) { %>
-              <option><%= user.devices[i].name %></option>
+                <option value="<%= user.devices[i]._id %>"><%= user.devices[i].name %></option>
               <% } %>​
             </select>
           </div>
@@ -366,9 +359,6 @@
               <div class="checkbox">
                 <label><input id="hwaccel" type="checkbox" value="" checked>Hardware
                   acceleration</label>
-              </div>
-              <div class="checkbox">
-                <label><input id="deinterlace" type="checkbox" value="" checked>Deinterlace</label>
               </div>
             </div>
           </div>
