@@ -9,34 +9,34 @@
   </script>
 </head>
 <body onload="init()">
-  <div class="container">
-    <h2>Availible user devices:</h2>
-    <table class="table">
-      <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Created date</th>
-        <th>Actions</th> 
-     </tr>
-      </thead>
-      <tbody>
-        <% if (devices.length > 0) { %>
-        <% for (var i = 0; i < devices.length; i++) { %>
-        <tr>
-          <td><%= i + 1 %></td>
-          <td><%= devices[i].name %></td>
-          <td><%= devices[i].created_date %></td>
-          <td>
-            <form action="/remove_device" method="post">
-              <input type="hidden" class="form-control" name="device_id" value="<%= devices[i]._id %>">
-              <button type="submit" class="btn btn-danger btn-xs">Remove</button>
-            </form>
-          </td>
-        </tr>
-        <% } %>
-        <% } %>
-      </tbody>
+<div class="container">
+  <h2>Availible user devices:</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Created date</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if (devices.length > 0) { %>
+    <% for (var i = 0; i < devices.length; i++) { %>
+    <tr>
+      <td><%= i + 1 %></td>
+      <td><%= devices[i].name %></td>
+      <td><%= devices[i].created_date %></td>
+      <td>
+        <form action="/remove_device" method="post">
+          <input type="hidden" class="form-control" name="device_id" value="<%= devices[i]._id %>">
+          <button type="submit" class="btn btn-danger btn-xs">Remove</button>
+        </form>
+      </td>
+    </tr>
+    <% } %>
+    <% } %>
+    </tbody>
   </table>
   <form class="form-inline" action="/add_device" method="post">
     <input class="form-control" name="device_name" placeholder="Name">

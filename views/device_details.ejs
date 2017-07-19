@@ -99,7 +99,6 @@
     });
 
     function init() {
-      ping_device('<%- user_id %>', cmd_id, socket);
       $('#status_label').html(SERVER_STATUS.OFFLINE);
       $('#status_img').attr("src", SERVER_STATUS_IMG.OFFLINE);
       $('#os_label').html(SERVER_OS_DEFAULT_LABEL);
@@ -107,10 +106,30 @@
       $('#ram_label').html(SERVER_RAM_DEFAULT_LABEL);
       $('#bandwidth_label').html(SERVER_NETWORK_BANDWIDTH_DEFAULT_LABEL);
     }
+
+    function local_ping_device() {
+      var device_id = $('#devices').value;
+      ping_device('<%- user_id %>', device_id, cmd_id, socket);
+    }
+
+    function local_device_info() {
+      var device_id = $('#devices').value;
+      device_info('<%- user_id %>', device_id, cmd_id, socket);
+    }
   </script>
 </head>
 <body onload="init()">
 <div class="container">
+  <div class="form-group">
+    <label class="col-xs-3 control-label">Availible Devices:</label>
+    <div class="col-xs-5 selectContainer">
+      <select id="devices" class="form-control" onchange="local_ping_device()">
+        <% for (var i = 0; i < devices.length; i++) { %>
+          <option value="<%= devices[i]._id %>"><%= devices[i].name %></option>
+        <% } %>
+      </select>
+    </div>
+  </div>
   <legend id="server_name_label"><%- login %></legend>
   <div class="well">
     Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
@@ -119,7 +138,7 @@
     Installed memory(RAM): <label id="ram_label"></label><br>
     Network bandwidth: <label id="bandwidth_label"></label>
   </div>
-  <button class="btn btn-info" id="info_button" disabled onclick="device_info('<%- user_id %>', cmd_id, socket)">
+  <button class="btn btn-info" id="info_button" disabled onclick="local_device_info()">
     Info
   </button>
 </div>

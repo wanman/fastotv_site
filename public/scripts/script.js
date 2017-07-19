@@ -50,21 +50,29 @@ function parse_command_out(msg) {
 }
 
 // device functions
-function ping_device(user_id, id_cmd, socket) {
+function ping_device(user_id, device_id, id_cmd, socket) {
   if (user_id === undefined) {
     return;
   }
 
-  var msg = user_id + " " + id_cmd + " " + COMMANDS.PING;
+  if (device_id === undefined) {
+    return;
+  }
+
+  var msg = user_id + " " + device_id + " " + id_cmd + " " + COMMANDS.PING;
   socket.emit('publish_redis', msg);
 }
 
-function device_info(user_id, id_cmd, socket) {
+function device_info(user_id, device_id, id_cmd, socket) {
   if (user_id === undefined) {
     return;
   }
 
-  var msg = user_id + " " + id_cmd + " " + COMMANDS.INFO;
+  if (device_id === undefined) {
+    return;
+  }
+
+  var msg = user_id + " " + device_id + " " + id_cmd + " " + COMMANDS.INFO;
   socket.emit('publish_redis', msg);
 }
 

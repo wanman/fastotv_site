@@ -341,7 +341,7 @@ module.exports = function (app, passport, nev) {
   app.post('/add_device', function (req, res) {
     var user = req.user;
     var device_name = req.body.device_name;
-    var new_device = {"name" : device_name, "created_date" : Date()};
+    var new_device = {"name": device_name, "created_date": Date()};
     user.devices.push(new_device);
     user.save(function (err) {
       if (err) {
@@ -361,13 +361,13 @@ module.exports = function (app, passport, nev) {
     });
   });
 
- // REMOVE device
+  // REMOVE device
   app.post('/remove_device', function (req, res) {
     var user = req.user;
     var device_id = req.body.device_id;
     user.devices.pull({_id: device_id});
     user.save(function (err) {
-      if (err) { 
+      if (err) {
         req.flash('statusProfileMessage', err);
         return;
       }
@@ -399,6 +399,7 @@ module.exports = function (app, passport, nev) {
 
     res.render('device_details.ejs', {
       user_id: user._id,
+      devices: user.devices,
       login: login
     });
   });

@@ -149,14 +149,14 @@
         <div class="form-group">
           <label class="col-xs-3 control-label">Availible Devices:</label>
           <div class="col-xs-5 selectContainer">
-          <select class="form-control" name="color">
-          <% for (var i = 0; i < user.devices.length; i++) { %>
-            <option><%= user.devices[i].name %></option>
-          <% } %>​
-          </select>
+            <select class="form-control" name="color">
+              <% for (var i = 0; i < user.devices.length; i++) { %>
+              <option><%= user.devices[i].name %></option>
+              <% } %>​
+            </select>
+          </div>
         </div>
-      </div>
-      <div>
+        <div>
           <ul class="nav nav-tabs device" role="tablist">
             <li role="presentation" class="active"><a href="#pc_device" aria-controls="pc_device" role="tab"
                                                       data-toggle="tab"><i class="fa fa-laptop"></i> PC</a>
