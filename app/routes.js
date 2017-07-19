@@ -33,9 +33,8 @@ module.exports = function (app, passport, nev) {
           return callback(err);
         }
 
-        console.log(channels);
         var redis_channels = []; // Create a new empty array.
-        for (var i = 0; i < channels.length; i++) {
+        for (i = 0; i < channels.length; i++) {
           var channel = channels[i];
           var programs = [];
           for (k = 0; k < channel.programmes.length; k++) {
@@ -52,12 +51,17 @@ module.exports = function (app, passport, nev) {
           redis_channels.push(of_red_channel);
         }
 
+        var redis_devices = [];
+        for (i = 0; i < user.devices.length; i++) {
+          redis_devices = user.devices[i]._id;
+        }
+
         var needed_val = {
           id: user._id,
           login: user.email,
           password: user.password,
           channels: redis_channels,
-          devices: user.devices
+          devices: redis_devices
         };
         var needed_val_str = JSON.stringify(needed_val);
         app.redis_connection.set(user.email, needed_val_str);
