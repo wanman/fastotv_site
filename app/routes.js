@@ -27,36 +27,43 @@ function createRedisChannel(id, url, title, icon, programs) {  // ChannelInfo
 
 module.exports = function (app, passport, nev) {
   var updateRedisUser = function (user, callback) {
-    var channels = user.getChannels();
-    console.log(channels);
-    var redis_channels = []; // Create a new empty array.
-    for (var i = 0; i < channels.length; i++) {
-      var channel = channels[i];
-      var programs = [];
-      for (k = 0; k < channel.programmes.length; k++) {
-        var progr = channel.programmes[k];
-        programs.push(
-          {
-            channel: progr.channel,
-            start: progr.start.getTime(),
-            stop: progr.end.getTime(),
-            title: progr.title.length > 0 ? progr.title[0] : "N/A"
-          });
-      }
-      var of_red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
-      redis_channels.push(of_red_channel);
-    }
+    user.getChannels(function (err, channels) {
+        if (err) {
+          console.error(err);
+          return callback(err);
+        }
 
-    var needed_val = {
-      id: user._id,
-      login: user.email,
-      password: user.password,
-      channels: redis_channels,
-      devices: user.devices
-    };
-    var needed_val_str = JSON.stringify(needed_val);
-    app.redis_connection.set(user.email, needed_val_str);
-    return callback(null, user);
+        console.log(channels);
+        var redis_channels = []; // Create a new empty array.
+        for (var i = 0; i < channels.length; i++) {
+          var channel = channels[i];
+          var programs = [];
+          for (k = 0; k < channel.programmes.length; k++) {
+            var progr = channel.programmes[k];
+            programs.push(
+              {
+                channel: progr.channel,
+                start: progr.start.getTime(),
+                stop: progr.end.getTime(),
+                title: progr.title.length > 0 ? progr.title[0] : "N/A"
+              });
+          }
+          var of_red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
+          redis_channels.push(of_red_channel);
+        }
+
+        var needed_val = {
+          id: user._id,
+          login: user.email,
+          password: user.password,
+          channels: redis_channels,
+          devices: user.devices
+        };
+        var needed_val_str = JSON.stringify(needed_val);
+        app.redis_connection.set(user.email, needed_val_str);
+        return callback(null, user);
+      }
+    );
   };
   // normal routes ===============================================================
   // show the home page (will also have our login links)
@@ -106,10 +113,10 @@ module.exports = function (app, passport, nev) {
       }
 
       var official_channels = [];
-      for (var i = 0; i < all_channels.length; i++) {
+      for (i = 0; i < all_channels.length; i++) {
         var channel = all_channels[i];
         var exist = false;
-        for (var j = 0; j < user_official_channels.length; j++) {
+        for (j = 0; j < user_official_channels.length; j++) {
           if (user_official_channels[j].equals(channel._id)) {
             exist = true;
             break;

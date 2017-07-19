@@ -63,11 +63,10 @@ userSchema.methods.isAdministrator = function () {
   return this.type === 'ADMIN';
 };
 
-userSchema.methods.getChannels = function () {
+userSchema.methods.getChannels = function (done) {
   ChannelsTable.find({}, function (err, officials) {
     if (err) {
-      console.error(err);
-      return [];
+      return done(err);
     }
 
     var channels = []; // Create a new empty array.
@@ -92,7 +91,7 @@ userSchema.methods.getChannels = function () {
         }
       }
     }
-    return channels;
+    return done(null, channels);
   });
 };
 
