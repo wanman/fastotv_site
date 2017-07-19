@@ -316,6 +316,7 @@ module.exports = function (app, passport, nev) {
       });
     });
   });
+
   app.get('/user_status', function (req, res) {
     User.find({}, function (err, all_users) {
       if (err) {
@@ -333,6 +334,62 @@ module.exports = function (app, passport, nev) {
       res.render('user_status.ejs', {
         users: users
       });
+    });
+  });
+
+  // ADD device  
+  app.post('/add_device', function (req, res) {
+    var user = req.user;
+    var device_name = req.body.device_name;
+    var new_device = {"name" : device_name, "created_date" : Date()};
+    user.devices.push(new_device);
+    user.save(function (err) {
+      if (err) {
+        req.flash('statusProfileMessage', err);
+        return;
+      }
+
+      updateRedisUser(user, redis_channels, function (err, user) {
+        if (err) {
+          console.error(err);
+          req.flash('statusProfileMessage', err);
+          return;
+        }
+        res.redirect('/profile');
+      });
+      res.redirect('/devices');
+    });
+  });
+
+ // REMOVE device
+  app.post('/remove_device', function (req, res) {
+    var user = req.user;
+    var device_id = req.body.device_id;
+    user.devices.pull({_id: device_id});
+    user.save(function (err) {
+      if (err) { 
+        req.flash('statusProfileMessage', err);
+        return;
+      }
+
+      updateRedisUser(user, redis_channels, function (err, user) {
+        if (err) {
+          console.error(err);
+          req.flash('statusProfileMessage', err);
+          return;
+        }
+        res.redirect('/profile');
+      });
+      res.redirect('/devices');
+    });
+  });
+
+  app.get('/devices', function (req, res) {
+    var user = req.user;
+    var login = req.body.login;
+
+    res.render('devices.ejs', {
+      devices: user.devices
     });
   });
 

@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var ChannelSchema = require('./channel_scheme');
+var DeviceSchema = require('./device');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
@@ -35,7 +36,8 @@ var userSchema = mongoose.Schema({
     type: String,
     enum: ['USER', 'ADMIN'],
     default: 'USER'
-  }
+  },
+  devices: [DeviceSchema]
 });
 
 // generating a hash
