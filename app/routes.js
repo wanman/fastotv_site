@@ -53,7 +53,7 @@ module.exports = function (app, passport, nev) {
 
         var redis_devices = [];
         for (i = 0; i < user.devices.length; i++) {
-          redis_devices = user.devices[i]._id;
+          redis_devices.push(user.devices[i]._id);
         }
 
         var needed_val = {
