@@ -361,9 +361,8 @@ module.exports = function (app, passport, nev) {
           req.flash('statusProfileMessage', err);
           return;
         }
-        res.redirect('/profile');
+        res.redirect('/devices');
       });
-      res.redirect('/devices');
     });
   });
 
@@ -384,9 +383,8 @@ module.exports = function (app, passport, nev) {
           req.flash('statusProfileMessage', err);
           return;
         }
-        res.redirect('/profile');
+        res.redirect('/devices');
       });
-      res.redirect('/devices');
     });
   });
 
