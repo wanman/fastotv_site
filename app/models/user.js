@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var crypto = require('crypto');
 var ChannelSchema = require('./channel_scheme');
 var DeviceSchema = require('./device');
+var ChannelsTable = require('./channel');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
@@ -60,6 +61,39 @@ userSchema.methods.isReadOnlyMode = function () {
 // checking if password is valid
 userSchema.methods.isAdministrator = function () {
   return this.type === 'ADMIN';
+};
+
+userSchema.methods.getChannels = function () {
+  ChannelsTable.find({}, function (err, officials) {
+    if (err) {
+      console.error(err);
+      return [];
+    }
+
+    var channels = []; // Create a new empty array.
+    for (i = 0; i < this.official_channels.length; i++) {
+      var channel = this.official_channels[i];
+      for (j = 0; j < official.length; j++) {
+        var offic = officials[j];
+        if (channel._id === offic._id) {  // FIX ME find how to compare
+          channels.push(offic);
+          break;
+        }
+      }
+    }
+
+    for (i = 0; i < this.private_channels.length; i++) {
+      var channel = this.private_channels[i];
+      for (j = 0; j < this.private_pool_channels.length; j++) {
+        var priv = this.private_pool_channels[j];
+        if (channel._id === priv._id) {  // FIX ME find how to compare
+          channels.push(priv);
+          break;
+        }
+      }
+    }
+    return channels;
+  });
 };
 
 // create the model for users and expose it to our app

@@ -26,8 +26,34 @@ function createRedisChannel(id, url, title, icon, programs) {  // ChannelInfo
 }
 
 module.exports = function (app, passport, nev) {
-  var updateRedisUser = function (user, channels, callback) {
-    var needed_val = {id: user._id, login: user.email, password: user.password, channels: channels};
+  var updateRedisUser = function (user, callback) {
+    var channels = user.getChannels();
+    console.log(channels);
+    var redis_channels = []; // Create a new empty array.
+    for (var i = 0; i < channels.length; i++) {
+      var channel = channels[i];
+      var programs = [];
+      for (k = 0; k < channel.programmes.length; k++) {
+        var progr = channel.programmes[k];
+        programs.push(
+          {
+            channel: progr.channel,
+            start: progr.start.getTime(),
+            stop: progr.end.getTime(),
+            title: progr.title.length > 0 ? progr.title[0] : "N/A"
+          });
+      }
+      var of_red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
+      redis_channels.push(of_red_channel);
+    }
+
+    var needed_val = {
+      id: user._id,
+      login: user.email,
+      password: user.password,
+      channels: redis_channels,
+      devices: user.devices
+    };
     var needed_val_str = JSON.stringify(needed_val);
     app.redis_connection.set(user.email, needed_val_str);
     return callback(null, user);
@@ -246,26 +272,12 @@ module.exports = function (app, passport, nev) {
         return;
       }
 
-      var redis_channels = []; // Create a new empty array.
       var official_channels = [];
       for (i = 0; i < all_channels.length; i++) {
         var of_channel = all_channels[i];
         for (j = 0; j < official_channels_ids.length; j++) {
           if (of_channel._id == official_channels_ids[j]) {  // FIX ME find how to compare
             official_channels.push(of_channel);
-            var programs = [];
-            for (k = 0; k < of_channel.programmes.length; k++) {
-              var progr = of_channel.programmes[k];
-              programs.push(
-                {
-                  channel: progr.channel,
-                  start: progr.start.getTime(),
-                  stop: progr.end.getTime(),
-                  title: progr.title.length > 0 ? progr.title[0] : "N/A"
-                });
-            }
-            var of_red_channel = createRedisChannel(of_channel._id, of_channel.url, of_channel.name, of_channel.icon, programs);
-            redis_channels.push(of_red_channel);
             break;
           }
         }
@@ -279,19 +291,6 @@ module.exports = function (app, passport, nev) {
         for (j = 0; j < private_channels_ids.length; j++) {
           if (channel._id == private_channels_ids[j]) {  // FIX ME find how to compare
             private_channels.push(channel);
-            var programs = [];
-            for (k = 0; k < channel.programmes.length; k++) {
-              var progr = channel.programmes[k];
-              programs.push(
-                {
-                  channel: progr.channel,
-                  start: progr.start.getTime(),
-                  stop: progr.end.getTime(),
-                  title: progr.title.length > 0 ? progr.title[0] : "N/A"
-                });
-            }
-            var red_channel = createRedisChannel(channel._id, channel.url, channel.name, channel.icon, programs);
-            redis_channels.push(red_channel);
             break;
           }
         }
@@ -305,7 +304,7 @@ module.exports = function (app, passport, nev) {
           return;
         }
 
-        updateRedisUser(user, redis_channels, function (err, user) {
+        updateRedisUser(user, function (err, user) {
           if (err) {
             console.error(err);
             req.flash('statusProfileMessage', err);
@@ -349,7 +348,7 @@ module.exports = function (app, passport, nev) {
         return;
       }
 
-      updateRedisUser(user, redis_channels, function (err, user) {
+      updateRedisUser(user, function (err, user) {
         if (err) {
           console.error(err);
           req.flash('statusProfileMessage', err);
@@ -372,7 +371,7 @@ module.exports = function (app, passport, nev) {
         return;
       }
 
-      updateRedisUser(user, redis_channels, function (err, user) {
+      updateRedisUser(user, function (err, user) {
         if (err) {
           console.error(err);
           req.flash('statusProfileMessage', err);
@@ -528,7 +527,7 @@ module.exports = function (app, passport, nev) {
             return res.status(404).send('ERROR: sending confirmation email FAILED');
           }
 
-          updateRedisUser(user, [], function (err, user) {
+          updateRedisUser(user, function (err, user) {
             if (err) {
               return res.status(404).send('ERROR: save into cache');
             }
