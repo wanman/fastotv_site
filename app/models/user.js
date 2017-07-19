@@ -76,9 +76,9 @@ userSchema.methods.getChannels = function (done) {
     for (i = 0; i < user_officials.length; i++) {
       var channel = user_officials[i];
       for (j = 0; j < officials.length; j++) {
-        var offic = officials[j];
-        if (channel._id == offic._id) {  // FIX ME find how to compare
-          channels.push(offic);
+        var official_full = officials[j];
+        if (channel === official_full._id) {  // FIX ME find how to compare
+          channels.push(official_full);
           break;
         }
       }
@@ -87,13 +87,14 @@ userSchema.methods.getChannels = function (done) {
     for (i = 0; i < user_private.length; i++) {
       var channel = user_private[i];
       for (j = 0; j < user_private_pool.length; j++) {
-        var priv = user_private_pool[j];
-        if (channel._id == priv._id) {  // FIX ME find how to compare
-          channels.push(priv);
+        var private_full = user_private_pool[j];
+        if (channel === private_full._id) {  // FIX ME find how to compare
+          channels.push(private_full);
           break;
         }
       }
     }
+    console.log(channels);
     return done(null, channels);
   });
 };
