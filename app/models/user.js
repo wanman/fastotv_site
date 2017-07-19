@@ -64,14 +64,17 @@ userSchema.methods.isAdministrator = function () {
 };
 
 userSchema.methods.getChannels = function (done) {
+  var user_officials = this.official_channels;
+  var user_private = this.private_channels;
+  var user_private_pool = this.private_pool_channels;
   ChannelsTable.find({}, function (err, officials) {
     if (err) {
       return done(err);
     }
 
     var channels = []; // Create a new empty array.
-    for (i = 0; i < this.official_channels.length; i++) {
-      var channel = this.official_channels[i];
+    for (i = 0; i < user_officials.length; i++) {
+      var channel = user_officials[i];
       for (j = 0; j < official.length; j++) {
         var offic = officials[j];
         if (channel._id === offic._id) {  // FIX ME find how to compare
@@ -81,10 +84,10 @@ userSchema.methods.getChannels = function (done) {
       }
     }
 
-    for (i = 0; i < this.private_channels.length; i++) {
-      var channel = this.private_channels[i];
-      for (j = 0; j < this.private_pool_channels.length; j++) {
-        var priv = this.private_pool_channels[j];
+    for (i = 0; i < user_private.length; i++) {
+      var channel = user_private[i];
+      for (j = 0; j < user_private_pool.length; j++) {
+        var priv = user_private_pool[j];
         if (channel._id === priv._id) {  // FIX ME find how to compare
           channels.push(priv);
           break;
