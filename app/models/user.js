@@ -72,17 +72,12 @@ userSchema.methods.getChannels = function (done) {
       return done(err);
     }
 
-    console.log('officials: ' + officials);
-    console.log('user_officials: ' + user_officials);
-    console.log('user_private: ' + user_private);
-    console.log('user_private_pool: ' + user_private_pool);
-
     var channels = []; // Create a new empty array.
     for (i = 0; i < user_officials.length; i++) {
       var channel = user_officials[i];
       for (j = 0; j < officials.length; j++) {
         var offic = officials[j];
-        if (channel === offic._id) {  // FIX ME find how to compare
+        if (channel._id == offic._id) {  // FIX ME find how to compare
           channels.push(offic);
           break;
         }
@@ -93,7 +88,7 @@ userSchema.methods.getChannels = function (done) {
       var channel = user_private[i];
       for (j = 0; j < user_private_pool.length; j++) {
         var priv = user_private_pool[j];
-        if (channel === priv._id) {  // FIX ME find how to compare
+        if (channel._id == priv._id) {  // FIX ME find how to compare
           channels.push(priv);
           break;
         }
