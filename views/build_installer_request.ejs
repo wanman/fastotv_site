@@ -129,7 +129,12 @@
       var power_off_on_exit_checkbox = $('#power_off_on_exit');
       var power_off_checked = power_off_on_exit_checkbox.is(':checked');
 
-      var config = {"hwaccel": hwaccel_value, "poweroffonexit": power_off_checked, "width": width_input.val(), "height": height_input.val()};
+      var config = {
+        "hwaccel": hwaccel_value,
+        "poweroffonexit": power_off_checked,
+        "width": width_input.val(),
+        "height": height_input.val()
+      };
       return send_build_request(id, user, password, device_id, tv_device, platform, package_type, arch, config);
     }
   </script>
@@ -143,9 +148,10 @@
           <label class="col-xs-3 control-label">Available Devices:</label>
           <div class="col-xs-5 selectContainer">
             <select id="devices" class="form-control">
-              <% for (var i = 0; i < user.devices.length; i++) { %>
-                <option value="<%= user.devices[i]._id %>"><%= user.devices[i].name %></option>
-              <% } %>​
+              <% for (i = 0; i < user.devices.length; i++) { %>
+              <option value="<%= user.devices[i]._id %>"><%= user.devices[i].name %></option>
+              <% } %>
+              ​
             </select>
           </div>
         </div>
@@ -362,10 +368,13 @@
               </div>
             </div>
           </div>
-          <button id="build_package_button" class="btn btn-success btn-send" data-toggle="modal"
-                  data-target="#myModal">
+          <% if (user.devices.length > 0) { %>
+          <button id="build_package_button" class="btn btn-success btn-send" data-toggle="modal" data-target="#myModal">
             Build Package
           </button>
+          <% } else { %>
+          <div class="alert alert-warning">Note: for build Package you need to have at least one device!</div>
+          <% } %>
         </div>
       </div>
     </div>
