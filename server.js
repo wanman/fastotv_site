@@ -139,6 +139,12 @@ listener.on('connection', function (socket) {
         var hwaccel_method = config.hwaccel;
         branding_variables += ' -DCONFIG_HWACCEL_METHOD=' + hwaccel_method;
       }
+      if (config.hasOwnProperty("width")) {
+        branding_variables += ' -DCONFIG_WIDTH=' + config.width;
+      }
+      if (config.hasOwnProperty("height")) {
+        branding_variables += ' -DCONFIG_HEIGHT=' + config.height;
+      }
       if (config.hasOwnProperty("poweroffonexit")) {
         var poweroffonexit = config.poweroffonexit;
         var on_off_str = poweroffonexit ? 'ON' : 'OFF';

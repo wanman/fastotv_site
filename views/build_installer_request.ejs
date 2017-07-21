@@ -129,7 +129,7 @@
       var power_off_on_exit_checkbox = $('#power_off_on_exit');
       var power_off_checked = power_off_on_exit_checkbox.is(':checked');
 
-      var config = {"hwaccel": hwaccel_value, "poweroffonexit": power_off_checked};
+      var config = {"hwaccel": hwaccel_value, "poweroffonexit": power_off_checked, "width": width_input.val(), "height": height_input.val()};
       return send_build_request(id, user, password, device_id, tv_device, platform, package_type, arch, config);
     }
   </script>
@@ -362,7 +362,6 @@
               </div>
             </div>
           </div>
-
           <button id="build_package_button" class="btn btn-success btn-send" data-toggle="modal"
                   data-target="#myModal">
             Build Package
