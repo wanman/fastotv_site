@@ -141,6 +141,7 @@
 </head>
 <body>
 <div class="container">
+  <% if (user.devices.length > 0) { %>
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12">
       <div class="well">
@@ -368,13 +369,9 @@
               </div>
             </div>
           </div>
-          <% if (user.devices.length > 0) { %>
           <button id="build_package_button" class="btn btn-success btn-send" data-toggle="modal" data-target="#myModal">
             Build Package
           </button>
-          <% } else { %>
-          <div class="alert alert-warning">Note: for build Package you need to have at least one device!</div>
-          <% } %>
         </div>
       </div>
     </div>
@@ -410,6 +407,9 @@
       </div>
     </div>
   </div>
+  <% } else { %>
+  <div class="alert alert-warning">Note: for build Package you need to have at least one device!</div>
+  <% } %>
   <table class="table">
     <thead>
     <tr>
