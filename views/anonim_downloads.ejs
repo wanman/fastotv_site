@@ -55,27 +55,33 @@
 
     <div class="row">
       <div class="row">
-        <div class="column">
-          <h2 class="down-h2"><%= project.name %> <%= project.version %> <br>
-            <span class="dowm-os">For Linux:</span>
+        <div>
+          <h2>
+            <%= project.name %> <%= project.version %> <span class="dowm-os">For Linux:</span>
           </h2>
         </div>
-        <div class="column" style="float: right; margin-right: -40px; margin-top: -48px;">
+        <div>
           <img src="images/linux.png" alt="" title="">
         </div>
       </div>
       <!-- version -->
       <p>Download <%= site.small_description %></p>
       <p>The latest stable version:</p>
-      <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.deb">
-        Debian/Ubuntu <%= project.version %> Package (.deb)
-      </a>
-      <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.rpm">
-        Fedora/openSUSE <%= project.version %> Package (.rpm)
-      </a>
-      <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.tar.gz">
-        Application Archive <%= project.version %> (.tar.gz)
-      </a>
+      <div class="row">
+        <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.deb">
+          Debian/Ubuntu <%= project.version %> Package (.deb)
+        </a>
+      </div>
+      <div class="row">
+        <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.rpm">
+          Fedora/openSUSE <%= project.version %> Package (.rpm)
+        </a>
+      </div>
+      <div class="row">
+        <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.tar.gz">
+          Application Archive <%= project.version %> (.tar.gz)
+        </a>
+      </div>
     </div>
 
   </div>
