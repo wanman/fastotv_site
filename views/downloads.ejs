@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('head/main') %>
+</head>
+<body>
+<header role="banner" class="transparent light">
+  <%- include('header/main') %>
+</header>
+<div class="container">
+  <div class="well">
+    <div class="row">
+      <div class="row">
+        <div class="column">
+          <h2 class="down-h2"><%= project.name %> <%= project.version %> <br>
+            <span class="dowm-os">For Mac OS X:</span>
+          </h2>
+        </div>
+        <div class="column" style="float: right; margin-right: -40px; margin-top: -48px;">
+          <img src="images/macosx.png" alt="" title="">
+        </div>
+      </div>
+      <!-- version -->
+      <p>Download <%= site.small_description %></p>
+      <p>The latest stable version:</p>
+      <a href="/download/macosx/<%= project.name_lowercase %>-<%= project.version %>-x86_64.dmg"><%= builded_packages[i].file_name %>
+        64 bit Mac OS X <%= project.version %> Installer (.dmg)
+      </a>
+      <a href="/download/macosx/<%= project.name_lowercase %>-<%= project.version %>-x86_64.zip"><%= builded_packages[i].file_name %>
+        Application Archive <%= project.version %> (.zip)
+      </a>
+    </div>
+
+    <div class="row">
+      <div class="row">
+        <div class="column">
+          <h2 class="down-h2"><%= project.name %> <%= project.version %> <br>
+            <span class="dowm-os">For Windows:</span>
+          </h2>
+        </div>
+        <div class="column" style="float: right; margin-right: -40px; margin-top: -48px;">
+          <img src="images/windows.png" alt="" title="">
+        </div>
+      </div>
+      <!-- version -->
+      <p>Download <%= site.small_description %></p>
+      <p>The latest stable version:</p>
+      <a href="/download/windows/<%= project.name_lowercase %>-<%= project.version %>-x86_64.exe"><%= builded_packages[i].file_name %>
+        64 bit Windows <%= project.version %> Installer (.exe)
+      </a>
+      <a href="/download/windows/<%= project.name_lowercase %>-<%= project.version %>-x86_64.zip"><%= builded_packages[i].file_name %>
+        64 bit Application Archive <%= project.version %> (.zip)
+      </a>
+    </div>
+
+    <div class="row">
+      <div class="row">
+        <div class="column">
+          <h2 class="down-h2"><%= project.name %> <%= project.version %> <br>
+            <span class="dowm-os">For Linux:</span>
+          </h2>
+        </div>
+        <div class="column" style="float: right; margin-right: -40px; margin-top: -48px;">
+          <img src="images/linux.png" alt="" title="">
+        </div>
+      </div>
+      <!-- version -->
+      <p>Download <%= site.small_description %></p>
+      <p>The latest stable version:</p>
+      <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.deb"><%= builded_packages[i].file_name %>
+        Debian/Ubuntu <%= project.version %> Package (.deb)
+      </a>
+      <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.rpm"><%= builded_packages[i].file_name %>
+        Fedora/openSUSE <%= project.version %> Package (.rpm)
+      </a>
+      <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.tar.gz"><%= builded_packages[i].file_name %>
+        Application Archive <%= project.version %> (.tar.gz)
+      </a>
+    </div>
+
+  </div>
+</div>
+<footer class="footer">
+  <%- include('footer/main') %>
+</footer>
+</body>
+</html>
