@@ -11,46 +11,50 @@
   <div class="well">
     <div class="row">
       <div class="row">
-        <div class="column">
-          <h2 class="down-h2"><%= project.name %> <%= project.version %> <br>
-            <span class="dowm-os">For Mac OS X:</span>
+        <div class="col-md-12">
+          <h2>
+            <img src="images/macosx.png" alt="" title="">
+            <%= project.name %> <%= project.version %> <span class="dowm-os">For Mac OS X:</span>
           </h2>
-        </div>
-        <div class="column" style="float: right; margin-right: -40px; margin-top: -48px;">
-          <img src="images/macosx.png" alt="" title="">
         </div>
       </div>
       <!-- version -->
       <p>Download <%= site.small_description %></p>
       <p>The latest stable version:</p>
-      <a href="/download/macosx/<%= project.name_lowercase %>-<%= project.version %>-x86_64.dmg">
-        64 bit Mac OS X <%= project.version %> Installer (.dmg)
-      </a>
-      <a href="/download/macosx/<%= project.name_lowercase %>-<%= project.version %>-x86_64.zip">
-        Application Archive <%= project.version %> (.zip)
-      </a>
+      <p>
+        <a href="/download/macosx/<%= project.name_lowercase %>-<%= project.version %>-x86_64.dmg">
+          64 bit Mac OS X <%= project.version %> Installer (.dmg)
+        </a>
+      </p>
+      <p>
+        <a href="/download/macosx/<%= project.name_lowercase %>-<%= project.version %>-x86_64.zip">
+          Application Archive <%= project.version %> (.zip)
+        </a>
+      <p>
     </div>
 
     <div class="row">
       <div class="row">
-        <div class="column">
-          <h2 class="down-h2"><%= project.name %> <%= project.version %> <br>
-            <span class="dowm-os">For Windows:</span>
+        <div class="col-md-12">
+          <h2>
+            <img src="images/windows.png" alt="" title="">
+            <%= project.name %> <%= project.version %> <span class="dowm-os">For Windows:</span>
           </h2>
-        </div>
-        <div class="column" style="float: right; margin-right: -40px; margin-top: -48px;">
-          <img src="images/windows.png" alt="" title="">
         </div>
       </div>
       <!-- version -->
       <p>Download <%= site.small_description %></p>
       <p>The latest stable version:</p>
-      <a href="/download/windows/<%= project.name_lowercase %>-<%= project.version %>-x86_64.exe">
-        64 bit Windows <%= project.version %> Installer (.exe)
-      </a>
-      <a href="/download/windows/<%= project.name_lowercase %>-<%= project.version %>-x86_64.zip">
-        64 bit Application Archive <%= project.version %> (.zip)
-      </a>
+      <p>
+        <a href="/download/windows/<%= project.name_lowercase %>-<%= project.version %>-x86_64.exe">
+          64 bit Windows <%= project.version %> Installer (.exe)
+        </a>
+      </p>
+      <p>
+        <a href="/download/windows/<%= project.name_lowercase %>-<%= project.version %>-x86_64.zip">
+          64 bit Application Archive <%= project.version %> (.zip)
+        </a>
+      </p>
     </div>
 
     <div class="row">
