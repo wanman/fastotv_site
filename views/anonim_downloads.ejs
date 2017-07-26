@@ -55,33 +55,31 @@
 
     <div class="row">
       <div class="row">
-        <div>
+        <div class="col-md-12">
           <h2>
+            <img src="images/linux.png" alt="" title="">
             <%= project.name %> <%= project.version %> <span class="dowm-os">For Linux:</span>
           </h2>
-        </div>
-        <div>
-          <img src="images/linux.png" alt="" title="">
         </div>
       </div>
       <!-- version -->
       <p>Download <%= site.small_description %></p>
       <p>The latest stable version:</p>
-      <div class="row">
+      <p>
         <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.deb">
           Debian/Ubuntu <%= project.version %> Package (.deb)
         </a>
-      </div>
-      <div class="row">
+      </p>
+      <p>
         <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.rpm">
           Fedora/openSUSE <%= project.version %> Package (.rpm)
         </a>
-      </div>
-      <div class="row">
+      </p>
+      <p>
         <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.tar.gz">
           Application Archive <%= project.version %> (.tar.gz)
         </a>
-      </div>
+      <p>
     </div>
 
   </div>
