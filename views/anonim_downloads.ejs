@@ -9,6 +9,13 @@
 </header>
 <div class="container">
   <div class="well">
+    <h1>Note: Anonim downloads used only for official channels, if you want to have private channels you need to be
+      registered and build your own package in profile page.
+    </h1>
+    <h2>
+      <p>Download <%= site.small_description %></p>
+      <p>The latest stable version:</p>
+    </h2>
     <div class="row">
       <div class="row">
         <div class="col-md-12">
@@ -19,15 +26,13 @@
         </div>
       </div>
       <!-- version -->
-      <p>Download <%= site.small_description %></p>
-      <p>The latest stable version:</p>
       <p>
-        <a href="/download/macosx/<%= project.name_lowercase %>-<%= project.version %>-x86_64.dmg">
+        <a href="/downloads/macosx/<%= project.name_lowercase %>-<%= project.version %>-x86_64.dmg">
           64 bit Mac OS X <%= project.version %> Installer (.dmg)
         </a>
       </p>
       <p>
-        <a href="/download/macosx/<%= project.name_lowercase %>-<%= project.version %>-x86_64.zip">
+        <a href="/downloads/macosx/<%= project.name_lowercase %>-<%= project.version %>-x86_64.zip">
           Application Archive <%= project.version %> (.zip)
         </a>
       <p>
@@ -43,15 +48,13 @@
         </div>
       </div>
       <!-- version -->
-      <p>Download <%= site.small_description %></p>
-      <p>The latest stable version:</p>
       <p>
-        <a href="/download/windows/<%= project.name_lowercase %>-<%= project.version %>-x86_64.exe">
+        <a href="/downloads/windows/<%= project.name_lowercase %>-<%= project.version %>-x86_64.exe">
           64 bit Windows <%= project.version %> Installer (.exe)
         </a>
       </p>
       <p>
-        <a href="/download/windows/<%= project.name_lowercase %>-<%= project.version %>-x86_64.zip">
+        <a href="/downloads/windows/<%= project.name_lowercase %>-<%= project.version %>-x86_64.zip">
           64 bit Application Archive <%= project.version %> (.zip)
         </a>
       </p>
@@ -67,20 +70,18 @@
         </div>
       </div>
       <!-- version -->
-      <p>Download <%= site.small_description %></p>
-      <p>The latest stable version:</p>
       <p>
-        <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.deb">
+        <a href="/downloads/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.deb">
           Debian/Ubuntu <%= project.version %> Package (.deb)
         </a>
       </p>
       <p>
-        <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.rpm">
+        <a href="/downloads/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.rpm">
           Fedora/openSUSE <%= project.version %> Package (.rpm)
         </a>
       </p>
       <p>
-        <a href="/download/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.tar.gz">
+        <a href="/downloads/linux/<%= project.name_lowercase %>-<%= project.version %>-x86_64.tar.gz">
           Application Archive <%= project.version %> (.tar.gz)
         </a>
       <p>
