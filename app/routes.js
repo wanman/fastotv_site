@@ -77,8 +77,8 @@ module.exports = function (app, passport, nev) {
   app.get('/supported_devices', function (req, res) {
     res.render('supported_devices.ejs');
   });
-  app.get('/downloads', function (req, res) {
-    res.render('downloads.ejs');
+  app.get('/anonim_downloads', function (req, res) {
+    res.render('anonim_downloads.ejs');
   });
   app.get('/help', function (req, res) {
     res.render('help.ejs');
