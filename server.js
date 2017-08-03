@@ -42,11 +42,11 @@ app.redis_connection.on("error", function (err) {
 var https = require('https');
 var io = require('socket.io');
 var server = https.createServer({
-    key: fs.readFileSync('/etc/nginx/ssl/nginx.key'),
-    cert: fs.readFileSync('/etc/nginx/ssl/nginx.crt'),
-    ca: fs.readFileSync('/etc/nginx/ssl/nginx.crt'),
-    requestCert: false,
-    rejectUnauthorized: false
+  key: fs.readFileSync(settings_config.private_key_path),
+  cert: fs.readFileSync(settings_config.private_cert_path),
+  ca: fs.readFileSync(settings_config.private_ca_path),
+  requestCert: false,
+  rejectUnauthorized: false
 }, app);
 var listener = io.listen(server);
 
@@ -278,9 +278,9 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
 app.use(session({
-	secret: app.locals.project.name_lowercase, 
-	resave: true,
-        saveUninitialized: true
+  secret: app.locals.project.name_lowercase,
+  resave: true,
+  saveUninitialized: true
 })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
