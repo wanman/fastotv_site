@@ -31,7 +31,7 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-
+var fs = require('fs');
 
 app.redis_connection = redis.createClient();
 app.redis_connection.on("error", function (err) {
@@ -39,9 +39,15 @@ app.redis_connection.on("error", function (err) {
 });
 // app_r
 
-var http = require('http');
+var https = require('https');
 var io = require('socket.io');
-var server = http.createServer(app);
+var server = https.createServer({
+    key: fs.readFileSync('/etc/nginx/ssl/nginx.key'),
+    cert: fs.readFileSync('/etc/nginx/ssl/nginx.crt'),
+    ca: fs.readFileSync('/etc/nginx/ssl/nginx.crt'),
+    requestCert: false,
+    rejectUnauthorized: false
+}, app);
 var listener = io.listen(server);
 
 // settings
@@ -271,7 +277,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
-app.use(session({secret: app.locals.project.name_lowercase})); // session secret
+app.use(session({
+	secret: app.locals.project.name_lowercase, 
+	resave: true,
+        saveUninitialized: true
+})); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
@@ -283,5 +293,5 @@ require('./app/routes.js')(app, passport, nev); // load our routes and pass in o
 
 // launch ======================================================================
 app.listen(port);
-console.log('Http server ready for requests');
+console.log('Https server ready for requests');
 server.listen(app.locals.back_end.socketio_port);
