@@ -42,9 +42,9 @@ app.redis_connection.on("error", function (err) {
 var https = require('https');
 var io = require('socket.io');
 var server = https.createServer({
-  key: fs.readFileSync(settings_config.private_key_path),
-  cert: fs.readFileSync(settings_config.private_cert_path),
-  ca: fs.readFileSync(settings_config.private_ca_path),
+  key: fs.readFileSync(settings_config.ssl_key_path),
+  cert: fs.readFileSync(settings_config.ssl_cert_path),
+  ca: fs.readFileSync(settings_config.ssl_ca_path),
   requestCert: false,
   rejectUnauthorized: false
 }, app);
