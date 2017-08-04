@@ -39,7 +39,7 @@ server {
     location / {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header Host $http_host;
+      proxy_set_header Host $http_sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crthost;
       proxy_set_header X-NginX-Proxy true;
 
       proxy_pass http://app_fastotv;
