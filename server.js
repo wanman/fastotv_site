@@ -40,14 +40,11 @@ app.redis_connection.on("error", function (err) {
 // app_r
 
 var https = require('https');
-var io = require('socket.io');
 var server = https.createServer({
   key: fs.readFileSync(settings_config.ssl_key_path),
-  cert: fs.readFileSync(settings_config.ssl_cert_path),
-  ca: fs.readFileSync(settings_config.ssl_ca_path),
-  requestCert: false,
-  rejectUnauthorized: false
+  cert: fs.readFileSync(settings_config.ssl_cert_path)
 }, app);
+var io = require('socket.io');
 var listener = io.listen(server);
 
 // settings

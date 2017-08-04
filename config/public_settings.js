@@ -8,7 +8,7 @@ module.exports = {
 
   app_title: 'FastoTV',
   app_lowercase: 'fastotv',
-  app_version: '0.5.0',
+  app_version: '0.5.1',
   app_version_type: 'release'
 };
 
