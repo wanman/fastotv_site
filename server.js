@@ -5,7 +5,7 @@ function gen_routing_key(device, platform, arch) {
 }
 
 // load configs
-var configDB = require('./config/database.js');
+var config_db = require('./config/database.js');
 var public_settings_config = require('./config/public_settings.js');
 var settings_config = require('./config/settings.js');
 var auth_config = require('./config/auth.js');
@@ -215,7 +215,7 @@ redis_sub.on('message', function (channel, message) {
 
 // configuration ===============================================================
 mongoose.Promise = global.Promise;
-mongoose.connect(configDB.url); // connect to our database
+mongoose.connect(config_db.url); // connect to our database
 
 // NEV configuration =====================
 // our persistent user model
