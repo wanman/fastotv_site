@@ -10,39 +10,41 @@
 </head>
 <body onload="init()">
 <div class="container">
-  <a href="/profile" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Profile</a>
-  <h2>Available devices:</h2>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>#</th>
-      <th>Name</th>
-      <th>Created date</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% if (devices.length > 0) { %>
-    <% for (var i = 0; i < devices.length; i++) { %>
-    <tr>
-      <td><%= i + 1 %></td>
-      <td><%= devices[i].name %></td>
-      <td><%= devices[i].created_date %></td>
-      <td>
-        <form action="/remove_device" method="post">
-          <input type="hidden" class="form-control" name="device_id" value="<%= devices[i]._id %>">
-          <button type="submit" class="btn btn-danger btn-xs">Remove</button>
-        </form>
-      </td>
-    </tr>
-    <% } %>
-    <% } %>
-    </tbody>
-  </table>
-  <form class="form-inline" action="/add_device" method="post">
-    <input class="form-control" name="device_name" placeholder="Name">
-    <button type="submit" class="btn btn-warning btn-small">Add</button>
-  </form>
+  <div class="well">
+    <a href="/profile" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Profile</a>
+    <h2>Available devices:</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Created date</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% if (devices.length > 0) { %>
+      <% for (var i = 0; i < devices.length; i++) { %>
+      <tr>
+        <td><%= i + 1 %></td>
+        <td><%= devices[i].name %></td>
+        <td><%= devices[i].created_date %></td>
+        <td>
+          <form action="/remove_device" method="post">
+            <input type="hidden" class="form-control" name="device_id" value="<%= devices[i]._id %>">
+            <button type="submit" class="btn btn-danger btn-xs">Remove</button>
+          </form>
+        </td>
+      </tr>
+      <% } %>
+      <% } %>
+      </tbody>
+    </table>
+    <form class="form-inline" action="/add_device" method="post">
+      <input class="form-control" name="device_name" placeholder="Name">
+      <button type="submit" class="btn btn-success">Add</button>
+    </form>
+  </div>
 </div>
 </body>
 </html>
