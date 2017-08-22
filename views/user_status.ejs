@@ -51,24 +51,26 @@
   <div class="well">
     <a href="/profile" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Profile</a>
     <h2>Registered users:</h2>
-    <table class="table">
-      <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Date created</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% for (var i = 0; i < users.length; i++) { %>
-      <tr>
-        <td><%= i + 1 %></td>
-        <td><img id="status_img<%= users[i].id %>" src="images/offline.png"/> <%= users[i].name %></td>
-        <td><%= users[i].created_date %></td>
-      </tr>
-      <% } %>
-      </tbody>
-    </table>
+    <div class="well">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Date created</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for (var i = 0; i < users.length; i++) { %>
+        <tr>
+          <td><%= i + 1 %></td>
+          <td><img id="status_img<%= users[i].id %>" src="images/offline.png"/> <%= users[i].name %></td>
+          <td><%= users[i].created_date %></td>
+        </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
   </div>
   <% } %>
 </div>
