@@ -87,74 +87,69 @@
     <div class="col-sm-6">
       <% if (user.isReadOnlyMode()) { %>
       <div class="alert alert-danger">Read only mode</div>
-      <div class="row">
-        <div class="col-sm-6">
-          1) You can see how much members are in our community.
-        </div>
-        <div class="col-sm-6">
-          <form action="/user_status" method="get">
-            <button type="submit" class="btn btn-info btn-small">Registered users</button>
-          </form>
+      <div class="well">
+        <div class="row">
+          <div class="col-sm-6">
+            <form action="/user_status" method="get">
+              <button type="submit" class="btn btn-info btn-small">Registered users</button>
+            </form>
+          </div>
         </div>
       </div>
       <% } else { %>
       <div class="alert alert-success">Nice to meet you <strong><%= user.name %></strong></div>
-      <div class="row">
-        <div class="col-sm-6">
-          1) You can see how much members are in our community.
+      <div class="well">
+        <div class="row">
+          <div class="col-sm-6">
+            1) Please create device.
+          </div>
+          <div class="col-sm-6">
+            <form action="/devices" method="get">
+              <button type="submit" class="btn btn-primary btn-small">Devices</button>
+            </form>
+          </div>
         </div>
-        <div class="col-sm-6">
-          <form action="/user_status" method="get">
-            <button type="submit" class="btn btn-info btn-small">Registered users</button>
-          </form>
+        <div class="row">
+          <div class="col-sm-6">
+            2) Please choose which channel do you want to watch.
+          </div>
+          <div class="col-sm-6">
+            <form action="/channels" method="get">
+              <button type="submit" class="btn btn-primary btn-small">Channels</button>
+            </form>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6">
-          2) Please create device.
+        <div class="row">
+          <div class="col-sm-6">
+            3) Build and install video player for your device.
+          </div>
+          <div class="col-sm-6">
+            <form action="/build_installer_request" method="get">
+              <button type="submit" class="btn btn-primary btn-small">Build last stable <%= project.name %> version
+              </button>
+            </form>
+          </div>
         </div>
-        <div class="col-sm-6">
-          <form action="/devices" method="get">
-            <button type="submit" class="btn btn-primary btn-small">Devices</button>
-          </form>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6">
-          3) Please choose which channel do you want to watch.
-        </div>
-        <div class="col-sm-6">
-          <form action="/channels" method="get">
-            <button type="submit" class="btn btn-primary btn-small">Channels</button>
-          </form>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6">
-          4) Build and install video player for your device.
-        </div>
-        <div class="col-sm-6">
-          <form action="/build_installer_request" method="get">
-            <button type="submit" class="btn btn-success">Build last stable <%= project.name %> version
-            </button>
-          </form>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6">
-          <strong>
-            5) Start application and enjoy watching.
-          </strong>
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <strong>
+              4) Start application and enjoy watching.
+            </strong>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-6">
-          Test if your device is online.
-        </div>
-        <div class="col-sm-6">
-          <form action="/device_details" method="get">
-            <button type="submit" class="btn btn-success">Test Device</button>
-          </form>
+      <div class="well">
+        <div class="row">
+          <div class="col-sm-6">
+            <form action="/user_status" method="get">
+              <button type="submit" class="btn btn-info btn-small">Registered users</button>
+            </form>
+          </div>
+          <div class="col-sm-6">
+            <form action="/device_details" method="get">
+              <button type="submit" class="btn btn-success pull-right">Test Device</button>
+            </form>
+          </div>
         </div>
       </div>
       <% } %>

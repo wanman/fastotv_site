@@ -126,7 +126,8 @@
   </script>
 </head>
 <body onload="init()">
-<div class="container">
+<div class="well">
+  <a href="/profile" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Profile</a>
   <div class="row">
     <label class="col-xs-3 control-label"><%- login %></label>
     <label class="col-xs-3 control-label">Available Devices:</label>
@@ -139,7 +140,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="well">
+    <div>
       Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
       OS: <label id="os_label"></label><br>
       Processor: <label id="cpu_label"></label><br>

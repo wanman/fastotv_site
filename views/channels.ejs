@@ -15,10 +15,6 @@
       width: 15%;
     }
 
-    th.user_channel_price {
-      width: 35%;
-    }
-
     th.user_channel_url {
       width: 35%;
     }
@@ -97,13 +93,14 @@
 <body onload="on_load()">
 <div class="container">
   <div class="well">
+    <a href="/profile" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Profile</a>
     <h2>Availible channels:</h2>
     <table class="table">
       <thead>
       <tr>
         <th class="user_channel_number">#</th>
         <th class="user_channel_name">Name</th>
-        <th class="user_channel_price">Price</th>
+        <th class="user_channel_url">Url</th>
         <th class="user_channel_tags">Tags</th>
         <th class="user_channel_playlist">In playlist</th>
         <th class="user_channel_action">Actions</th>
@@ -118,7 +115,7 @@
           <img width="32px" height="32px"
                src="<%= official_channels[i].icon %>"/> <%= official_channels[i].name %>
         </td>
-        <td><%= official_channels[i].price %></td>
+        <td>Hidden</td>
         <td>
           <input value="<%- official_channels[i].tags %>" disabled>
         </td>
@@ -243,15 +240,14 @@
   </div>
   <!-- Apply channels FORM -->
   <form class="form-inline" action="/apply_channels" method="post">
-    <div class="form-group">
-      <label>TOTAL PRICE:</label>
+    <div class="col-md-12 text-center">
+      <div class="form-group">
+        <input type="hidden" class="form-control" id="total" value=0 disabled>
+      </div>
+      <input type="hidden" id="official_ids" class="form-control" name="apply_channels_official_ids" value="">
+      <input type="hidden" id="private_ids" class="form-control" name="apply_channels_private_ids" value="">
+      <button type="submit" class="btn-lg btn-warning btn-small">Apply</button>
     </div>
-    <div class="form-group">
-      <input class="form-control" id="total" , value=0 disabled>
-    </div>
-    <input type="hidden" id="official_ids" class="form-control" name="apply_channels_official_ids" value="">
-    <input type="hidden" id="private_ids" class="form-control" name="apply_channels_private_ids" value="">
-    <button type="submit" class="btn btn-warning btn-small">Apply</button>
   </form>
 </div>
 </body>

@@ -342,36 +342,10 @@
         </div>
       </div>
 
-      <div class="well">
-        <h2>Profile settings:</h2>
-        <div>
-          <ul class="nav nav-tabs" role="tablist" id="connection_settings">
-            <li role="presentation" class="active">
-              <a href="#base" aria-controls="base" role="tab" data-toggle="tab"><i class="fa fa-cog"></i>
-                Base</a>
-            </li>
-            <li role="presentation">
-              <a href="#advanced" aria-controls="advanced" role="tab" data-toggle="tab"><i
-                        class="fa fa-cogs"></i> Advanced</a>
-            </li>
-          </ul>
-          <!-- Tab panes -->
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane form-inline active" id="base">
-              <div>
-                <label>Email: <input type="text" disabled id="email" value='<%- user.email %>'></label>
-              </div>
-            </div>
-            <div role="tabpanel" class="tab-pane form-inline" id="advanced">
-              <div class="checkbox">
-                <label><input id="hwaccel" type="checkbox" value="">Hardware acceleration</label>
-              </div>
-            </div>
-          </div>
-          <button id="build_package_button" class="btn btn-success btn-send" data-toggle="modal" data-target="#myModal">
-            Build Package
-          </button>
-        </div>
+      <div class="col-md-12 text-center">
+        <button id="build_package_button" class="btn-lg btn-success btn-send" data-toggle="modal" data-target="#myModal">
+          Build Package
+        </button>
       </div>
     </div>
   </div>
