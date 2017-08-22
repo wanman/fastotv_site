@@ -140,17 +140,20 @@
         </select>
       </div>
     </div>
-    <div class="row">
-      <div>
-        Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
-        OS: <label id="os_label"></label><br>
-        Processor: <label id="cpu_label"></label><br>
-        Installed memory(RAM): <label id="ram_label"></label><br>
-        Network bandwidth: <label id="bandwidth_label"></label>
+    </br>
+    <div class="container">
+      <div class="row">
+        <div>
+          Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
+          OS: <label id="os_label"></label><br>
+          Processor: <label id="cpu_label"></label><br>
+          Installed memory(RAM): <label id="ram_label"></label><br>
+          Network bandwidth: <label id="bandwidth_label"></label>
+        </div>
+        <button class="btn btn-info" id="info_button" disabled onclick="local_device_info()">
+          Info
+        </button>
       </div>
-      <button class="btn btn-info" id="info_button" disabled onclick="local_device_info()">
-        Info
-      </button>
     </div>
   </div>
 </div>
