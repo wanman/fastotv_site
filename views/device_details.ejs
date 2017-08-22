@@ -127,29 +127,31 @@
 </head>
 <body onload="init()">
 <div class="well">
-  <a href="/profile" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Profile</a>
-  <div class="row">
-    <label class="col-xs-3 control-label"><%- login %></label>
-    <label class="col-xs-3 control-label">Available Devices:</label>
-    <div class="col-xs-5 selectContainer">
-      <select id="devices" class="form-control" onchange="local_ping_device(this)">
-        <% for (var i = 0; i < devices.length; i++) { %>
-        <option value="<%= devices[i]._id %>"><%= devices[i].name %></option>
-        <% } %>
-      </select>
+  <div class="container">
+    <a href="/profile" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Profile</a>
+    <div class="row">
+      <label class="col-xs-3 control-label"><%- login %></label>
+      <label class="col-xs-3 control-label">Available Devices:</label>
+      <div class="col-xs-5 selectContainer">
+        <select id="devices" class="form-control" onchange="local_ping_device(this)">
+          <% for (var i = 0; i < devices.length; i++) { %>
+          <option value="<%= devices[i]._id %>"><%= devices[i].name %></option>
+          <% } %>
+        </select>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div>
-      Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
-      OS: <label id="os_label"></label><br>
-      Processor: <label id="cpu_label"></label><br>
-      Installed memory(RAM): <label id="ram_label"></label><br>
-      Network bandwidth: <label id="bandwidth_label"></label>
+    <div class="row">
+      <div>
+        Status: <img id="status_img" src="images/offline.png"/> <label id="status_label"></label><br>
+        OS: <label id="os_label"></label><br>
+        Processor: <label id="cpu_label"></label><br>
+        Installed memory(RAM): <label id="ram_label"></label><br>
+        Network bandwidth: <label id="bandwidth_label"></label>
+      </div>
+      <button class="btn btn-info" id="info_button" disabled onclick="local_device_info()">
+        Info
+      </button>
     </div>
-    <button class="btn btn-info" id="info_button" disabled onclick="local_device_info()">
-      Info
-    </button>
   </div>
 </div>
 </body>
