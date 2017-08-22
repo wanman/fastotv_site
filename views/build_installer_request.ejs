@@ -141,11 +141,11 @@
 </head>
 <body>
 <div class="container">
-  <a href="/profile" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Profile</a>
   <% if (user.devices.length > 0) { %>
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12">
       <div class="well">
+        <a href="/profile" class="btn btn-warning btn-md pull-right"><span class="fa fa-sign-out"/>Profile</a>
         <div class="form-group">
           <label class="col-xs-3 control-label">Available Devices:</label>
           <div class="col-xs-5 selectContainer">
@@ -153,7 +153,6 @@
               <% for (i = 0; i < user.devices.length; i++) { %>
               <option value="<%= user.devices[i]._id %>"><%= user.devices[i].name %></option>
               <% } %>
-              ​
             </select>
           </div>
         </div>
@@ -344,7 +343,8 @@
       </div>
 
       <div class="col-md-12 text-center">
-        <button id="build_package_button" class="btn-lg btn-success btn-send" data-toggle="modal" data-target="#myModal">
+        <button id="build_package_button" class="btn-lg btn-success btn-send" data-toggle="modal"
+                data-target="#myModal">
           Build Package
         </button>
       </div>
