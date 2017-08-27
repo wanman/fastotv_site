@@ -175,13 +175,14 @@ listener.on('connection', function (socket) {
     socket.sessionController = sessionController;
   });
 
-  socket.on('disconnect', function (data) {
+  socket.on('leave_chat', function (data) {
     // just some logging to trace the chat data
     console.log('leave_chat', data);
     
     var channel = data.channel;
     if (socket.sessionController !== null) {
       socket.sessionController.unsubscribe(channel);
+      socket.sessionController.destroyRedis();
       socket.sessionController = null;
     }
   });
