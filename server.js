@@ -120,7 +120,7 @@ function SessionController(user) {
 
 SessionController.prototype.subscribe = function (channel, socket) {
   this.sub.on('message', function (channel, message) {
-    socket.emit(channel, message);
+    listener.in(channel).emit('message', message);
   });
   
   this.channel = channel;
@@ -161,7 +161,7 @@ listener.on('connection', function (socket) {
     }
     
     var resp = {user: this.user, msg: data.msg, msg_type: 1};
-    socket.sessionController.publish(data);
+    socket.sessionController.publish(resp);
   });
 
   socket.on('join_chat', function (data) {

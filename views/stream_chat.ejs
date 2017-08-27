@@ -21,7 +21,7 @@
     });
 
     //on new message adds a new message to display
-    socket.on('post_to_chat', function (data) {
+    socket.on('message', function (data) {
       log.message(data);
       if (data.channel === '<%= channel_id %>') {
       }
