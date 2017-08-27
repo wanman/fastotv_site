@@ -157,7 +157,7 @@ listener.on('connection', function (socket) {
     }
     
     var resp = {user: this.user, msg: data.msg, msg_type: 1};
-    sessionController.sessionController.publish(data);
+    socket.sessionController.publish(data);
   });
 
   socket.on('join_chat', function (data) {
