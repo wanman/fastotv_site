@@ -121,7 +121,7 @@ function SessionController(user) {
 SessionController.prototype.subscribe = function (channel, socket) {
   this.sub.on('message', function (channel, message) {
     console.log("received", channel, message)
-    socket.emit('post_to_chat', message);
+    socket.emit('new_message', message);
   });
   
   this.channel = channel;
