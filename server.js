@@ -166,11 +166,11 @@ listener.on('connection', function (socket) {
     socket.get('sessionController', function (err, sessionController) {
       if (sessionController === null) {
         // implicit login - socket can be timed out or disconnected
-        var newSessionController = new SessionController(msg.channel_id);
+        var newSessionController = new SessionController(msg.channel);
         socket.set('sessionController', newSessionController);
         newSessionController.rejoin(socket, msg);
       } else {
-        var reply = JSON.stringify({action: 'message', channel: msg.channel_id, user: msg.user, msg: msg.msg});
+        var reply = JSON.stringify({action: 'message', channel: msg.channel, user: msg.user, msg: msg.msg});
         sessionController.publish(reply);
       }
     });
@@ -181,11 +181,21 @@ listener.on('connection', function (socket) {
     console.log("join_chat", data);
     
     var msg = JSON.parse(data);
-    var sessionController = new SessionController(msg.channel_id);
+    var sessionController = new SessionController(msg.channel);
     socket.set('sessionController', sessionController);
     sessionController.subscribe(socket);
   });
 
+  socket.on('leave_chat', function (data) {
+    // just some logging to trace the chat data
+    console.log("leave_chat", data);
+    
+    var msg = JSON.parse(data);
+    var sessionController = new SessionController(msg.channel);
+    socket.set('sessionController', sessionController);
+    sessionController.unsubscribe(socket);
+  });
+  
   socket.on('subscribe_redis', function (data) {
     console.log('subscribe_redis', data.channel);
     socket.join(data.channel);
