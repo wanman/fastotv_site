@@ -120,6 +120,7 @@ function SessionController(user) {
 
 SessionController.prototype.subscribe = function (channel, socket) {
   this.sub.on('message', function (channel, message) {
+    console.log("received", channel, message)
     listener.in(channel).emit('message', message);
   });
   
@@ -160,7 +161,7 @@ listener.on('connection', function (socket) {
       socket.sessionController = sessionController;
     }
     
-    var resp = {user: this.user, msg: data.msg, msg_type: 1};
+    var resp = {user: data.user, msg: data.msg, msg_type: 1};
     socket.sessionController.publish(resp);
   });
 
