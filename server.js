@@ -125,12 +125,18 @@ SessionController.prototype.subscribe = function (channel, socket) {
   
   var current = this;
   this.sub.on('subscribe', function (channel, count) {
-    current.publish(channel, {action: 'control', user: current.user, msg: ' joined the channel'});
+    var resp = {user: current.user, msg: ' joined the channel'};
+    listener.in(channel).emit('post_to_chat', resp);
   });
   this.sub.subscribe(channel);
 };
 
 SessionController.prototype.unsubscribe = function (channel) {
+  var current = this;
+  this.sub.on('unsubscribe', function (channel, count) {
+    var resp = {user: current.user, msg: ' leave the channel'};
+    listener.in(channel).emit('post_to_chat', resp);
+  });
   this.sub.unsubscribe(channel);
 };
 
