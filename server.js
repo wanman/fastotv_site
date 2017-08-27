@@ -135,8 +135,9 @@ SessionController.prototype.unsubscribe = function () {
   this.publish(resp);
 };
 
-SessionController.prototype.publish = function (message) {
-  this.pub.publish(this.channel, message);
+SessionController.prototype.publish = function (message_json) {
+  var message_str = JSON.stringify(message_json);
+  this.pub.publish(this.channel, message_str);
 };
 
 SessionController.prototype.destroyRedis = function () {
