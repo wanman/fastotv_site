@@ -175,7 +175,7 @@ listener.on('connection', function (socket) {
     socket.sessionController = sessionController;
   });
 
-  socket.on('leave_chat', function (data) {
+  socket.on('disconnect', function (data) {
     // just some logging to trace the chat data
     console.log('leave_chat', data);
     
