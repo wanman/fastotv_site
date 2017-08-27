@@ -28,7 +28,7 @@
     });
 
     function post_message() {
-      var input = $(this).find(':input');
+      var input = $('#messge_box');
       var msg = input.val();
       socket.emit('post_to_chat', {channel: '<%= channel_id %>', user: '<%- login %>', msg: msg});
       input.val('');
@@ -44,18 +44,18 @@
   <div id="channel" class="bordered">
     <div id="msgs">
       <ul>
-        <li class="message">
+        <li class="message" style="display: none">
           <span class="user"></span><span class="message"></span>
           <span class="time"></span>
         </li>
-        <li class="control">
+        <li class="control" style="display: none">
           <span class="user"></span>&nbsp;<span class="message"></span>
           <span class="time"></span>
         </li>
       </ul>
     </div>
     <div>
-      <input type="text" id="message"/>
+      <input type="text" id="messge_box"/>
       <button class="btn btn-success" onclick="post_message()">Post message</button>
     </div>
   </div>
