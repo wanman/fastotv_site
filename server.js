@@ -123,7 +123,7 @@ SessionController.prototype.subscribe = function (channel, socket) {
     socket.emit(channel, message);
   });
   
-  var resp = {user: this.user, msg: this.user + ' joined the channel'};
+  var resp = {user: this.user, msg: this.user + ' joined the channel', msg_type: 0};
   this.channel = channel;
   this.publish(resp);
 };
