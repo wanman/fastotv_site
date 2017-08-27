@@ -187,6 +187,14 @@ listener.on('connection', function (socket) {
     }
   });
   
+  socket.on('disconnect', function() {
+    var channel = data.channel;
+    if (socket.sessionController !== null) {
+      socket.sessionController.destroyRedis();
+      socket.sessionController = null;
+    }
+  });
+  
   socket.on('subscribe_redis', function (data) {
     console.log('subscribe_redis', data.channel);
     socket.join(data.channel);

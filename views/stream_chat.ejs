@@ -15,7 +15,7 @@
 
     //on connetion, updates connection state and sends subscribe request
     socket.on('disconnect', function () {
-      socket.emit('leave_chat', {channel: '<%= channel_id %>', user: '<%- login %>'});
+      console.log('disconnected');
     });
     
     //when reconnection is attempted, updates status
