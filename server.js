@@ -159,6 +159,9 @@ SessionController.prototype.destroyRedis = function () {
 
 listener.on('connection', function (socket) {
   socket.on('post_to_chat', function (data) { // receiving chat messages
+    // just some logging to trace the chat data
+    console.log("post_to_chat", data);
+    
     var msg = JSON.parse(data);
     socket.get('sessionController', function (err, sessionController) {
       if (sessionController === null) {
@@ -171,17 +174,16 @@ listener.on('connection', function (socket) {
         sessionController.publish(reply);
       }
     });
-    // just some logging to trace the chat data
-    console.log(data);
   });
 
   socket.on('join_chat', function (data) {
+    // just some logging to trace the chat data
+    console.log("join_chat", data);
+    
     var msg = JSON.parse(data);
     var sessionController = new SessionController(msg.channel_id);
     socket.set('sessionController', sessionController);
     sessionController.subscribe(socket);
-    // just some logging to trace the chat data
-    console.log(data);
   });
 
   socket.on('subscribe_redis', function (data) {
