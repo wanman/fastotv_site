@@ -138,6 +138,7 @@ SessionController.prototype.unsubscribe = function () {
 SessionController.prototype.publish = function (message_json) {
   var message_str = JSON.stringify(message_json);
   this.pub.publish(this.channel, message_str);
+  console.log('chat_published into redis', message_str);
 };
 
 SessionController.prototype.destroyRedis = function () {
@@ -183,7 +184,7 @@ listener.on('connection', function (socket) {
     }
   });
   
-  socket.on('disconnect', function() {
+  socket.on('disconnect', function() {    
     if (socket.sessionController !== null) {
       socket.sessionController.unsubscribe();
       socket.sessionController.destroyRedis();
