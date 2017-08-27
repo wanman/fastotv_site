@@ -47,7 +47,7 @@
   <%- include('header/main') %>
 </header>
 <div class="container">
-  <div id="channel" class="bordered" style="display: none;">
+  <div id="channel" class="bordered">
     <div id="descr" class="bordered">
       <strong>Note:</strong> your messages make a round-trip up and down the stack (including Redis)
       before being displayed here.<br/>
@@ -56,11 +56,11 @@
     </div>
     <div id="msgs">
       <ul>
-        <li class="message" style="display: none">
+        <li class="message">
           <span class="user"></span><span class="message"></span>
           <span class="time"></span>
         </li>
-        <li class="control" style="display: none">
+        <li class="control">
           <span class="user"></span>&nbsp;<span class="message"></span>
           <span class="time"></span>
         </li>

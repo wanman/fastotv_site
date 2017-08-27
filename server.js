@@ -123,7 +123,7 @@ SessionController.prototype.subscribe = function (channel, socket) {
     socket.emit(channel, message);
   });
   
-  var resp = {user: this.user, msg: ' joined the channel'};
+  var resp = {user: this.user, msg: this.user + ' joined the channel'};
   this.channel = channel;
   this.publish(resp);
 };
@@ -131,7 +131,7 @@ SessionController.prototype.subscribe = function (channel, socket) {
 SessionController.prototype.unsubscribe = function () {
   this.sub.unsubscribe();
   
-  var resp = {user: this.user, msg: ' leave the channel'};
+  var resp = {user: this.user, msg: this.user + ' leave the channel', msg_type: 0};
   this.publish(resp);
 };
 
@@ -148,9 +148,6 @@ SessionController.prototype.destroyRedis = function () {
 
 listener.on('connection', function (socket) {
   socket.on('post_to_chat', function (data) { // receiving chat messages
-    // just some logging to trace the chat data
-    console.log("post_to_chat", data);
-    
     var channel = data.channel;
     if (socket.sessionController === null) {
       // implicit login - socket can be timed out or disconnected
@@ -159,13 +156,11 @@ listener.on('connection', function (socket) {
       socket.sessionController = sessionController;
     }
     
+    var resp = {user: this.user, msg: data.msg, msg_type: 1};
     sessionController.sessionController.publish(data);
   });
 
   socket.on('join_chat', function (data) {
-    // just some logging to trace the chat data
-    console.log('join_chat', data);
-    
     var channel = data.channel;
     var sessionController = new SessionController(data.user);
     sessionController.subscribe(channel, socket);
@@ -173,9 +168,6 @@ listener.on('connection', function (socket) {
   });
 
   socket.on('leave_chat', function (data) {
-    // just some logging to trace the chat data
-    console.log('leave_chat', data);
-    
     var channel = data.channel;
     if (socket.sessionController !== null) {
       socket.sessionController.unsubscribe();
@@ -193,7 +185,6 @@ listener.on('connection', function (socket) {
   });
   
   socket.on('subscribe_redis', function (data) {
-    console.log('subscribe_redis', data.channel);
     socket.join(data.channel);
   });
 
