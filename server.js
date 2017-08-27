@@ -118,38 +118,24 @@ function SessionController(user) {
   this.user = user;
 }
 
-SessionController.prototype.subscribe = function (socket) {
-  this.sub.on('message', function (channel, message) {
+SessionController.prototype.subscribe = function (channel, socket) {
+  this.sub.on('post_to_chat', function (channel, message) {
     socket.emit(channel, message);
   });
+  
   var current = this;
   this.sub.on('subscribe', function (channel, count) {
-    var joinMessage = JSON.stringify({action: 'control', user: current.user, msg: ' joined the channel'});
-    current.publish(joinMessage);
+    current.publish(channel, {action: 'control', user: current.user, msg: ' joined the channel'});
   });
-  this.sub.subscribe('chat');
+  this.sub.subscribe(channel);
 };
 
-SessionController.prototype.rejoin = function (socket, message) {
-  this.sub.on('message', function (channel, message) {
-    socket.emit(channel, message);
-  });
-  var current = this;
-  this.sub.on('subscribe', function (channel, count) {
-    var rejoin = JSON.stringify({action: 'control', user: current.user, msg: ' rejoined the channel'});
-    current.publish(rejoin);
-    var reply = JSON.stringify({action: 'message', user: message.user, msg: message.msg});
-    current.publish(reply);
-  });
-  this.sub.subscribe('chat');
+SessionController.prototype.unsubscribe = function (channel) {
+  this.sub.unsubscribe(channel);
 };
 
-SessionController.prototype.unsubscribe = function () {
-  this.sub.unsubscribe('chat');
-};
-
-SessionController.prototype.publish = function (message) {
-  this.pub.publish('chat', message);
+SessionController.prototype.publish = function (channel, message) {
+  this.pub.publish(channel, message);
 };
 
 SessionController.prototype.destroyRedis = function () {
@@ -162,38 +148,39 @@ listener.on('connection', function (socket) {
     // just some logging to trace the chat data
     console.log("post_to_chat", data);
     
-    var msg = JSON.parse(data);
+    var channel = data.channel;
     socket.get('sessionController', function (err, sessionController) {
       if (sessionController === null) {
         // implicit login - socket can be timed out or disconnected
-        var newSessionController = new SessionController(msg.channel);
-        socket.set('sessionController', newSessionController);
-        newSessionController.rejoin(socket, msg);
-      } else {
-        var reply = JSON.stringify({action: 'message', channel: msg.channel, user: msg.user, msg: msg.msg});
-        sessionController.publish(reply);
+        sessionController = new SessionController(data.user);
+        socket.set('sessionController', sessionController);
+        sessionController.subscribe(channel, socket);
       }
+      
+      sessionController.publish(channel, data);
     });
   });
 
   socket.on('join_chat', function (data) {
     // just some logging to trace the chat data
-    console.log("join_chat", data);
+    console.log('join_chat', data);
     
-    var msg = JSON.parse(data);
-    var sessionController = new SessionController(msg.channel);
+    var channel = data.channel;
+    var sessionController = new SessionController(data.user);
     socket.set('sessionController', sessionController);
-    sessionController.subscribe(socket);
+    sessionController.subscribe(channel, socket);
   });
 
   socket.on('leave_chat', function (data) {
     // just some logging to trace the chat data
-    console.log("leave_chat", data);
+    console.log('leave_chat', data);
     
-    var msg = JSON.parse(data);
-    var sessionController = new SessionController(msg.channel);
-    socket.set('sessionController', sessionController);
-    sessionController.unsubscribe(socket);
+    var channel = data.channel;
+    socket.get('sessionController', function (err, sessionController) {
+      if (sessionController !== null) {
+        sessionController.unsubscribe(channel);
+      }
+    });
   });
   
   socket.on('subscribe_redis', function (data) {

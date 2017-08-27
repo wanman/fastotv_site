@@ -20,11 +20,15 @@
     
     //when reconnection is attempted, updates status
     socket.on('reconnecting', function (data) {
+      socket.emit('leave_chat', {channel: '<%= channel_id %>', user: '<%- login %>'});
+      socket.emit('join_chat', {channel: '<%= channel_id %>', user: '<%- login %>'});
     });
 
     //on new message adds a new message to display
-    socket.on('message', function (data) {
+    socket.on('post_to_chat', function (data) {
       log.message(data);
+      if (data.channel === '<%= channel_id %>') {
+      }
     });
 
     // new message is send in the input box
@@ -32,7 +36,7 @@
       event.preventDefault();
       var input = $(this).find(':input');
       var msg = input.val();
-      socket.emit('post_to_chat', {action: 'message', user: '<%- login %>', msg: msg});
+      socket.emit('post_to_chat', {channel: '<%= channel_id %>', user: '<%- login %>', msg: msg});
       input.val('');
     });
 
