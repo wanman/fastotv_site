@@ -32,7 +32,7 @@
       var msg = input.val();
       socket.emit('post_to_chat', {channel: '<%= channel_id %>', user: '<%- login %>', msg: msg});
       input.val('');
-    });
+    }
 
   </script>
 </head>

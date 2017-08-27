@@ -123,15 +123,15 @@ SessionController.prototype.subscribe = function (channel, socket) {
     socket.emit(channel, message);
   });
   
-  var resp = {user: this.user, msg: this.user + ' joined the channel', msg_type: 0};
   this.channel = channel;
+  var resp = {user: this.user, msg: this.user + ' joined the channel ' + this.channel, msg_type: 0};
   this.publish(resp);
 };
 
 SessionController.prototype.unsubscribe = function () {
   this.sub.unsubscribe();
   
-  var resp = {user: this.user, msg: this.user + ' leave the channel', msg_type: 0};
+  var resp = {user: this.user, msg: this.user + ' leave the channel ' + this.channel, msg_type: 0};
   this.publish(resp);
 };
 
