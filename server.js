@@ -149,16 +149,14 @@ listener.on('connection', function (socket) {
     console.log("post_to_chat", data);
     
     var channel = data.channel;
-    socket.get('sessionController', function (err, sessionController) {
-      if (sessionController === null) {
-        // implicit login - socket can be timed out or disconnected
-        sessionController = new SessionController(data.user);
-        socket.set('sessionController', sessionController);
-        sessionController.subscribe(channel, socket);
-      }
-      
-      sessionController.publish(channel, data);
-    });
+    if (socket.sessionController === null) {
+      // implicit login - socket can be timed out or disconnected
+      var sessionController = new SessionController(data.user);
+      sessionController.subscribe(channel, socket);
+      socket.sessionController = sessionController;
+    }
+    
+    sessionController.sessionController.publish(channel, data);
   });
 
   socket.on('join_chat', function (data) {
@@ -167,8 +165,8 @@ listener.on('connection', function (socket) {
     
     var channel = data.channel;
     var sessionController = new SessionController(data.user);
-    socket.set('sessionController', sessionController);
     sessionController.subscribe(channel, socket);
+    socket.sessionController = sessionController;
   });
 
   socket.on('leave_chat', function (data) {
@@ -176,11 +174,10 @@ listener.on('connection', function (socket) {
     console.log('leave_chat', data);
     
     var channel = data.channel;
-    socket.get('sessionController', function (err, sessionController) {
-      if (sessionController !== null) {
-        sessionController.unsubscribe(channel);
-      }
-    });
+    if (socket.sessionController !== null) {
+      socket.sessionController.unsubscribe(channel);
+      socket.sessionController = null;
+    }
   });
   
   socket.on('subscribe_redis', function (data) {
