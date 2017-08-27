@@ -107,7 +107,83 @@ rabbit_connection.on('error', function (err) {
   console.error("rabbit_connection.on:", err);
 });
 
+function SessionController(user) {
+  // session controller class for storing redis connections
+  // this is more a workaround for the proof-of-concept
+  // in "real" applications session handling should NOT
+  // be done like this
+  this.sub = redis.createClient();
+  this.pub = redis.createClient();
+
+  this.user = user;
+}
+
+SessionController.prototype.subscribe = function (socket) {
+  this.sub.on('message', function (channel, message) {
+    socket.emit(channel, message);
+  });
+  var current = this;
+  this.sub.on('subscribe', function (channel, count) {
+    var joinMessage = JSON.stringify({action: 'control', user: current.user, msg: ' joined the channel'});
+    current.publish(joinMessage);
+  });
+  this.sub.subscribe('chat');
+};
+
+SessionController.prototype.rejoin = function (socket, message) {
+  this.sub.on('message', function (channel, message) {
+    socket.emit(channel, message);
+  });
+  var current = this;
+  this.sub.on('subscribe', function (channel, count) {
+    var rejoin = JSON.stringify({action: 'control', user: current.user, msg: ' rejoined the channel'});
+    current.publish(rejoin);
+    var reply = JSON.stringify({action: 'message', user: message.user, msg: message.msg});
+    current.publish(reply);
+  });
+  this.sub.subscribe('chat');
+};
+
+SessionController.prototype.unsubscribe = function () {
+  this.sub.unsubscribe('chat');
+};
+
+SessionController.prototype.publish = function (message) {
+  this.pub.publish('chat', message);
+};
+
+SessionController.prototype.destroyRedis = function () {
+  if (this.sub !== null) this.sub.quit();
+  if (this.pub !== null) this.pub.quit();
+};
+
 listener.on('connection', function (socket) {
+  socket.on('post_to_chat', function (data) { // receiving chat messages
+    var msg = JSON.parse(data);
+    socket.get('sessionController', function (err, sessionController) {
+      if (sessionController === null) {
+        // implicit login - socket can be timed out or disconnected
+        var newSessionController = new SessionController(msg.channel_id);
+        socket.set('sessionController', newSessionController);
+        newSessionController.rejoin(socket, msg);
+      } else {
+        var reply = JSON.stringify({action: 'message', channel: msg.channel_id, user: msg.user, msg: msg.msg});
+        sessionController.publish(reply);
+      }
+    });
+    // just some logging to trace the chat data
+    console.log(data);
+  });
+
+  socket.on('join_chat', function (data) {
+    var msg = JSON.parse(data);
+    var sessionController = new SessionController(msg.channel_id);
+    socket.set('sessionController', sessionController);
+    sessionController.subscribe(socket);
+    // just some logging to trace the chat data
+    console.log(data);
+  });
+
   socket.on('subscribe_redis', function (data) {
     console.log('subscribe_redis', data.channel);
     socket.join(data.channel);
