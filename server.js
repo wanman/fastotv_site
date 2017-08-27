@@ -119,11 +119,13 @@ function SessionController(user) {
 }
 
 SessionController.prototype.subscribe = function (channel, socket) {
-  this.sub.on('post_to_chat', function (channel, message) {
+  this.sub.on('message', function (channel, message) {
     socket.emit(channel, message);
   });
   
   this.channel = channel;
+  
+  this.sub.subscribe(channel);
   var resp = {user: this.user, msg: this.user + ' joined the channel ' + this.channel, msg_type: 0};
   this.publish(resp);
 };
@@ -142,8 +144,10 @@ SessionController.prototype.publish = function (message_json) {
 };
 
 SessionController.prototype.destroyRedis = function () {
-  if (this.sub !== null) this.sub.quit();
-  if (this.pub !== null) this.pub.quit();
+  if (this.sub !== null) 
+    this.sub.quit();
+  if (this.pub !== null) 
+    this.pub.quit();
 };
 
 listener.on('connection', function (socket) {
