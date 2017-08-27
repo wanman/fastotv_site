@@ -123,25 +123,20 @@ SessionController.prototype.subscribe = function (channel, socket) {
     socket.emit(channel, message);
   });
   
-  var current = this;
-  this.sub.on('subscribe', function (channel, count) {
-    var resp = {user: current.user, msg: ' joined the channel'};
-    listener.in(channel).emit('post_to_chat', resp);
-  });
-  this.sub.subscribe(channel);
+  var resp = {user: this.user, msg: ' joined the channel'};
+  this.channel = channel;
+  this.publish(resp);
 };
 
-SessionController.prototype.unsubscribe = function (channel) {
-  var current = this;
-  this.sub.on('unsubscribe', function (channel, count) {
-    var resp = {user: current.user, msg: ' leave the channel'};
-    listener.in(channel).emit('post_to_chat', resp);
-  });
-  this.sub.unsubscribe(channel);
+SessionController.prototype.unsubscribe = function () {
+  this.sub.unsubscribe();
+  
+  var resp = {user: this.user, msg: ' leave the channel'};
+  this.publish(resp);
 };
 
-SessionController.prototype.publish = function (channel, message) {
-  this.pub.publish(channel, message);
+SessionController.prototype.publish = function (message) {
+  this.pub.publish(this.channel, message);
 };
 
 SessionController.prototype.destroyRedis = function () {
@@ -162,7 +157,7 @@ listener.on('connection', function (socket) {
       socket.sessionController = sessionController;
     }
     
-    sessionController.sessionController.publish(channel, data);
+    sessionController.sessionController.publish(data);
   });
 
   socket.on('join_chat', function (data) {
@@ -181,7 +176,7 @@ listener.on('connection', function (socket) {
     
     var channel = data.channel;
     if (socket.sessionController !== null) {
-      socket.sessionController.unsubscribe(channel);
+      socket.sessionController.unsubscribe();
       socket.sessionController.destroyRedis();
       socket.sessionController = null;
     }
@@ -189,6 +184,7 @@ listener.on('connection', function (socket) {
   
   socket.on('disconnect', function() {
     if (socket.sessionController !== null) {
+      socket.sessionController.unsubscribe();
       socket.sessionController.destroyRedis();
       socket.sessionController = null;
     }
