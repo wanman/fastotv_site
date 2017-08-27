@@ -556,6 +556,16 @@ module.exports = function (app, passport, nev) {
     res.render('after_confirm.ejs');
   });
 
+  app.get('/stream_chat', function (req, res) {
+    var user = req.user;
+    var login = user.name;
+    
+    res.render('stream_chat.ejs', {
+      login: login,
+      channel_id: 'test'
+    });
+  });
+
 // facebook -------------------------------
 
   // send to facebook to do the authentication

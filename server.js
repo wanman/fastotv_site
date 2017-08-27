@@ -107,9 +107,89 @@ rabbit_connection.on('error', function (err) {
   console.error("rabbit_connection.on:", err);
 });
 
+function SessionController(user) {
+  // session controller class for storing redis connections
+  // this is more a workaround for the proof-of-concept
+  // in "real" applications session handling should NOT
+  // be done like this
+  this.sub = redis.createClient();
+  this.pub = redis.createClient();
+
+  this.user = user;
+}
+
+SessionController.prototype.subscribe = function (channel, socket) {
+  this.sub.on('message', function (channel, message) {
+    console.log("received", channel, message)
+    socket.emit('new_message', message);
+  });
+  
+  this.channel = channel;
+  
+  this.sub.subscribe(channel);
+  var resp = {user: this.user, msg: this.user + ' joined the channel ' + this.channel, msg_type: 0};
+  this.publish(resp);
+};
+
+SessionController.prototype.unsubscribe = function () {
+  this.sub.unsubscribe();
+  
+  var resp = {user: this.user, msg: this.user + ' leave the channel ' + this.channel, msg_type: 0};
+  this.publish(resp);
+};
+
+SessionController.prototype.publish = function (message_json) {
+  var message_str = JSON.stringify(message_json);
+  this.pub.publish(this.channel, message_str);
+  console.log('chat_published into redis', message_str);
+};
+
+SessionController.prototype.destroyRedis = function () {
+  if (this.sub !== null) 
+    this.sub.quit();
+  if (this.pub !== null) 
+    this.pub.quit();
+};
+
 listener.on('connection', function (socket) {
+  socket.on('post_to_chat', function (data) { // receiving chat messages
+    var channel = data.channel;
+    if (socket.sessionController === null) {
+      // implicit login - socket can be timed out or disconnected
+      var sessionController = new SessionController(data.user);
+      sessionController.subscribe(channel, socket);
+      socket.sessionController = sessionController;
+    }
+    
+    var resp = {user: data.user, msg: data.msg, msg_type: 1};
+    socket.sessionController.publish(resp);
+  });
+
+  socket.on('join_chat', function (data) {
+    var channel = data.channel;
+    var sessionController = new SessionController(data.user);
+    sessionController.subscribe(channel, socket);
+    socket.sessionController = sessionController;
+  });
+
+  socket.on('leave_chat', function (data) {
+    var channel = data.channel;
+    if (socket.sessionController !== null) {
+      socket.sessionController.unsubscribe();
+      socket.sessionController.destroyRedis();
+      socket.sessionController = null;
+    }
+  });
+  
+  socket.on('disconnect', function() {    
+    if (socket.sessionController !== null) {
+      socket.sessionController.unsubscribe();
+      socket.sessionController.destroyRedis();
+      socket.sessionController = null;
+    }
+  });
+  
   socket.on('subscribe_redis', function (data) {
-    console.log('subscribe_redis', data.channel);
     socket.join(data.channel);
   });
 
