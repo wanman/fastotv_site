@@ -557,8 +557,11 @@ module.exports = function (app, passport, nev) {
   });
 
   app.get('/stream_chat', function (req, res) {
-    res.render('device_details.ejs', {
-      login: user.email,
+    var user = req.user;
+    var login = user.name;
+    
+    res.render('stream_chat.ejs', {
+      login: login,
       channel_id: 'test'
     });
   });
