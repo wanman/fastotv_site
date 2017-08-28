@@ -568,14 +568,12 @@ module.exports = function (app, passport, nev) {
       var official_channels = [];
       for (i = 0; i < all_channels.length; i++) {
         var of_channel = all_channels[i];
-        for (j = 0; j < official_channels_ids.length; j++) {
-          if (of_channel._id == channel_id) {  // FIX ME find how to compare
-            res.render('stream_chat.ejs', {
-              user: user,
-              channel: of_channel
-            });
-            return;
-          }
+        if (of_channel._id == channel_id) {  // FIX ME find how to compare
+          res.render('stream_chat.ejs', {
+            user: user,
+            channel: of_channel
+          });
+          return;
         }
       }
 
