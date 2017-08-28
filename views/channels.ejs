@@ -108,7 +108,7 @@
       </thead>
       <tbody>
       <% if (official_channels.length > 0) { %>
-      <% for (var i = 0; i < official_channels.length; i++) { %>
+      <% for (i = 0; i < official_channels.length; i++) { %>
       <tr>
         <td><%= i + 1 %></td>
         <td>
@@ -147,6 +147,12 @@
             </div>
           </form>
           <% } %>
+          <form class="form-inline" action="/apply_channels" method="post">
+            <div class="form-group">
+              <input type="hidden" class="form-control" id="channel_id" value="<%= official_channels[i].id %>">
+            </div>
+            <button type="submit" class="btn btn-info">Chat room</button>
+          </form>
         </td>
       </tr>
       <% } %>
