@@ -10,22 +10,13 @@
 
     //on connetion, updates connection state and sends subscribe request
     socket.on('connect', function (data) {
-      socket.emit('join_chat', {channel: '<%= channel._id %>', user: '<%- login %>'});
+      socket.emit('join_chat', {channel: '<%= channel._id %>', user: '<%- user.name %>'});
     });
 
-<<<<<<< HEAD
-    
     //when reconnection is attempted, updates status
     socket.on('reconnecting', function (data) {
-      socket.emit('leave_chat', {channel: '<%= channel._id %>', user: '<%- login %>'});
-      socket.emit('join_chat', {channel: '<%= channel._id %>', user: '<%- login %>'});
-=======
-
-    //when reconnection is attempted, updates status
-    socket.on('reconnecting', function (data) {
-      socket.emit('leave_chat', {channel: '<%= channel._id %>', user: '<%- login %>'});
-      socket.emit('join_chat', {channel: '<%= channel._id %>', user: '<%- login %>'});
->>>>>>> chat
+      socket.emit('leave_chat', {channel: '<%= channel._id %>', user: '<%- user.name %>'});
+      socket.emit('join_chat', {channel: '<%= channel._id %>', user: '<%- user.name %>'});
     });
 
     //on new message adds a new message to display
