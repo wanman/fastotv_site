@@ -558,11 +558,28 @@ module.exports = function (app, passport, nev) {
 
   app.get('/stream_chat', function (req, res) {
     var user = req.user;
-    var login = user.name;
-    
-    res.render('stream_chat.ejs', {
-      login: login,
-      channel_id: 'test'
+    var channel_id = req.body.channel_id;
+    Channel.find({}, function (err, all_channels) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      var official_channels = [];
+      for (i = 0; i < all_channels.length; i++) {
+        var of_channel = all_channels[i];
+        for (j = 0; j < official_channels_ids.length; j++) {
+          if (of_channel._id == channel_id) {  // FIX ME find how to compare
+            res.render('stream_chat.ejs', {
+              user: user,
+              channel: of_channel
+            });
+            return;
+          }
+        }
+      }
+
+      res.redirect('/channels');
     });
   });
 

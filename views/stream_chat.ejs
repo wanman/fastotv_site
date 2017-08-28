@@ -13,11 +13,11 @@
       socket.emit('join_chat', {channel: '<%= channel_id %>', user: '<%- login %>'});
     });
 
-    
+
     //when reconnection is attempted, updates status
     socket.on('reconnecting', function (data) {
-      socket.emit('leave_chat', {channel: '<%= channel_id %>', user: '<%- login %>'});
-      socket.emit('join_chat', {channel: '<%= channel_id %>', user: '<%- login %>'});
+      socket.emit('leave_chat', {channel: '<%= channel._id %>', user: '<%- login %>'});
+      socket.emit('join_chat', {channel: '<%= channel._id %>', user: '<%- login %>'});
     });
 
     //on new message adds a new message to display
@@ -27,7 +27,7 @@
     function post_message() {
       var input = $('#messge_box');
       var msg = input.val();
-      socket.emit('post_to_chat', {channel: '<%= channel_id %>', user: '<%- login %>', msg: msg});
+      socket.emit('post_to_chat', {channel: '<%= channel._id %>', user: '<%- user.name %>', msg: msg});
       input.val('');
     }
 
@@ -38,6 +38,10 @@
   <%- include('header/main') %>
 </header>
 <div class="container">
+  <div class="alert alert-success"><strong><%= user.name %></strong> welcome to
+    <img width="32px" height="32px" src="<%= channel.icon %>"/>
+    <%= channel.name %>
+  </div>
   <div id="channel" class="bordered">
     <div id="msgs">
       <ul>
