@@ -556,7 +556,7 @@ module.exports = function (app, passport, nev) {
     res.render('after_confirm.ejs');
   });
 
-  app.get('/stream_chat', function (req, res) {
+  app.post('/stream_chat', function (req, res) {
     var user = req.user;
     var channel_id = req.body.channel_id;
     Channel.find({}, function (err, all_channels) {
