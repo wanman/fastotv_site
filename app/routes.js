@@ -98,7 +98,7 @@ module.exports = function (app, passport, nev) {
 
       var private_pool_channels = user.private_pool_channels;
       var private_channels = [];
-      for (var i = 0; i < private_pool_channels.length; i++) {
+      for (i = 0; i < private_pool_channels.length; i++) {
         var channel = private_pool_channels[i];
         var exist = false;
         for (var j = 0; j < user_private_channels.length; j++) {

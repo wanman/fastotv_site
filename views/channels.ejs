@@ -148,9 +148,7 @@
           </form>
           <% } %>
           <form class="form-inline" action="/stream_chat" method="post">
-            <div class="form-group">
-              <input type="hidden" class="form-control" id="channel_id" value="<%= official_channels[i].id %>">
-            </div>
+            <input type="hidden" class="form-control" name="channel_id" value="<%= official_channels[i].id %>">
             <button type="submit" class="btn btn-info btn-xs">Chat room</button>
           </form>
         </td>
