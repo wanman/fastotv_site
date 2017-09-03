@@ -120,12 +120,11 @@ function SessionController(user) {
 
 SessionController.prototype.subscribe = function (channel, socket) {
   this.sub.on('message', function (channel, message) {
-    console.log("received", channel, message)
     socket.emit('new_message', message);
   });
-  
+
   this.channel = channel;
-  
+
   this.sub.subscribe(channel);
   var resp = {user: this.user, msg: this.user + ' joined the channel ' + this.channel, msg_type: 0};
   this.publish(resp);
@@ -133,7 +132,7 @@ SessionController.prototype.subscribe = function (channel, socket) {
 
 SessionController.prototype.unsubscribe = function () {
   this.sub.unsubscribe();
-  
+
   var resp = {user: this.user, msg: this.user + ' leave the channel ' + this.channel, msg_type: 0};
   this.publish(resp);
 };
@@ -145,9 +144,9 @@ SessionController.prototype.publish = function (message_json) {
 };
 
 SessionController.prototype.destroyRedis = function () {
-  if (this.sub !== null) 
+  if (this.sub !== null)
     this.sub.quit();
-  if (this.pub !== null) 
+  if (this.pub !== null)
     this.pub.quit();
 };
 
@@ -160,7 +159,7 @@ listener.on('connection', function (socket) {
       sessionController.subscribe(channel, socket);
       socket.sessionController = sessionController;
     }
-    
+
     var resp = {user: data.user, msg: data.msg, msg_type: 1};
     socket.sessionController.publish(resp);
   });
@@ -180,15 +179,15 @@ listener.on('connection', function (socket) {
       socket.sessionController = null;
     }
   });
-  
-  socket.on('disconnect', function() {    
+
+  socket.on('disconnect', function () {
     if (socket.sessionController !== null) {
       socket.sessionController.unsubscribe();
       socket.sessionController.destroyRedis();
       socket.sessionController = null;
     }
   });
-  
+
   socket.on('subscribe_redis', function (data) {
     socket.join(data.channel);
   });
