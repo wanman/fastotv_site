@@ -312,6 +312,8 @@ nev.configure({
     auth: {
       user: app.locals.site.support_email,
       pass: app.locals.site.support_email_password
+    }, tls: {
+      ciphers: 'SSLv3'
     }
   },
   verifyMailOptions: {
