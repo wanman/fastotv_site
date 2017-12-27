@@ -81,7 +81,7 @@ app.locals.project = {
 };
 app.locals.author = {
     name: 'Topilski Alexandr',
-    contact: 'atopilski@fastogt.com'
+    contact: 'support@fastogt.com'
 };
 app.locals.company = {
     name: 'FastoGT',
